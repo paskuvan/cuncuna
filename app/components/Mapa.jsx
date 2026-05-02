@@ -2,6 +2,7 @@
 
 import { Check, Lock, Star, Flame, BookOpen, Sparkles } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
+import CuncunaCabeza from './CuncunaCabeza';
 
 // ============================================================
 // COMPONENTE: Mapa
@@ -32,7 +33,7 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
               className="bg-[#FFD23F] border-[3px] border-white p-2"
               style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
             >
-              <BookOpen size={24} strokeWidth={3} className="text-black" />
+              <CuncunaCabeza size={36} />
             </div>
             <div>
               <h1 className="text-white font-black text-xl md:text-2xl uppercase tracking-tight leading-none">
