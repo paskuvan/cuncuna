@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 200" width="640" height="200">
+  <title>Cuncuna - Logo horizontal</title>
+
+  <!-- MASCOTA -->
+  <g id="mascota">
+    <!-- Antenas -->
+    <line x1="100" y1="80" x2="95" y2="65" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="120" y1="80" x2="125" y2="65" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="95" cy="65" r="4" fill="#FF6B9D" stroke="#000000" stroke-width="2.5"/>
+    <circle cx="125" cy="65" r="4" fill="#FF6B9D" stroke="#000000" stroke-width="2.5"/>
+
+    <!-- Cabeza (segmento 1) -->
+    <circle cx="110" cy="115" r="35" fill="#FFD23F" stroke="#000000" stroke-width="4"/>
+    <!-- Ojos -->
+    <circle cx="100" cy="108" r="7" fill="#FFFFFF" stroke="#000000" stroke-width="3"/>
+    <circle cx="120" cy="108" r="7" fill="#FFFFFF" stroke="#000000" stroke-width="3"/>
+    <circle cx="100" cy="108" r="3" fill="#000000"/>
+    <circle cx="120" cy="108" r="3" fill="#000000"/>
+    <circle cx="101" cy="106" r="1.2" fill="#FFFFFF"/>
+    <circle cx="121" cy="106" r="1.2" fill="#FFFFFF"/>
+    <!-- Sonrisa -->
+    <path d="M 98 122 Q 110 130 122 122" stroke="#000000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Cachetes -->
+    <circle cx="92" cy="120" r="3" fill="#FF6B9D"/>
+    <circle cx="128" cy="120" r="3" fill="#FF6B9D"/>
+
+    <!-- Segmentos del cuerpo -->
+    <circle cx="158" cy="115" r="30" fill="#FF6B9D" stroke="#000000" stroke-width="4"/>
+    <circle cx="204" cy="115" r="30" fill="#4ECDC4" stroke="#000000" stroke-width="4"/>
+    <circle cx="248" cy="115" r="28" fill="#7FFF6B" stroke="#000000" stroke-width="4"/>
+    <circle cx="288" cy="115" r="24" fill="#FFD23F" stroke="#000000" stroke-width="4"/>
+  </g>
+
+  <!-- WORDMARK -->
+  <g id="wordmark">
+    <text x="340" y="125" font-family="'Archivo Black', 'Arial Black', sans-serif" font-weight="900" font-size="52" fill="#000000">CUNCUNA</text>
+    <rect x="340" y="138" width="270" height="7" fill="#FFD23F" stroke="#000000" stroke-width="2"/>
+    <text x="340" y="170" font-family="'Archivo', sans-serif" font-weight="700" font-size="13" fill="#000000" letter-spacing="2">DE SEÑA EN SEÑA</text>
+  </g>
+</svg>

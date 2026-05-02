@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 160" width="340" height="160">
+  <title>Cuncuna - Solo mascota</title>
+
+  <g id="mascota">
+    <!-- Antenas -->
+    <line x1="60" y1="50" x2="55" y2="32" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="80" y1="50" x2="85" y2="32" stroke="#000000" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="55" cy="32" r="5" fill="#FF6B9D" stroke="#000000" stroke-width="2.5"/>
+    <circle cx="85" cy="32" r="5" fill="#FF6B9D" stroke="#000000" stroke-width="2.5"/>
+
+    <!-- Cabeza (segmento 1) -->
+    <circle cx="70" cy="85" r="38" fill="#FFD23F" stroke="#000000" stroke-width="4"/>
+    <circle cx="58" cy="78" r="8" fill="#FFFFFF" stroke="#000000" stroke-width="3"/>
+    <circle cx="82" cy="78" r="8" fill="#FFFFFF" stroke="#000000" stroke-width="3"/>
+    <circle cx="58" cy="78" r="3.8" fill="#000000"/>
+    <circle cx="82" cy="78" r="3.8" fill="#000000"/>
+    <circle cx="59" cy="76" r="1.5" fill="#FFFFFF"/>
+    <circle cx="83" cy="76" r="1.5" fill="#FFFFFF"/>
+    <path d="M 56 95 Q 70 104 84 95" stroke="#000000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="48" cy="92" r="3.5" fill="#FF6B9D"/>
+    <circle cx="92" cy="92" r="3.5" fill="#FF6B9D"/>
+
+    <!-- Segmentos -->
+    <circle cx="123" cy="85" r="32" fill="#FF6B9D" stroke="#000000" stroke-width="4"/>
+    <circle cx="173" cy="85" r="30" fill="#4ECDC4" stroke="#000000" stroke-width="4"/>
+    <circle cx="220" cy="85" r="28" fill="#7FFF6B" stroke="#000000" stroke-width="4"/>
+    <circle cx="263" cy="85" r="24" fill="#FFD23F" stroke="#000000" stroke-width="4"/>
+    <circle cx="300" cy="85" r="18" fill="#FF6B9D" stroke="#000000" stroke-width="4"/>
+  </g>
+</svg>

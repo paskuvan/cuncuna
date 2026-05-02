@@ -1,28 +1,28 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { Archivo, Archivo_Black } from 'next/font/google';
+import './globals.css';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+// Fuentes optimizadas con next/font (mejor performance que <link>)
+const archivo = Archivo({
+  subsets: ['latin'],
+  variable: '--font-archivo',
+  weight: ['400', '500', '700', '900'],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const archivoBlack = Archivo_Black({
+  subsets: ['latin'],
+  variable: '--font-archivo-black',
+  weight: ['400'],
 });
 
 export const metadata = {
-  title: "Cuncuna",
-  description: "Aprende LSCh paso a paso",
+  title: 'Cuncuna · Aprende LSCh',
+  description: 'Plataforma de aprendizaje de Lengua de Señas Chilena, de seña en seña.',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="es" className={`${archivo.variable} ${archivoBlack.variable}`}>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }
