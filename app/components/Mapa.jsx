@@ -3,6 +3,7 @@
 import { Check, Lock, Star, Flame, BookOpen, Sparkles } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import CuncunaCabeza from './CuncunaCabeza';
+import UsuarioMenu from './UsuarioMenu';
 
 // ============================================================
 // COMPONENTE: Mapa
@@ -60,8 +61,14 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
               <Star size={16} strokeWidth={3} className="text-black" fill="black" />
               <span className="text-black font-black text-sm">{progreso.xpTotal}</span>
             </div>
+             <div className="flex items-center gap-2">
+  {/* Racha y XP que ya están... */}
+
+  <UsuarioMenu />   {/* ← agregar al final */}
+</div>
           </div>
         </div>
+       
       </header>
 
       <main className="max-w-4xl mx-auto p-4 md:p-6">
