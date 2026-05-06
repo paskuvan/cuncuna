@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, Star, ChevronRight } from 'lucide-react';
 import VideoPlayer from './VideoPlayer';
 import Quiz from './Quiz';
+import Cuncuna from '../components/mascota/Cuncuna';
 
 // ============================================================
 // COMPONENTE: VistaLeccion (versión con logros)
@@ -62,7 +63,7 @@ export default function VistaLeccion({
           className="bg-[#FFD23F] border-[4px] border-black p-8 max-w-md w-full text-center"
           style={{ boxShadow: '12px 12px 0 #000' }}
         >
-          <div className="text-7xl mb-4 animate-bounce">🎉</div>
+          <div className="text-7xl mb-4 animate-bounce"><Cuncuna estado="celebrando" size={120} /></div>
           <h2 className="text-4xl font-black uppercase text-black mb-2">
             ¡Lección completa!
           </h2>

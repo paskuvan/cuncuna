@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Sparkles, ChevronRight } from 'lucide-react';
+import Cuncuna from './mascota/Cuncuna';
 
 // ============================================================
 // COMPONENTE: ModalLogroNuevo
@@ -47,7 +48,7 @@ export default function ModalLogroNuevo({ logrosNuevos, onCerrar }) {
         <div className="flex items-center justify-center gap-2 mb-4">
           <Sparkles size={20} strokeWidth={3} className="text-[#FFD23F]" />
           <span className="font-black uppercase text-xs tracking-[0.2em] text-black">
-            ¡Logro desbloqueado!
+            <Cuncuna estado="celebrando" size={80} />
           </span>
           <Sparkles size={20} strokeWidth={3} className="text-[#FFD23F]" />
         </div>

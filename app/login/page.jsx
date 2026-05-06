@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { createClient } from '../lib/supabase-client';
+import Cuncuna from '../components/mascota/Cuncuna';
 
 // ============================================================
 // PÁGINA: /login
@@ -42,22 +43,7 @@ export default function LoginPage() {
             className="bg-[#FFD23F] border-[4px] border-black p-6"
             style={{ boxShadow: '8px 8px 0 #FF6B9D' }}
           >
-            <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-              <line x1="40" y1="22" x2="35" y2="6" stroke="#000" strokeWidth="3" strokeLinecap="round" />
-              <line x1="60" y1="22" x2="65" y2="6" stroke="#000" strokeWidth="3" strokeLinecap="round" />
-              <circle cx="35" cy="6" r="4" fill="#FF6B9D" stroke="#000" strokeWidth="2" />
-              <circle cx="65" cy="6" r="4" fill="#FF6B9D" stroke="#000" strokeWidth="2" />
-              <circle cx="50" cy="55" r="35" fill="#FFFFFF" stroke="#000" strokeWidth="4" />
-              <circle cx="38" cy="48" r="8" fill="#FFFFFF" stroke="#000" strokeWidth="3" />
-              <circle cx="62" cy="48" r="8" fill="#FFFFFF" stroke="#000" strokeWidth="3" />
-              <circle cx="38" cy="48" r="4" fill="#000" />
-              <circle cx="62" cy="48" r="4" fill="#000" />
-              <circle cx="40" cy="46" r="1.5" fill="#FFFFFF" />
-              <circle cx="64" cy="46" r="1.5" fill="#FFFFFF" />
-              <path d="M 36 65 Q 50 75 64 65" stroke="#000" strokeWidth="3" fill="none" strokeLinecap="round" />
-              <circle cx="28" cy="62" r="3.5" fill="#FF6B9D" />
-              <circle cx="72" cy="62" r="3.5" fill="#FF6B9D" />
-            </svg>
+            <Cuncuna estado="saludando" size={100} />
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Check, Lock, Star, Flame, Sparkles, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import UsuarioMenu from './UsuarioMenu';
+import Cuncuna from './mascota/Cuncuna';
 
 // ============================================================
 // Mapa.jsx - VERSIÓN CON LOGROS
@@ -34,7 +35,7 @@ export default function Mapa({
               className="bg-[#FFD23F] border-[3px] border-white p-2"
               style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
             >
-              <CuncunaIcon size={24} />
+              <Cuncuna estado="idle" size={24} animado={false} />
             </div>
             <div>
               <h1 className="text-white font-black text-xl md:text-2xl uppercase tracking-tight leading-none">
