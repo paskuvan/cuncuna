@@ -6,21 +6,23 @@ import VideoPlayer from './VideoPlayer';
 import Quiz from './Quiz';
 
 // ============================================================
-// COMPONENTE: VistaLeccion
-// Maneja el flujo completo de una lección:
-//   1. Itera por los ejercicios secuencialmente
-//   2. Renderiza el componente correcto según el tipo
-//   3. Cuenta aciertos
-//   4. Muestra pantalla de éxito al terminar
+// COMPONENTE: VistaLeccion (versión con logros)
+// ⚠️ REEMPLAZA el VistaLeccion anterior.
 //
-// Props:
-//   - leccion: objeto de la lección (con ejercicios)
-//   - nivel: objeto del nivel (para el color de fondo)
-//   - onCompletar: (leccionId, xp) => void
-//   - onVolver: () => void
+// Cambios:
+//   - Recibe registrarVideoVisto y registrarQuizAcertado
+//   - Llama esos métodos cuando corresponde
+//   - onCompletar ahora puede devolver stats para verificar logros
 // ============================================================
 
-export default function VistaLeccion({ leccion, nivel, onCompletar, onVolver }) {
+export default function VistaLeccion({
+  leccion,
+  nivel,
+  onCompletar,
+  onVolver,
+  registrarVideoVisto,
+  registrarQuizAcertado,
+}) {
   const [indiceEjercicio, setIndiceEjercicio] = useState(0);
   const [aciertos, setAciertos] = useState(0);
   const [terminada, setTerminada] = useState(false);
@@ -28,17 +30,31 @@ export default function VistaLeccion({ leccion, nivel, onCompletar, onVolver }) 
   const ejercicio = leccion.ejercicios[indiceEjercicio];
   const porcentaje = ((indiceEjercicio + 1) / leccion.ejercicios.length) * 100;
 
-  const siguiente = (acerto = true) => {
-    if (acerto) setAciertos(aciertos + 1);
+  const siguiente = async (acerto = true, esQuiz = false) => {
+    // Registrar evento según tipo de ejercicio
+    if (esQuiz && acerto) {
+      await registrarQuizAcertado?.();
+      setAciertos(aciertos + 1);
+    }
+
     if (indiceEjercicio < leccion.ejercicios.length - 1) {
       setIndiceEjercicio(indiceEjercicio + 1);
     } else {
       setTerminada(true);
-      onCompletar(leccion.id, leccion.xp);
+      await onCompletar(leccion.id, leccion.xp);
     }
   };
 
-  // Pantalla de éxito al completar la lección
+  const siguienteVideo = async () => {
+    await registrarVideoVisto?.();
+    siguiente(true, false);
+  };
+
+  const siguienteQuiz = async (acerto) => {
+    siguiente(acerto, true);
+  };
+
+  // Pantalla de éxito
   if (terminada) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
@@ -47,17 +63,25 @@ export default function VistaLeccion({ leccion, nivel, onCompletar, onVolver }) 
           style={{ boxShadow: '12px 12px 0 #000' }}
         >
           <div className="text-7xl mb-4 animate-bounce">🎉</div>
-          <h2 className="text-4xl font-black uppercase text-black mb-2">¡Lección completa!</h2>
+          <h2 className="text-4xl font-black uppercase text-black mb-2">
+            ¡Lección completa!
+          </h2>
           <p className="text-black font-bold mb-6 text-lg">
             {aciertos} de{' '}
-            {leccion.ejercicios.filter((e) => e.tipo.startsWith('quiz')).length} respuestas correctas
+            {leccion.ejercicios.filter((e) => e.tipo.startsWith('quiz')).length}{' '}
+            respuestas correctas
           </p>
           <div
             className="bg-black text-[#FFD23F] p-4 border-[3px] border-black mb-6"
             style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
           >
             <div className="flex items-center justify-center gap-2">
-              <Star className="text-[#FFD23F]" size={28} strokeWidth={3} fill="#FFD23F" />
+              <Star
+                className="text-[#FFD23F]"
+                size={28}
+                strokeWidth={3}
+                fill="#FFD23F"
+              />
               <span className="text-3xl font-black">+{leccion.xp} XP</span>
             </div>
           </div>
@@ -103,7 +127,6 @@ export default function VistaLeccion({ leccion, nivel, onCompletar, onVolver }) 
         </div>
       </div>
 
-      {/* Contenido del ejercicio */}
       <div className="max-w-2xl mx-auto p-4 md:p-6">
         <div
           className="bg-white border-[4px] border-black p-6 md:p-8"
@@ -127,7 +150,7 @@ export default function VistaLeccion({ leccion, nivel, onCompletar, onVolver }) 
                 titulo={ejercicio.titulo}
               />
               <button
-                onClick={() => siguiente(true)}
+                onClick={siguienteVideo}
                 className="w-full mt-6 p-4 border-[3px] border-black bg-black text-[#FFD23F] font-black uppercase text-xl tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
                 style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
               >
@@ -144,7 +167,7 @@ export default function VistaLeccion({ leccion, nivel, onCompletar, onVolver }) 
               >
                 Pregunta
               </div>
-              <Quiz ejercicio={ejercicio} onResponder={siguiente} />
+              <Quiz ejercicio={ejercicio} onResponder={siguienteQuiz} />
             </div>
           )}
         </div>

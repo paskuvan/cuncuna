@@ -1,26 +1,26 @@
 'use client';
 
-import { Check, Lock, Star, Flame, BookOpen, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { Check, Lock, Star, Flame, Sparkles, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
-import CuncunaCabeza from './CuncunaCabeza';
 import UsuarioMenu from './UsuarioMenu';
 
 // ============================================================
-// COMPONENTE: Mapa
-// Vista principal de la app:
-//   - Header con stats (racha, XP)
-//   - Hero con progreso global
-//   - Lista de niveles con sus lecciones
-//   - Sistema de desbloqueo progresivo
-//   - Botón de reinicio en footer
+// Mapa.jsx - VERSIÓN CON LOGROS
+// ⚠️ REEMPLAZA el Mapa.jsx anterior.
 //
-// Props:
-//   - progreso: { leccionesCompletadas, xpTotal, racha }
-//   - onSeleccionarLeccion: (leccion, nivel) => void
-//   - onReiniciar: () => void
+// Cambios:
+//   - Recibe logrosObtenidos como prop
+//   - Agrega botón Trophy en el header que va a /logros
+//   - Muestra contador de badges junto a XP y racha
 // ============================================================
 
-export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
+export default function Mapa({
+  progreso,
+  logrosObtenidos = [],
+  onSeleccionarLeccion,
+  onReiniciar,
+}) {
   const totalLecciones = CURRICULUM.reduce((acc, n) => acc + n.lecciones.length, 0);
   const completadas = progreso.leccionesCompletadas.length;
 
@@ -34,41 +34,51 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
               className="bg-[#FFD23F] border-[3px] border-white p-2"
               style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
             >
-              <CuncunaCabeza size={36} />
+              <CuncunaIcon size={24} />
             </div>
             <div>
               <h1 className="text-white font-black text-xl md:text-2xl uppercase tracking-tight leading-none">
                 Cuncuna<span className="text-[#FFD23F]">.</span>
               </h1>
-              <p className="text-white/70 text-xs font-bold uppercase tracking-wider">
+              <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
                 De seña en seña
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Racha */}
             <div
-              className="bg-[#FF6B9D] border-[3px] border-white px-3 py-1.5 flex items-center gap-1.5"
+              className="bg-[#FF6B9D] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5"
               style={{ boxShadow: '3px 3px 0 #FFD23F' }}
             >
               <Flame size={16} strokeWidth={3} className="text-white" />
               <span className="text-white font-black text-sm">{progreso.racha}</span>
             </div>
+
+            {/* XP */}
             <div
-              className="bg-[#FFD23F] border-[3px] border-white px-3 py-1.5 flex items-center gap-1.5"
+              className="bg-[#FFD23F] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5"
               style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
             >
               <Star size={16} strokeWidth={3} className="text-black" fill="black" />
               <span className="text-black font-black text-sm">{progreso.xpTotal}</span>
             </div>
-             <div className="flex items-center gap-2">
-  {/* Racha y XP que ya están... */}
 
-  <UsuarioMenu />   {/* ← agregar al final */}
-</div>
+            {/* Logros - lleva a /logros */}
+            <Link
+              href="/logros"
+              className="bg-[#7FFF6B] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5 hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
+              aria-label="Ver logros"
+            >
+              <Trophy size={16} strokeWidth={3} className="text-black" />
+              <span className="text-black font-black text-sm">{logrosObtenidos.length}</span>
+            </Link>
+
+            <UsuarioMenu />
           </div>
         </div>
-       
       </header>
 
       <main className="max-w-4xl mx-auto p-4 md:p-6">
@@ -130,7 +140,6 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
 
             return (
               <div key={nivel.id} className="relative">
-                {/* Banner del nivel */}
                 <div
                   className="border-[4px] border-black p-5 mb-5 flex items-center gap-4 relative"
                   style={{
@@ -164,7 +173,6 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
                   </div>
                 </div>
 
-                {/* Grid de lecciones */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-0 md:ml-6">
                   {nivel.lecciones.map((leccion, idxLeccion) => {
                     const completada = progreso.leccionesCompletadas.includes(leccion.id);
@@ -229,7 +237,6 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
           })}
         </section>
 
-        {/* FOOTER */}
         <footer className="mt-12 mb-6 text-center">
           <div
             className="inline-block bg-white border-[3px] border-black p-4"
@@ -238,7 +245,7 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
             <p className="font-black uppercase text-sm text-black mb-2">¿Empezar de nuevo?</p>
             <button
               onClick={() => {
-                if (confirm('¿Seguro? Perderás todo tu progreso.')) onReiniciar();
+                if (confirm('¿Seguro? Perderás todo tu progreso y logros.')) onReiniciar();
               }}
               className="bg-[#FF6B6B] text-white border-[3px] border-black px-4 py-2 font-black uppercase text-xs tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
               style={{ boxShadow: '4px 4px 0 #000' }}
@@ -252,5 +259,25 @@ export default function Mapa({ progreso, onSeleccionarLeccion, onReiniciar }) {
         </footer>
       </main>
     </div>
+  );
+}
+
+// Mini cuncuna para el header
+function CuncunaIcon({ size = 24 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="22" x2="35" y2="6" stroke="#000" strokeWidth="3" strokeLinecap="round" />
+      <line x1="60" y1="22" x2="65" y2="6" stroke="#000" strokeWidth="3" strokeLinecap="round" />
+      <circle cx="35" cy="6" r="4" fill="#FF6B9D" stroke="#000" strokeWidth="2" />
+      <circle cx="65" cy="6" r="4" fill="#FF6B9D" stroke="#000" strokeWidth="2" />
+      <circle cx="50" cy="55" r="35" fill="#FFFFFF" stroke="#000" strokeWidth="4" />
+      <circle cx="38" cy="48" r="8" fill="#FFFFFF" stroke="#000" strokeWidth="3" />
+      <circle cx="62" cy="48" r="8" fill="#FFFFFF" stroke="#000" strokeWidth="3" />
+      <circle cx="38" cy="48" r="4" fill="#000" />
+      <circle cx="62" cy="48" r="4" fill="#000" />
+      <path d="M 36 65 Q 50 75 64 65" stroke="#000" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <circle cx="28" cy="62" r="3.5" fill="#FF6B9D" />
+      <circle cx="72" cy="62" r="3.5" fill="#FF6B9D" />
+    </svg>
   );
 }
