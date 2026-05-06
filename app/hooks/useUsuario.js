@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { createClient } from '../lib/supabase-client';
 
 // ============================================================
@@ -11,7 +11,7 @@ import { createClient } from '../lib/supabase-client';
 export function useUsuario() {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   useEffect(() => {
     // Cargar usuario actual
@@ -28,7 +28,7 @@ export function useUsuario() {
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [supabase]);
 
   const cerrarSesion = async () => {
     await supabase.auth.signOut();

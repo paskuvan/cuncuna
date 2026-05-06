@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createClient } from '../lib/supabase-client';
 
 // ============================================================
@@ -19,7 +19,7 @@ export const useProgreso = () => {
     cargando: true,
   });
 
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   // Cargar progreso al montar
   useEffect(() => {
@@ -52,7 +52,7 @@ export const useProgreso = () => {
     };
 
     cargarProgreso();
-  }, []);
+  }, [supabase]);
 
   // Completar lección: actualiza BD y estado local
   const completarLeccion = useCallback(async (leccionId, xp) => {
@@ -94,7 +94,7 @@ export const useProgreso = () => {
       xpTotal: nuevoXp,
       racha: nuevaRacha,
     }));
-  }, [progreso.xpTotal, progreso.racha, progreso.leccionesCompletadas]);
+  }, [progreso.xpTotal, progreso.racha, progreso.leccionesCompletadas, supabase]);
 
   // Reiniciar progreso (borra todo en BD)
   const reiniciar = useCallback(async () => {
@@ -117,7 +117,7 @@ export const useProgreso = () => {
       racha: 0,
       cargando: false,
     });
-  }, []);
+  }, [supabase]);
 
   return { progreso, completarLeccion, reiniciar };
 };

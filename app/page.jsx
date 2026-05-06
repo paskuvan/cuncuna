@@ -8,13 +8,11 @@ import VistaLeccion from './components/VistaLeccion';
 import ModalLogroNuevo from './components/ModalLogroNuevo';
 
 // ============================================================
-// PAGE: Punto de entrada
+// PAGE: con verificación retroactiva de logros
 // ⚠️ REEMPLAZA el page.jsx anterior.
 //
-// Cambios:
-//   - Conecta useProgreso con useLogros
-//   - Verifica logros al completar lección
-//   - Muestra modal celebratorio si hay logros nuevos
+// CAMBIO: useLogros ahora recibe `progreso` para poder verificar
+// logros automáticamente al cargar (no solo al completar lección).
 // ============================================================
 
 export default function Page() {
@@ -26,12 +24,12 @@ export default function Page() {
     reiniciar,
   } = useProgreso();
 
+  // ⚠️ Pasamos `progreso` al hook para que pueda verificar retroactivamente
   const { logrosObtenidos, logrosNuevos, verificarLogros, limpiarLogrosNuevos } =
-    useLogros();
+    useLogros(progreso);
 
   const [vista, setVista] = useState({ tipo: 'mapa' });
 
-  // Wrapper que completa lección Y verifica logros
   const handleCompletarLeccion = async (leccionId, xp) => {
     const nuevosStats = await completarLeccion(leccionId, xp);
     if (nuevosStats) {
@@ -63,7 +61,6 @@ export default function Page() {
         />
       )}
 
-      {/* Modal celebratorio de logros nuevos */}
       <ModalLogroNuevo
         logrosNuevos={logrosNuevos}
         onCerrar={limpiarLogrosNuevos}

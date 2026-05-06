@@ -11,12 +11,14 @@ import { Sparkles, ChevronRight } from 'lucide-react';
 
 export default function ModalLogroNuevo({ logrosNuevos, onCerrar }) {
   const [indice, setIndice] = useState(0);
-  const [animar, setAnimar] = useState(false);
+  const [animar, setAnimar] = useState(true);
 
   useEffect(() => {
-    setAnimar(true);
     const t = setTimeout(() => setAnimar(false), 600);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      setAnimar(true);
+    };
   }, [indice]);
 
   if (!logrosNuevos || logrosNuevos.length === 0) return null;
