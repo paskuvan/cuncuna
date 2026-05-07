@@ -2,11 +2,16 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 
 // ============================================================
-// MIDDLEWARE
-// Se ejecuta en CADA request. Hace dos cosas:
-//   1. Refresca la sesión de Supabase (cookies)
-//   2. Redirige a /login si el usuario no está autenticado
-//      (excepto en /login y /auth/callback, claro)
+// MIDDLEWARE (versión con landing pública)
+// ⚠️ REEMPLAZA el middleware.js anterior.
+//
+// CAMBIOS:
+//   - / es PÚBLICA (landing)
+//   - /app/* es PROTEGIDA (requiere login)
+//   - /login y /auth/callback siguen siendo públicas
+//
+// Si usuario logueado entra a /login → redirige a /app
+// Si usuario no logueado entra a /app/* → redirige a /login
 // ============================================================
 
 export async function middleware(request) {
@@ -33,33 +38,30 @@ export async function middleware(request) {
     }
   );
 
-  // Refrescar sesión
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Rutas públicas (no requieren login)
-  const rutasPublicas = ['/login', '/auth/callback'];
-  const esRutaPublica = rutasPublicas.some(ruta =>
-    request.nextUrl.pathname.startsWith(ruta)
-  );
+  const path = request.nextUrl.pathname;
 
-  // Si NO está logueado y NO es ruta pública → redirigir a /login
-  if (!user && !esRutaPublica) {
+  // Rutas que requieren autenticación (todas las que empiecen con /app)
+  const requiereAuth = path.startsWith('/app');
+
+  // Si necesita auth y no hay usuario → al login
+  if (requiereAuth && !user) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  // Si SÍ está logueado y va a /login → redirigir al inicio
-  if (user && request.nextUrl.pathname === '/login') {
+  // Si está logueado y va a /login → directo a la app
+  if (user && path === '/login') {
     const url = request.nextUrl.clone();
-    url.pathname = '/';
+    url.pathname = '/app';
     return NextResponse.redirect(url);
   }
 
   return response;
 }
 
-// Aplicar middleware a todas las rutas excepto archivos estáticos
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|logos|videos|posters|.*\\.(?:svg|png|jpg|jpeg|gif|webp|mp4)$).*)',
