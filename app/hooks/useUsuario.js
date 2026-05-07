@@ -32,7 +32,7 @@ export function useUsuario() {
 
   const cerrarSesion = async () => {
     await supabase.auth.signOut();
-    window.location.href = '/login';
+    window.location.href = '/'; // Redirigir al inicio después de cerrar sesión /login
   };
 
   return { usuario, cargando, cerrarSesion };

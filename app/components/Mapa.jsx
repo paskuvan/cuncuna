@@ -66,9 +66,9 @@ export default function Mapa({
               <span className="text-black font-black text-sm">{progreso.xpTotal}</span>
             </div>
 
-            {/* Logros - lleva a /logros */}
+            {/* Logros - lleva a /app/logros */}
             <Link
-              href="/logros"
+              href="/app/logros"
               className="bg-[#7FFF6B] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5 hover:translate-y-[-2px] transition-transform"
               style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
               aria-label="Ver logros"
