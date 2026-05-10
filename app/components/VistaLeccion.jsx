@@ -1,19 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Star, ChevronRight } from 'lucide-react';
+import { X, Star, ChevronRight, BookOpen } from 'lucide-react';
 import VideoPlayer from './VideoPlayer';
 import Quiz from './Quiz';
-import Cuncuna from '../components/mascota/Cuncuna';
 
 // ============================================================
-// COMPONENTE: VistaLeccion (versión con logros)
+// COMPONENTE: VistaLeccion (versión con tipo TEXTO)
 // ⚠️ REEMPLAZA el VistaLeccion anterior.
 //
-// Cambios:
-//   - Recibe registrarVideoVisto y registrarQuizAcertado
-//   - Llama esos métodos cuando corresponde
-//   - onCompletar ahora puede devolver stats para verificar logros
+// CAMBIO: ahora maneja un tipo nuevo de ejercicio: 'texto'
+// (para ejercicios educativos sin video, solo lectura).
+// Útil para el Nivel 0 de introducción a la LSCh.
 // ============================================================
 
 export default function VistaLeccion({
@@ -32,7 +30,6 @@ export default function VistaLeccion({
   const porcentaje = ((indiceEjercicio + 1) / leccion.ejercicios.length) * 100;
 
   const siguiente = async (acerto = true, esQuiz = false) => {
-    // Registrar evento según tipo de ejercicio
     if (esQuiz && acerto) {
       await registrarQuizAcertado?.();
       setAciertos(aciertos + 1);
@@ -51,38 +48,27 @@ export default function VistaLeccion({
     siguiente(true, false);
   };
 
-  const siguienteQuiz = async (acerto) => {
-    siguiente(acerto, true);
-  };
+  const siguienteTexto = () => siguiente(true, false);
+  const siguienteQuiz = (acerto) => siguiente(acerto, true);
 
-  // Pantalla de éxito
+  // Tipos de ejercicio que cuentan como "quiz" (para contar aciertos)
+  const tiposQuiz = ['quiz', 'quiz-imagen', 'quiz-video', 'verdadero-falso', 'ordenar', 'match', 'completar'];
+  const totalQuizzes = leccion.ejercicios.filter((e) => tiposQuiz.includes(e.tipo)).length;
+
   if (terminada) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
-        <div
-          className="bg-[#FFD23F] border-[4px] border-black p-8 max-w-md w-full text-center"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="text-7xl mb-4 animate-bounce"><Cuncuna estado="celebrando" size={120} /></div>
-          <h2 className="text-4xl font-black uppercase text-black mb-2">
-            ¡Lección completa!
-          </h2>
-          <p className="text-black font-bold mb-6 text-lg">
-            {aciertos} de{' '}
-            {leccion.ejercicios.filter((e) => e.tipo.startsWith('quiz')).length}{' '}
-            respuestas correctas
-          </p>
-          <div
-            className="bg-black text-[#FFD23F] p-4 border-[3px] border-black mb-6"
-            style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
-          >
+        <div className="bg-[#FFD23F] border-[4px] border-black p-8 max-w-md w-full text-center" style={{ boxShadow: '12px 12px 0 #000' }}>
+          <div className="text-7xl mb-4 animate-bounce">🎉</div>
+          <h2 className="text-4xl font-black uppercase text-black mb-2">¡Lección completa!</h2>
+          {totalQuizzes > 0 && (
+            <p className="text-black font-bold mb-6 text-lg">
+              {aciertos} de {totalQuizzes} respuestas correctas
+            </p>
+          )}
+          <div className="bg-black text-[#FFD23F] p-4 border-[3px] border-black mb-6" style={{ boxShadow: '6px 6px 0 #FF6B9D' }}>
             <div className="flex items-center justify-center gap-2">
-              <Star
-                className="text-[#FFD23F]"
-                size={28}
-                strokeWidth={3}
-                fill="#FFD23F"
-              />
+              <Star className="text-[#FFD23F]" size={28} strokeWidth={3} fill="#FFD23F" />
               <span className="text-3xl font-black">+{leccion.xp} XP</span>
             </div>
           </div>
@@ -100,7 +86,6 @@ export default function VistaLeccion({
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: nivel.color }}>
-      {/* Header con progreso */}
       <div className="bg-white border-b-[4px] border-black p-4 sticky top-0 z-10">
         <div className="max-w-2xl mx-auto flex items-center gap-4">
           <button
@@ -112,14 +97,8 @@ export default function VistaLeccion({
             <X size={24} strokeWidth={4} className="text-black" />
           </button>
           <div className="flex-1">
-            <div
-              className="h-5 bg-white border-[3px] border-black overflow-hidden"
-              style={{ boxShadow: '3px 3px 0 #000' }}
-            >
-              <div
-                className="h-full transition-all duration-300"
-                style={{ width: `${porcentaje}%`, backgroundColor: nivel.color }}
-              />
+            <div className="h-5 bg-white border-[3px] border-black overflow-hidden" style={{ boxShadow: '3px 3px 0 #000' }}>
+              <div className="h-full transition-all duration-300" style={{ width: `${porcentaje}%`, backgroundColor: nivel.color }} />
             </div>
           </div>
           <span className="font-black text-black text-sm uppercase shrink-0">
@@ -129,30 +108,18 @@ export default function VistaLeccion({
       </div>
 
       <div className="max-w-2xl mx-auto p-4 md:p-6">
-        <div
-          className="bg-white border-[4px] border-black p-6 md:p-8"
-          style={{ boxShadow: '10px 10px 0 #000' }}
-        >
+        <div className="bg-white border-[4px] border-black p-6 md:p-8" style={{ boxShadow: '10px 10px 0 #000' }}>
+
+          {/* TIPO: VIDEO */}
           {ejercicio.tipo === 'video' && (
             <div>
-              <div
-                className="bg-black text-[#FFD23F] inline-block px-3 py-1 border-[3px] border-black mb-4 font-black uppercase text-sm"
-                style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
-              >
-                Mira y aprende
-              </div>
-              <h2 className="text-2xl md:text-3xl font-black text-black uppercase mb-2 leading-tight">
-                {ejercicio.titulo}
-              </h2>
+              <Tag color="#FFD23F" texto="Mira y aprende" />
+              <h2 className="text-2xl md:text-3xl font-black text-black uppercase mb-2 leading-tight">{ejercicio.titulo}</h2>
               <p className="text-black font-bold mb-6">{ejercicio.descripcion}</p>
-              <VideoPlayer
-                src={ejercicio.videoUrl}
-                poster={ejercicio.posterUrl}
-                titulo={ejercicio.titulo}
-              />
+              <VideoPlayer src={ejercicio.videoUrl} poster={ejercicio.posterUrl} titulo={ejercicio.titulo} />
               <button
                 onClick={siguienteVideo}
-                className="w-full mt-6 p-4 border-[3px] border-black bg-black text-[#FFD23F] font-black uppercase text-xl tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
+                className="w-full mt-6 p-4 border-[3px] border-black bg-black text-[#FFD23F] font-black uppercase text-xl tracking-wider hover:translate-y-[-2px] transition-transform"
                 style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
               >
                 Ya lo vi <ChevronRight className="inline ml-1" size={24} strokeWidth={4} />
@@ -160,19 +127,56 @@ export default function VistaLeccion({
             </div>
           )}
 
-          {(ejercicio.tipo === 'quiz' || ejercicio.tipo === 'quiz-imagen') && (
+          {/* TIPO: TEXTO (para introducción / cultura sorda) */}
+          {ejercicio.tipo === 'texto' && (
             <div>
-              <div
-                className="bg-[#FF6B9D] text-white inline-block px-3 py-1 border-[3px] border-black mb-4 font-black uppercase text-sm"
-                style={{ boxShadow: '4px 4px 0 #000' }}
-              >
-                Pregunta
+              <Tag color="#A78BFA" texto="Aprende" icono={<BookOpen size={14} strokeWidth={3} />} />
+              <h2 className="text-2xl md:text-3xl font-black text-black uppercase mb-4 leading-tight">{ejercicio.titulo}</h2>
+              <div className="bg-[#F5F0E8] border-[3px] border-black p-5 mb-6" style={{ boxShadow: '6px 6px 0 #000' }}>
+                <p className="text-black font-bold leading-relaxed text-base md:text-lg">
+                  {ejercicio.descripcion}
+                </p>
               </div>
+              <button
+                onClick={siguienteTexto}
+                className="w-full p-4 border-[3px] border-black bg-black text-[#FFD23F] font-black uppercase text-xl tracking-wider hover:translate-y-[-2px] transition-transform"
+                style={{ boxShadow: '6px 6px 0 #A78BFA' }}
+              >
+                Entendido <ChevronRight className="inline ml-1" size={24} strokeWidth={4} />
+              </button>
+            </div>
+          )}
+
+          {/* TIPOS DE QUIZ */}
+          {['quiz', 'quiz-imagen', 'quiz-video', 'verdadero-falso', 'ordenar', 'match', 'completar'].includes(ejercicio.tipo) && (
+            <div>
+              <Tag
+                color="#FF6B9D"
+                texto={
+                  ejercicio.tipo === 'verdadero-falso' ? '¿Verdadero o falso?' :
+                  ejercicio.tipo === 'ordenar' ? 'Ordena las palabras' :
+                  ejercicio.tipo === 'match' ? 'Relaciona' :
+                  'Pregunta'
+                }
+              />
               <Quiz ejercicio={ejercicio} onResponder={siguienteQuiz} />
             </div>
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+// Mini componente reutilizable para los tags
+function Tag({ color, texto, icono }) {
+  return (
+    <div
+      className="inline-flex items-center gap-1.5 px-3 py-1 border-[3px] border-black mb-4 font-black uppercase text-sm"
+      style={{ backgroundColor: color, color: color === '#A78BFA' ? '#fff' : '#000', boxShadow: '4px 4px 0 #000' }}
+    >
+      {icono}
+      {texto}
     </div>
   );
 }
