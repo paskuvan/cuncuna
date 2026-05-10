@@ -17,6 +17,7 @@ const archivoBlack = Archivo_Black({
 export const metadata = {
   title: 'Cuncuna · Aprende LSCh',
   description: 'Plataforma de aprendizaje de Lengua de Señas Chilena, de seña en seña.',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({ children }) {
