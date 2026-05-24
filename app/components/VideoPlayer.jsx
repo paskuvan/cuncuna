@@ -60,7 +60,7 @@ export default function VideoPlayer({ src, poster, titulo }) {
             ref={videoRef}
             src={src}
             poster={poster}
-            className="w-full aspect-video bg-gray-200 block"
+            className="w-full aspect-video bg-[#FFD23F] object-cover block"
             onTimeUpdate={onTimeUpdate}
             onEnded={() => setReproduciendo(false)}
             onError={() => setError(true)}
