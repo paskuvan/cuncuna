@@ -141,8 +141,8 @@ export const CURRICULUM = [
         descripcion: 'Hola, chao, buenos días',
         xp: 20,
         ejercicios: [
-          { tipo: 'video', titulo: 'Mira la seña: HOLA', descripcion: 'Saludo universal en LSCh.', videoUrl: videoUrl('l1-1-hola.mp4'), posterUrl: posterUrl('l1-1-hola.jpg') },
-          { tipo: 'video', titulo: 'Mira la seña: CHAO', descripcion: 'La despedida más común.', videoUrl: videoUrl('l1-1-chao.mp4'), posterUrl: posterUrl('l1-1-chao.jpg') },
+          { tipo: 'video', titulo: 'Mira la seña: HOLA', descripcion: 'Saludo universal en LSCh.', videoUrl: videoUrl('HOLACHAO.mp4'), posterUrl: posterUrl('l1-1-hola.jpg') },
+          { tipo: 'video', titulo: 'Mira la seña: CHAO', descripcion: 'La despedida más común.', videoUrl: videoUrl('HOLACHAO.mp4'), posterUrl: posterUrl('l1-1-chao.jpg') },
           {
             tipo: 'quiz-video',
             pregunta: '¿Qué seña ves?',
