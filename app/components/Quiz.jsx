@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Check, X, ChevronRight } from 'lucide-react';
 
 // ============================================================
@@ -43,6 +44,7 @@ export default function Quiz({ ejercicio, onResponder }) {
 function QuizMultiple({ ejercicio, onResponder }) {
   const [seleccionada, setSeleccionada] = useState(null);
   const [verificada, setVerificada] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
   const verificar = () => seleccionada !== null && setVerificada(true);
   const continuar = () => onResponder(seleccionada === ejercicio.correcta);
@@ -50,9 +52,9 @@ function QuizMultiple({ ejercicio, onResponder }) {
 
   return (
     <div className="w-full">
-      {ejercicio.imagenUrl && (
-        <div className="mb-6 bg-white border-[3px] border-black overflow-hidden" style={{ boxShadow: '8px 8px 0 #000' }}>
-          <img src={ejercicio.imagenUrl} alt="" className="w-full aspect-video object-cover" onError={(e) => { e.target.style.display = 'none'; }} />
+      {ejercicio.imagenUrl && !imgError && (
+        <div className="mb-6 bg-white border-[3px] border-black overflow-hidden aspect-video relative" style={{ boxShadow: '8px 8px 0 #000' }}>
+          <Image src={ejercicio.imagenUrl} alt="" fill className="object-cover" unoptimized onError={() => setImgError(true)} />
         </div>
       )}
 
@@ -74,7 +76,7 @@ function QuizMultiple({ ejercicio, onResponder }) {
               key={idx}
               onClick={() => !verificada && setSeleccionada(idx)}
               disabled={verificada}
-              className={`w-full text-left p-4 border-[3px] border-black ${bg} ${text} font-black text-lg uppercase transition-all ${!verificada ? 'hover:translate-x-[-2px] hover:translate-y-[-2px]' : ''} flex items-center justify-between gap-3`}
+              className={`w-full text-left p-4 border-[3px] border-black ${bg} ${text} font-black text-lg uppercase transition-all ${!verificada ? 'hover:-translate-x-0.5 hover:-translate-y-0.5' : ''} flex items-center justify-between gap-3`}
               style={{ boxShadow: esSel || (verificada && esCorrOp) ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
             >
               <span className="flex-1">{opcion}</span>
@@ -125,7 +127,7 @@ function QuizVerdaderoFalso({ ejercicio, onResponder }) {
               key={valor.toString()}
               onClick={() => !verificada && setRespuesta(valor)}
               disabled={verificada}
-              className={`p-6 border-[3px] border-black ${bg} font-black uppercase text-2xl tracking-wider transition-all ${!verificada ? 'hover:translate-y-[-2px]' : ''}`}
+              className={`p-6 border-[3px] border-black ${bg} font-black uppercase text-2xl tracking-wider transition-all ${!verificada ? 'hover:-translate-y-0.5' : ''}`}
               style={{ boxShadow: esSel || (verificada && esCorrOp) ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
             >
               {valor ? '✓ Verdadero' : '✗ Falso'}
@@ -172,7 +174,7 @@ function QuizOrdenar({ ejercicio, onResponder }) {
       <h3 className="text-2xl md:text-3xl font-black text-black uppercase mb-6 leading-tight">{ejercicio.pregunta}</h3>
 
       {/* Zona de orden */}
-      <div className="bg-[#FFD23F] border-[3px] border-black p-4 mb-4 min-h-[80px] flex flex-wrap gap-2" style={{ boxShadow: '6px 6px 0 #000' }}>
+      <div className="bg-[#FFD23F] border-[3px] border-black p-4 mb-4 min-h-20 flex flex-wrap gap-2" style={{ boxShadow: '6px 6px 0 #000' }}>
         {orden.length === 0 && <p className="font-bold text-black/50 italic">Toca las palabras abajo para ordenarlas aquí</p>}
         {orden.map((palabraIdx, posicion) => (
           <button
@@ -196,7 +198,7 @@ function QuizOrdenar({ ejercicio, onResponder }) {
               key={idx}
               onClick={() => agregar(idx)}
               disabled={verificada}
-              className="bg-black text-[#FFD23F] border-[3px] border-black px-3 py-2 font-black uppercase text-sm hover:translate-y-[-2px] transition-transform"
+              className="bg-black text-[#FFD23F] border-[3px] border-black px-3 py-2 font-black uppercase text-sm hover:-translate-y-0.5 transition-transform"
               style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
             >
               {palabra}
@@ -207,6 +209,19 @@ function QuizOrdenar({ ejercicio, onResponder }) {
 
       <Feedback verificada={verificada} esCorrecta={esCorrecta} explicacion={ejercicio.explicacion} />
       <BotonAccion verificada={verificada} habilitado={orden.length === ejercicio.palabras.length} onVerificar={verificar} onContinuar={continuar} />
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// HELPER: Imagen dentro del match con fallback
+// ─────────────────────────────────────────────
+function MatchImagen({ src }) {
+  const [error, setError] = useState(false);
+  if (error) return <span className="text-2xl">🖼️</span>;
+  return (
+    <div className="w-full h-16 relative">
+      <Image src={src} alt="" fill className="object-cover" unoptimized onError={() => setError(true)} />
     </div>
   );
 }
@@ -262,12 +277,12 @@ function QuizMatch({ ejercicio, onResponder }) {
                 onClick={() => seleccionarIzq(idx)}
                 disabled={verificada || emparejado}
                 className={`w-full p-3 border-[3px] border-black font-black text-center transition-all ${
-                  emparejado ? 'bg-[#7FFF6B]' : seleccionado ? 'bg-[#FFD23F]' : 'bg-white hover:translate-y-[-2px]'
+                  emparejado ? 'bg-[#7FFF6B]' : seleccionado ? 'bg-[#FFD23F]' : 'bg-white hover:-translate-y-0.5'
                 }`}
                 style={{ boxShadow: '4px 4px 0 #000' }}
               >
                 {p.tipo_izquierda === 'imagen' ? (
-                  <img src={p.izquierda} alt="" className="w-full h-16 object-cover" onError={(e) => { e.target.replaceWith(document.createTextNode('🖼️')); }} />
+                  <MatchImagen src={p.izquierda} />
                 ) : (
                   <span className="text-2xl">{p.izquierda}</span>
                 )}
@@ -286,7 +301,7 @@ function QuizMatch({ ejercicio, onResponder }) {
                 onClick={() => seleccionarDer(p)}
                 disabled={verificada || yaUsado || seleccionIzq === null}
                 className={`w-full p-3 border-[3px] border-black font-black text-sm uppercase transition-all ${
-                  yaUsado ? 'bg-[#7FFF6B]' : 'bg-white hover:translate-y-[-2px]'
+                  yaUsado ? 'bg-[#7FFF6B]' : 'bg-white hover:-translate-y-0.5'
                 } ${seleccionIzq === null ? 'opacity-50' : ''}`}
                 style={{ boxShadow: '4px 4px 0 #000' }}
               >
@@ -340,7 +355,7 @@ function BotonAccion({ verificada, habilitado, onVerificar, onContinuar }) {
     return (
       <button
         onClick={onContinuar}
-        className="w-full p-4 border-[3px] border-black bg-[#7FFF6B] text-black font-black uppercase text-xl tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
+        className="w-full p-4 border-[3px] border-black bg-[#7FFF6B] text-black font-black uppercase text-xl tracking-wider hover:-translate-y-0.5 active:translate-y-0 transition-transform"
         style={{ boxShadow: '6px 6px 0 #000' }}
       >
         Continuar <ChevronRight className="inline ml-1" size={24} strokeWidth={4} />
@@ -353,7 +368,7 @@ function BotonAccion({ verificada, habilitado, onVerificar, onContinuar }) {
       onClick={onVerificar}
       disabled={!habilitado}
       className={`w-full p-4 border-[3px] border-black font-black uppercase text-xl tracking-wider transition-all ${
-        habilitado ? 'bg-black text-[#FFD23F] hover:translate-y-[-2px]' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        habilitado ? 'bg-black text-[#FFD23F] hover:-translate-y-0.5' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
       }`}
       style={{ boxShadow: habilitado ? '6px 6px 0 #FFD23F' : 'none' }}
     >

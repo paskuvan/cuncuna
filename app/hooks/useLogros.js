@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createClient } from '../lib/supabase-client';
 import { detectarLogrosNuevos, LOGROS } from '../data/logros';
 
@@ -21,7 +21,7 @@ export const useLogros = (progreso) => {
   const [cargando, setCargando] = useState(true);
   const [yaVerificadoRetroactivamente, setYaVerificadoRetroactivamente] = useState(false);
 
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   // Cargar logros al montar
   useEffect(() => {
@@ -42,7 +42,7 @@ export const useLogros = (progreso) => {
     };
 
     cargar();
-  }, []);
+  }, [supabase]);
 
   /**
    * Verifica logros sin mostrar modal (para verificación retroactiva silenciosa).
@@ -71,7 +71,7 @@ export const useLogros = (progreso) => {
     // vea que desbloqueó algo. Si prefieres no mostrar modal en retroactivo,
     // comenta la línea de abajo.
     setLogrosNuevos(nuevos);
-  }, [logrosObtenidos]);
+  }, [logrosObtenidos, supabase]);
 
   // Verificación retroactiva: al cargar, si ya tienes progreso pero te
   // faltan logros que te corresponden, los detecta y guarda.
@@ -89,8 +89,10 @@ export const useLogros = (progreso) => {
         videosVistos: progreso.videosVistos ?? 0,
         quizzesAcertados: progreso.quizzesAcertados ?? 0,
       };
-      verificarSilencioso(stats);
-      setYaVerificadoRetroactivamente(true);
+      (async () => {
+        await verificarSilencioso(stats);
+        setYaVerificadoRetroactivamente(true);
+      })();
     }
   }, [cargando, progreso, yaVerificadoRetroactivamente, verificarSilencioso]);
 
@@ -117,7 +119,7 @@ export const useLogros = (progreso) => {
       setLogrosObtenidos((prev) => [...prev, ...nuevos.map((l) => l.id)]);
       setLogrosNuevos(nuevos);
     },
-    [logrosObtenidos]
+    [logrosObtenidos, supabase]
   );
 
   const limpiarLogrosNuevos = useCallback(() => {

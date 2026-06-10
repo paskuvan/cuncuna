@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { LogOut, User } from 'lucide-react';
 import { useUsuario } from '../hooks/useUsuario';
 
@@ -24,12 +25,12 @@ export default function UsuarioMenu() {
     <div className="relative">
       <button
         onClick={() => setAbierto(!abierto)}
-        className="bg-white border-[3px] border-white w-10 h-10 flex items-center justify-center overflow-hidden hover:translate-y-[-2px] transition-transform"
+        className="bg-white border-[3px] border-white w-10 h-10 flex items-center justify-center overflow-hidden hover:-translate-y-0.5 transition-transform"
         style={{ boxShadow: '3px 3px 0 #FFD23F' }}
         aria-label="Menú de usuario"
       >
         {avatar ? (
-          <img src={avatar} alt={nombre} className="w-full h-full object-cover" />
+          <Image src={avatar} alt={nombre} width={40} height={40} className="w-full h-full object-cover" unoptimized />
         ) : (
           <span className="font-black text-black text-lg">{inicial}</span>
         )}
@@ -56,8 +57,8 @@ export default function UsuarioMenu() {
                   Tu cuenta
                 </span>
               </div>
-              <p className="font-black text-black text-sm break-words">{nombre}</p>
-              <p className="font-bold text-black/70 text-xs break-words mt-0.5">
+              <p className="font-black text-black text-sm wrap-break-word">{nombre}</p>
+              <p className="font-bold text-black/70 text-xs wrap-break-word mt-0.5">
                 {usuario.email}
               </p>
             </div>
