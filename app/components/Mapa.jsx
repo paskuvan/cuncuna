@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { BarChart3, BookOpen, Check, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
+import { BarChart3, BookOpen, Camera, Check, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import UsuarioMenu from './UsuarioMenu';
 import Cuncuna from './mascota/Cuncuna';
@@ -169,6 +169,14 @@ export default function Mapa({
               </div>
 
               <div className="flex flex-wrap gap-3 mt-5">
+                <Link
+                  href="/app/practica"
+                  className="bg-[#4ECDC4] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <Camera size={18} strokeWidth={4} />
+                  Practicar con cámara
+                </Link>
                 <Link
                   href="/app/repaso"
                   className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"

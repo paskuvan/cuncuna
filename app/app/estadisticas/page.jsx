@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Activity, ArrowLeft, BarChart3, BookOpen, RotateCcw, Target, Trophy } from 'lucide-react';
+import { Activity, ArrowLeft, BarChart3, BookOpen, Camera, RotateCcw, Target, Trophy } from 'lucide-react';
 import { obtenerSenasDiccionario } from '../../lib/diccionario';
 import { enriquecerSenasConErrores, obtenerErroresLocales } from '../../lib/errores-locales';
 import {
@@ -77,11 +77,12 @@ export default function PaginaEstadisticas() {
           </h2>
         </section>
 
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <section className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
           <StatCard icono={<Activity size={24} strokeWidth={3} />} titulo="Repasos" valor={stats.repasosCompletados} color="#FFD23F" />
           <StatCard icono={<BookOpen size={24} strokeWidth={3} />} titulo="Señas vistas" valor={stats.senasVistas} color="#7FFF6B" />
           <StatCard icono={<Target size={24} strokeWidth={3} />} titulo="Errores" valor={errores.length} color="#FF6B9D" />
           <StatCard icono={<Trophy size={24} strokeWidth={3} />} titulo="Misiones" valor={`${resumenMisiones.completadas}/${resumenMisiones.total}`} color="#A78BFA" />
+          <StatCard icono={<Camera size={24} strokeWidth={3} />} titulo="Con cámara" valor={stats.senasPracticadasCamara.length} color="#4ECDC4" />
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -122,6 +123,13 @@ export default function PaginaEstadisticas() {
             style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
           >
             Practicar
+          </Link>
+          <Link
+            href="/app/practica"
+            className="bg-[#4ECDC4] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm hover:translate-y-[-2px] transition-transform"
+            style={{ boxShadow: '5px 5px 0 #000' }}
+          >
+            Abrir cámara
           </Link>
           <Link
             href="/app/misiones"

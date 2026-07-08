@@ -28,6 +28,8 @@ function crearStatsBase() {
     practicasErrores: 0,
     erroresRecuperados: 0,
     conversacionesCompletadas: 0,
+    practicasCamara: 0,
+    senasPracticadasCamara: [],
     ultimaActividad: null,
   };
 }
@@ -89,6 +91,18 @@ export function registrarConversacionEstadisticas({ correctas, total }) {
     conversacionesCompletadas: stats.conversacionesCompletadas + 1,
     respuestasCorrectas: stats.respuestasCorrectas + correctas,
     respuestasTotales: stats.respuestasTotales + total,
+  });
+
+  guardarStats(actualizadas);
+  return actualizadas;
+}
+
+export function registrarPracticaCamaraEstadisticas(senaId) {
+  const stats = leerStats();
+  const actualizadas = conActividad({
+    ...stats,
+    practicasCamara: stats.practicasCamara + 1,
+    senasPracticadasCamara: [...new Set([...stats.senasPracticadasCamara, senaId])],
   });
 
   guardarStats(actualizadas);

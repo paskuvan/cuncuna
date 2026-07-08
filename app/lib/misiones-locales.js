@@ -38,6 +38,15 @@ export const MISIONES_DIARIAS = [
     color: '#FF6B9D',
   },
   {
+    id: 'practica_camara',
+    evento: 'practica_camara',
+    titulo: 'Manos a la obra',
+    descripcion: 'Practica una seña frente a la cámara.',
+    objetivo: 1,
+    xp: 20,
+    color: '#4ECDC4',
+  },
+  {
     id: 'conversacion',
     evento: 'conversacion',
     titulo: 'Conversación real',
