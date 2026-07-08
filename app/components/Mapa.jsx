@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Check, Lock, Star, Flame, Sparkles, Trophy } from 'lucide-react';
+import { BookOpen, Check, Flag, Lock, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import UsuarioMenu from './UsuarioMenu';
 import Cuncuna from './mascota/Cuncuna';
@@ -77,6 +77,24 @@ export default function Mapa({
               <span className="text-black font-black text-sm">{logrosObtenidos.length}</span>
             </Link>
 
+            <Link
+              href="/app/diccionario"
+              className="bg-white border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+              aria-label="Ver diccionario"
+            >
+              <BookOpen size={18} strokeWidth={3} className="text-black" />
+            </Link>
+
+            <Link
+              href="/app/misiones"
+              className="bg-[#FFD23F] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
+              aria-label="Ver misiones"
+            >
+              <Flag size={18} strokeWidth={3} className="text-black" />
+            </Link>
+
             <UsuarioMenu />
           </div>
         </div>
@@ -121,6 +139,41 @@ export default function Mapa({
                     </span>
                   )}
                 </div>
+              </div>
+
+              <div className="flex flex-wrap gap-3 mt-5">
+                <Link
+                  href="/app/repaso"
+                  className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
+                >
+                  <RotateCcw size={18} strokeWidth={4} />
+                  Repaso diario
+                </Link>
+                <Link
+                  href="/app/diccionario"
+                  className="bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <BookOpen size={18} strokeWidth={4} />
+                  Diccionario
+                </Link>
+                <Link
+                  href="/app/errores"
+                  className="bg-[#FF6B9D] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <Target size={18} strokeWidth={4} />
+                  Mis errores
+                </Link>
+                <Link
+                  href="/app/misiones"
+                  className="bg-[#7FFF6B] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <Flag size={18} strokeWidth={4} />
+                  Misiones
+                </Link>
               </div>
             </div>
           </div>

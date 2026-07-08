@@ -32,7 +32,7 @@ export default function PaginaLogros() {
       <header className="bg-black border-b-[4px] border-black sticky top-0 z-10">
         <div className="max-w-4xl mx-auto p-4 flex items-center gap-3">
           <Link
-            href="app/"
+            href="/app"
             className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
             style={{ boxShadow: '3px 3px 0 #FFD23F' }}
             aria-label="Volver"
