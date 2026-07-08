@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { BookOpen, Check, Flag, Lock, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
+import { BarChart3, BookOpen, Check, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import UsuarioMenu from './UsuarioMenu';
 import Cuncuna from './mascota/Cuncuna';
@@ -95,6 +95,33 @@ export default function Mapa({
               <Flag size={18} strokeWidth={3} className="text-black" />
             </Link>
 
+            <Link
+              href="/app/estadisticas"
+              className="bg-[#4ECDC4] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+              aria-label="Ver estadísticas"
+            >
+              <BarChart3 size={18} strokeWidth={3} className="text-black" />
+            </Link>
+
+            <Link
+              href="/app/conversaciones"
+              className="bg-[#A78BFA] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+              aria-label="Ver conversaciones"
+            >
+              <MessageCircle size={18} strokeWidth={3} className="text-white" />
+            </Link>
+
+            <Link
+              href="/app/favoritos"
+              className="bg-[#FFD23F] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
+              aria-label="Ver favoritos"
+            >
+              <Star size={18} strokeWidth={3} className="text-black" fill="black" />
+            </Link>
+
             <UsuarioMenu />
           </div>
         </div>
@@ -173,6 +200,30 @@ export default function Mapa({
                 >
                   <Flag size={18} strokeWidth={4} />
                   Misiones
+                </Link>
+                <Link
+                  href="/app/estadisticas"
+                  className="bg-[#4ECDC4] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <BarChart3 size={18} strokeWidth={4} />
+                  Estadísticas
+                </Link>
+                <Link
+                  href="/app/conversaciones"
+                  className="bg-[#A78BFA] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <MessageCircle size={18} strokeWidth={4} />
+                  Conversaciones
+                </Link>
+                <Link
+                  href="/app/favoritos"
+                  className="bg-[#FFD23F] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <Star size={18} strokeWidth={4} fill="black" />
+                  Favoritos
                 </Link>
               </div>
             </div>

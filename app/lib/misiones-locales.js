@@ -37,6 +37,15 @@ export const MISIONES_DIARIAS = [
     xp: 20,
     color: '#FF6B9D',
   },
+  {
+    id: 'conversacion',
+    evento: 'conversacion',
+    titulo: 'Conversación real',
+    descripcion: 'Completa una mini conversación.',
+    objetivo: 1,
+    xp: 25,
+    color: '#A78BFA',
+  },
 ];
 
 function fechaLocal() {

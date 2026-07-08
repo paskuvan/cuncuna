@@ -2,34 +2,30 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Check, ChevronRight, RotateCcw, Target, Trash2, X } from 'lucide-react';
+import { ArrowLeft, Check, ChevronRight, RotateCcw, Star, Trash2, X } from 'lucide-react';
 import VideoPlayer from '../../components/VideoPlayer';
 import { crearOpcionesRepaso, obtenerSenasDiccionario } from '../../lib/diccionario';
 import {
-  enriquecerSenasConErrores,
-  limpiarErrorLocal,
-  limpiarTodosLosErroresLocales,
-  obtenerErroresLocales,
-  registrarResultadoSena,
-} from '../../lib/errores-locales';
-import { registrarPracticaErroresEstadisticas } from '../../lib/estadisticas-locales';
-import { registrarEventoMision } from '../../lib/misiones-locales';
+  alternarFavoritoLocal,
+  limpiarFavoritosLocales,
+  obtenerFavoritosLocales,
+  obtenerSenasFavoritas,
+} from '../../lib/favoritos-locales';
 
-export default function PaginaErrores() {
+export default function PaginaFavoritos() {
   const todasLasSenas = useMemo(() => obtenerSenasDiccionario(), []);
-  const [errores, setErrores] = useState(() => obtenerErroresLocales());
+  const [favoritos, setFavoritos] = useState(() => obtenerFavoritosLocales());
   const [modoPractica, setModoPractica] = useState(false);
   const [indice, setIndice] = useState(0);
   const [seleccion, setSeleccion] = useState(null);
-  const [verificado, setVerificado] = useState(false);
+  const [verificada, setVerificada] = useState(false);
   const [resultados, setResultados] = useState([]);
 
-  const senasDebiles = useMemo(
-    () => enriquecerSenasConErrores(todasLasSenas, errores),
-    [errores, todasLasSenas]
+  const senasFavoritas = useMemo(
+    () => obtenerSenasFavoritas(todasLasSenas, favoritos),
+    [favoritos, todasLasSenas]
   );
-
-  const ejercicios = senasDebiles.slice(0, 5);
+  const ejercicios = senasFavoritas.slice(0, 5);
   const ejercicio = modoPractica ? ejercicios[indice] : null;
   const opciones = useMemo(
     () => (ejercicio ? crearOpcionesRepaso(ejercicio, todasLasSenas, 4) : []),
@@ -42,7 +38,7 @@ export default function PaginaErrores() {
     setModoPractica(true);
     setIndice(0);
     setSeleccion(null);
-    setVerificado(false);
+    setVerificada(false);
     setResultados([]);
   };
 
@@ -50,35 +46,24 @@ export default function PaginaErrores() {
     setModoPractica(false);
     setIndice(0);
     setSeleccion(null);
-    setVerificado(false);
+    setVerificada(false);
     setResultados([]);
+  };
+
+  const quitarFavorito = (senaId) => {
+    setFavoritos(alternarFavoritoLocal(senaId));
+  };
+
+  const limpiarTodo = () => {
+    setFavoritos(limpiarFavoritosLocales());
   };
 
   const siguiente = () => {
     const acerto = seleccion?.id === ejercicio.id;
-    const nuevosErrores = registrarResultadoSena(ejercicio.id, acerto);
-
-    if (indice === ejercicios.length - 1) {
-      const siguientesResultados = [...resultados, acerto];
-      registrarPracticaErroresEstadisticas({
-        correctas: siguientesResultados.filter(Boolean).length,
-        total: ejercicios.length,
-      });
-      registrarEventoMision('practicar_errores');
-    }
-    setErrores(nuevosErrores);
     setResultados([...resultados, acerto]);
     setSeleccion(null);
-    setVerificado(false);
+    setVerificada(false);
     setIndice(indice + 1);
-  };
-
-  const limpiarSena = (senaId) => {
-    setErrores(limpiarErrorLocal(senaId));
-  };
-
-  const limpiarTodo = () => {
-    setErrores(limpiarTodosLosErroresLocales());
   };
 
   if (practicaCompleta) {
@@ -88,13 +73,13 @@ export default function PaginaErrores() {
           className="bg-[#FFD23F] border-[4px] border-black p-6 md:p-8 max-w-md w-full text-center"
           style={{ boxShadow: '12px 12px 0 #000' }}
         >
-          <div className="text-6xl mb-4">🎯</div>
+          <div className="text-6xl mb-4">⭐</div>
           <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70 mb-2">
-            Práctica terminada
+            Favoritos practicados
           </p>
           <h1 className="font-black uppercase text-4xl text-black leading-none mb-4">
             {aciertos}/{ejercicios.length}
-            <span className="block text-lg mt-2 text-black/70">señas recuperadas</span>
+            <span className="block text-lg mt-2 text-black/70">respuestas correctas</span>
           </h1>
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -138,7 +123,7 @@ export default function PaginaErrores() {
                 style={{ boxShadow: '3px 3px 0 #FFD23F' }}
               >
                 <div
-                  className="h-full bg-[#FF6B9D] transition-all duration-300"
+                  className="h-full bg-[#FFD23F] transition-all duration-300"
                   style={{ width: `${progreso}%` }}
                 />
               </div>
@@ -151,17 +136,17 @@ export default function PaginaErrores() {
 
         <main className="max-w-3xl mx-auto p-4 md:p-6">
           <section
-            className="bg-[#FF6B9D] border-[4px] border-black p-5 md:p-6 mb-6"
+            className="bg-[#FFD23F] border-[4px] border-black p-5 md:p-6 mb-6"
             style={{ boxShadow: '10px 10px 0 #000' }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <Target size={22} strokeWidth={3} className="text-white" />
-              <p className="font-black uppercase text-xs tracking-[0.2em] text-white/80">
-                Mis errores
+              <Star size={22} strokeWidth={3} fill="black" className="text-black" />
+              <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70">
+                Favoritos
               </p>
             </div>
-            <h1 className="font-black uppercase text-3xl md:text-5xl text-white leading-none">
-              Recupera esta seña
+            <h1 className="font-black uppercase text-3xl md:text-5xl text-black leading-none">
+              Practica tu lista
             </h1>
           </section>
 
@@ -182,9 +167,9 @@ export default function PaginaErrores() {
                 let fondo = 'bg-white';
                 let texto = 'text-black';
 
-                if (verificado && esCorrecta) {
+                if (verificada && esCorrecta) {
                   fondo = 'bg-[#7FFF6B]';
-                } else if (verificado && estaSeleccionada) {
+                } else if (verificada && estaSeleccionada) {
                   fondo = 'bg-[#FF6B6B]';
                   texto = 'text-white';
                 } else if (estaSeleccionada) {
@@ -194,42 +179,28 @@ export default function PaginaErrores() {
                 return (
                   <button
                     key={opcion.id}
-                    onClick={() => !verificado && setSeleccion(opcion)}
-                    disabled={verificado}
+                    onClick={() => !verificada && setSeleccion(opcion)}
+                    disabled={verificada}
                     className={`${fondo} ${texto} border-[3px] border-black p-4 font-black uppercase text-left flex items-center justify-between gap-3 transition-all ${
-                      !verificado ? 'hover:translate-x-[-2px] hover:translate-y-[-2px]' : ''
+                      !verificada ? 'hover:translate-x-[-2px] hover:translate-y-[-2px]' : ''
                     }`}
                     style={{ boxShadow: estaSeleccionada || esCorrecta ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
                   >
                     <span>{opcion.palabra}</span>
-                    {verificado && esCorrecta && <Check size={22} strokeWidth={4} />}
-                    {verificado && estaSeleccionada && !esCorrecta && <X size={22} strokeWidth={4} />}
+                    {verificada && esCorrecta && <Check size={22} strokeWidth={4} />}
+                    {verificada && estaSeleccionada && !esCorrecta && <X size={22} strokeWidth={4} />}
                   </button>
                 );
               })}
             </div>
 
-            {verificado && (
-              <div
-                className={`mt-6 border-[3px] border-black p-4 ${
-                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-white'
-                }`}
-                style={{ boxShadow: '5px 5px 0 #000' }}
-              >
-                <p className="font-black uppercase">
-                  {seleccion?.id === ejercicio.id ? '¡Recuperada!' : `Era: ${ejercicio.palabra}`}
-                </p>
-                <p className="font-bold text-sm mt-1">{ejercicio.descripcion}</p>
-              </div>
-            )}
-
             <button
-              onClick={verificado ? siguiente : () => seleccion && setVerificado(true)}
+              onClick={verificada ? siguiente : () => seleccion && setVerificada(true)}
               disabled={!seleccion}
               className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-lg tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
               style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
             >
-              {verificado ? 'Siguiente' : 'Verificar'}
+              {verificada ? 'Siguiente' : 'Verificar'}
               <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
             </button>
           </section>
@@ -252,68 +223,68 @@ export default function PaginaErrores() {
           </Link>
           <div className="flex-1 min-w-0">
             <h1 className="text-white font-black text-xl md:text-2xl uppercase leading-none">
-              Mis errores
+              Favoritos
             </h1>
             <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
-              Señas para recuperar
+              Tu lista personal
             </p>
           </div>
           <div
-            className="bg-[#FF6B9D] border-[3px] border-white px-3 py-1.5 font-black text-white text-sm"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+            className="bg-[#FFD23F] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
+            style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
           >
-            {senasDebiles.length}
+            {senasFavoritas.length}
           </div>
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto p-4 md:p-6">
         <section
-          className="bg-[#FF6B9D] border-[4px] border-black p-5 md:p-6 mb-6"
+          className="bg-[#FFD23F] border-[4px] border-black p-5 md:p-6 mb-6"
           style={{ boxShadow: '10px 10px 0 #000' }}
         >
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-white/80 mb-2">
-            Entrenamiento enfocado
+          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70 mb-2">
+            Colección personal
           </p>
-          <h2 className="font-black uppercase text-3xl md:text-5xl text-white leading-none mb-4">
-            Vuelve fuerte
+          <h2 className="font-black uppercase text-3xl md:text-5xl text-black leading-none mb-4">
+            Señas guardadas
           </h2>
           <div className="flex flex-wrap gap-3">
             <button
               onClick={empezarPractica}
-              disabled={senasDebiles.length === 0}
+              disabled={senasFavoritas.length === 0}
               className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #FFD23F' }}
+              style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
             >
               <RotateCcw size={18} strokeWidth={4} />
-              Practicar errores
+              Practicar favoritos
             </button>
             <button
               onClick={limpiarTodo}
-              disabled={senasDebiles.length === 0}
+              disabled={senasFavoritas.length === 0}
               className="bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
               style={{ boxShadow: '5px 5px 0 #000' }}
             >
               <Trash2 size={18} strokeWidth={4} />
-              Limpiar lista
+              Limpiar
             </button>
           </div>
         </section>
 
-        {senasDebiles.length === 0 ? (
+        {senasFavoritas.length === 0 ? (
           <div
             className="bg-white border-[4px] border-black p-8 text-center"
             style={{ boxShadow: '10px 10px 0 #000' }}
           >
-            <Target size={46} strokeWidth={3} className="mx-auto text-black mb-3" />
-            <p className="font-black uppercase text-black text-xl">Aún no hay errores</p>
+            <Star size={46} strokeWidth={3} className="mx-auto text-black mb-3" />
+            <p className="font-black uppercase text-black text-xl">Aún no hay favoritas</p>
             <p className="font-bold text-black/60 mt-2">
-              Cuando falles una seña en el repaso diario, aparecerá aquí.
+              Guarda señas desde el diccionario para repasarlas aquí.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {senasDebiles.map((sena) => (
+            {senasFavoritas.map((sena) => (
               <article
                 key={sena.id}
                 className="bg-white border-[3px] border-black p-4"
@@ -329,24 +300,22 @@ export default function PaginaErrores() {
                     </h3>
                   </div>
                   <button
-                    onClick={() => limpiarSena(sena.id)}
-                    className="bg-[#7FFF6B] border-[3px] border-black p-2 hover:translate-y-[-2px] transition-transform"
+                    onClick={() => quitarFavorito(sena.id)}
+                    className="bg-[#FF6B6B] border-[3px] border-black p-2 hover:translate-y-[-2px] transition-transform"
                     style={{ boxShadow: '3px 3px 0 #000' }}
-                    aria-label={`Marcar ${sena.palabra} como recuperada`}
+                    aria-label={`Quitar ${sena.palabra} de favoritos`}
                   >
-                    <Check size={18} strokeWidth={4} className="text-black" />
+                    <X size={18} strokeWidth={4} className="text-white" />
                   </button>
                 </div>
                 <p className="font-bold text-black/70 text-sm mt-2 line-clamp-2">
                   {sena.descripcion}
                 </p>
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  <div className="bg-[#FF6B6B] text-white border-[3px] border-black p-2 font-black uppercase text-center">
-                    {sena.fallos} fallos
-                  </div>
-                  <div className="bg-[#7FFF6B] text-black border-[3px] border-black p-2 font-black uppercase text-center">
-                    {sena.aciertos} aciertos
-                  </div>
+                <div
+                  className="mt-4 border-[3px] border-black p-2 font-black uppercase text-xs text-black"
+                  style={{ backgroundColor: sena.nivelColor }}
+                >
+                  Nivel {sena.nivelNumero} · {sena.nivelTitulo}
                 </div>
               </article>
             ))}

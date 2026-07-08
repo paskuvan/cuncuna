@@ -10,6 +10,7 @@ import {
   obtenerSenasDiccionario,
 } from '../../lib/diccionario';
 import { registrarResultadoSena } from '../../lib/errores-locales';
+import { registrarRepasoEstadisticas } from '../../lib/estadisticas-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
 
 export default function PaginaRepaso() {
@@ -40,6 +41,11 @@ export default function PaginaRepaso() {
 
     registrarResultadoSena(ejercicio.id, acerto);
     if (indice === ejercicios.length - 1) {
+      registrarRepasoEstadisticas({
+        correctas: siguientesResultados.filter(Boolean).length,
+        total: ejercicios.length,
+        senasVistas: ejercicios.length,
+      });
       registrarEventoMision('repaso_diario');
       if (siguientesResultados.filter(Boolean).length >= 4) {
         registrarEventoMision('precision_repaso');

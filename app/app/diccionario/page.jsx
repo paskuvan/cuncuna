@@ -8,6 +8,12 @@ import {
   obtenerNivelesDiccionario,
   obtenerSenasDiccionario,
 } from '../../lib/diccionario';
+import { registrarDiccionarioEstadisticas } from '../../lib/estadisticas-locales';
+import {
+  alternarFavoritoLocal,
+  esFavoritaLocal,
+  obtenerFavoritosLocales,
+} from '../../lib/favoritos-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
 
 export default function PaginaDiccionario() {
@@ -16,8 +22,10 @@ export default function PaginaDiccionario() {
   const [busqueda, setBusqueda] = useState('');
   const [nivelActivo, setNivelActivo] = useState('todos');
   const [senaActiva, setSenaActiva] = useState(senas[0] ?? null);
+  const [favoritos, setFavoritos] = useState(() => obtenerFavoritosLocales());
 
   useEffect(() => {
+    registrarDiccionarioEstadisticas();
     registrarEventoMision('explorar_diccionario');
   }, []);
 
@@ -40,6 +48,10 @@ export default function PaginaDiccionario() {
     setNivelActivo(nivelId);
     const siguiente = senas.find((sena) => nivelId === 'todos' || sena.nivelId === nivelId);
     setSenaActiva(siguiente ?? null);
+  };
+
+  const alternarFavorita = (senaId) => {
+    setFavoritos(alternarFavoritoLocal(senaId));
   };
 
   return (
@@ -183,7 +195,11 @@ export default function PaginaDiccionario() {
                         {sena.leccionTitulo}
                       </span>
                       <span className="flex items-center gap-1 bg-black text-[#FFD23F] px-2 py-1 font-black text-xs shrink-0">
-                        <Star size={12} strokeWidth={3} fill="#FFD23F" />
+                        <Star
+                          size={12}
+                          strokeWidth={3}
+                          fill={favoritos.includes(sena.id) ? '#FFD23F' : 'none'}
+                        />
                         {sena.xp}
                       </span>
                     </div>
@@ -209,12 +225,31 @@ export default function PaginaDiccionario() {
                 style={{ boxShadow: '10px 10px 0 #000' }}
               >
                 <div className="mb-4">
-                  <p className="font-black uppercase text-xs tracking-[0.2em] text-black/50 mb-1">
-                    {senaActiva.nivelTitulo}
-                  </p>
-                  <h2 className="font-black uppercase text-3xl text-black leading-none">
-                    {senaActiva.palabra}
-                  </h2>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-black uppercase text-xs tracking-[0.2em] text-black/50 mb-1">
+                        {senaActiva.nivelTitulo}
+                      </p>
+                      <h2 className="font-black uppercase text-3xl text-black leading-none">
+                        {senaActiva.palabra}
+                      </h2>
+                    </div>
+                    <button
+                      onClick={() => alternarFavorita(senaActiva.id)}
+                      className={`border-[3px] border-black p-2 hover:translate-y-[-2px] transition-transform ${
+                        esFavoritaLocal(senaActiva.id) ? 'bg-[#FFD23F]' : 'bg-white'
+                      }`}
+                      style={{ boxShadow: '3px 3px 0 #000' }}
+                      aria-label="Guardar favorita"
+                    >
+                      <Star
+                        size={22}
+                        strokeWidth={3}
+                        className="text-black"
+                        fill={favoritos.includes(senaActiva.id) ? 'black' : 'none'}
+                      />
+                    </button>
+                  </div>
                   <p className="font-bold text-black/70 text-sm mt-2">
                     {senaActiva.descripcion}
                   </p>
