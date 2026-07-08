@@ -6,16 +6,23 @@ import { ArrowLeft, Check, ChevronRight, RotateCcw, Sparkles, X } from 'lucide-r
 import VideoPlayer from '../../components/VideoPlayer';
 import {
   crearOpcionesRepaso,
-  obtenerRepasoDiario,
   obtenerSenasDiccionario,
 } from '../../lib/diccionario';
 import { registrarResultadoSena } from '../../lib/errores-locales';
 import { registrarRepasoEstadisticas } from '../../lib/estadisticas-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
+import {
+  describirProximoRepaso,
+  obtenerRepasoInteligente,
+  registrarRepasoEspaciado,
+} from '../../lib/repeticion-espaciada';
 
 export default function PaginaRepaso() {
   const todasLasSenas = useMemo(() => obtenerSenasDiccionario(), []);
-  const ejercicios = useMemo(() => obtenerRepasoDiario(new Date(), 5), []);
+  const ejercicios = useMemo(
+    () => obtenerRepasoInteligente(todasLasSenas, 5),
+    [todasLasSenas]
+  );
   const [indice, setIndice] = useState(0);
   const [seleccion, setSeleccion] = useState(null);
   const [verificado, setVerificado] = useState(false);
@@ -35,11 +42,15 @@ export default function PaginaRepaso() {
     setVerificado(true);
   };
 
-  const siguiente = () => {
+  const siguiente = (calidad) => {
     const acerto = seleccion?.id === ejercicio.id;
     const siguientesResultados = [...resultados, acerto];
 
     registrarResultadoSena(ejercicio.id, acerto);
+    registrarRepasoEspaciado(
+      ejercicio.id,
+      acerto ? calidad : 'incorrecta'
+    );
     if (indice === ejercicios.length - 1) {
       registrarRepasoEstadisticas({
         correctas: siguientesResultados.filter(Boolean).length,
@@ -73,7 +84,7 @@ export default function PaginaRepaso() {
         >
           <div className="text-6xl mb-4">✨</div>
           <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70 mb-2">
-            Repaso terminado
+            Repaso inteligente terminado
           </p>
           <h1 className="font-black uppercase text-4xl text-black leading-none mb-4">
             {aciertos}/{ejercicios.length}
@@ -145,7 +156,7 @@ export default function PaginaRepaso() {
           <div className="flex items-center gap-2 mb-2">
             <Sparkles size={22} strokeWidth={3} className="text-black" />
             <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70">
-              Repaso diario
+              Repaso inteligente
             </p>
           </div>
           <h1 className="font-black uppercase text-3xl md:text-5xl text-black leading-none">
@@ -201,32 +212,69 @@ export default function PaginaRepaso() {
           </div>
 
           {verificado && (
-            <div
-              className={`mt-6 border-[3px] border-black p-4 ${
-                seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-white'
-              }`}
-              style={{ boxShadow: '5px 5px 0 #000' }}
-            >
-              <p className="font-black uppercase">
-                {seleccion?.id === ejercicio.id ? '¡Correcto!' : `Era: ${ejercicio.palabra}`}
-              </p>
-              <p className="font-bold text-sm mt-1">{ejercicio.descripcion}</p>
-            </div>
+            <>
+              <div
+                className={`mt-6 border-[3px] border-black p-4 ${
+                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-white'
+                }`}
+                style={{ boxShadow: '5px 5px 0 #000' }}
+              >
+                <p className="font-black uppercase">
+                  {seleccion?.id === ejercicio.id ? '¡Correcto!' : `Era: ${ejercicio.palabra}`}
+                </p>
+                <p className="font-bold text-sm mt-1">{ejercicio.descripcion}</p>
+              </div>
+
+              {seleccion?.id === ejercicio.id ? (
+                <div className="mt-6">
+                  <p className="font-black uppercase text-xs tracking-[0.15em] text-black/60 mb-3">
+                    ¿Qué tan fácil fue recordarla?
+                  </p>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: 'dificil', texto: 'Difícil', color: '#FF6B9D' },
+                      { id: 'bien', texto: 'Bien', color: '#FFD23F' },
+                      { id: 'facil', texto: 'Fácil', color: '#7FFF6B' },
+                    ].map((calidad) => (
+                      <button
+                        key={calidad.id}
+                        onClick={() => siguiente(calidad.id)}
+                        className="border-[3px] border-black p-3 font-black uppercase text-xs text-black hover:translate-y-[-2px] transition-transform"
+                        style={{
+                          backgroundColor: calidad.color,
+                          boxShadow: '4px 4px 0 #000',
+                        }}
+                        title={describirProximoRepaso(calidad.id)}
+                      >
+                        {calidad.texto}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => siguiente('incorrecta')}
+                  className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-base"
+                  style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
+                >
+                  Practicar de nuevo pronto
+                  <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
+                </button>
+              )}
+            </>
           )}
 
-          <button
-            onClick={verificado ? siguiente : verificar}
-            disabled={!seleccion}
-            className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-lg tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-            style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
-          >
-            {verificado ? 'Siguiente' : 'Verificar'}
-            {verificado ? (
-              <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
-            ) : (
+          {!verificado && (
+            <button
+              onClick={verificar}
+              disabled={!seleccion}
+              className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-lg tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
+            >
+              Verificar
               <RotateCcw className="inline ml-2" size={20} strokeWidth={4} />
-            )}
-          </button>
+            </button>
+          )}
         </section>
       </main>
     </div>

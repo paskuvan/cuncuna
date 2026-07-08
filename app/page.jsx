@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import {
   Sparkles, BookOpen, Trophy, Heart, Play, Check,
-  Mail, ArrowRight, Star, Zap
+  Mail, ArrowRight, Star, Zap, Users, ShieldCheck
 } from 'lucide-react';
 import Cuncuna from './components/mascota/Cuncuna';
 
@@ -21,6 +21,7 @@ export default function LandingPage() {
       <Caracteristicas />
       <ComoFunciona />
       <Beneficios />
+      <Planes />
       <CtaWaitlist />
       <Footer />
     </div>
@@ -52,6 +53,12 @@ function NavBar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <a
+            href="#planes"
+            className="text-white px-2 py-2 font-black uppercase text-xs sm:text-sm tracking-wider hover:text-[#FFD23F] transition-colors hidden md:block"
+          >
+            Planes
+          </a>
           <a
             href="#waitlist"
             className="bg-[#FFD23F] text-black border-[3px] border-white px-3 sm:px-4 py-2 font-black uppercase text-xs sm:text-sm tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
@@ -316,7 +323,7 @@ function Beneficios() {
     'Aprende a tu ritmo, sin presión',
     'Contenido específico para Chile, no traducido',
     'Diseño accesible pensado para personas sordas',
-    'Sin publicidad, sin distracciones',
+    'Experiencia sin publicidad en Plus',
     'Tu progreso siempre guardado',
     'Gratuito durante el lanzamiento',
   ];
@@ -357,6 +364,199 @@ function Beneficios() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// PLANES
+// ─────────────────────────────────────────────
+function Planes() {
+  const [periodo, setPeriodo] = useState('mensual');
+  const anual = periodo === 'anual';
+  const planes = [
+    {
+      id: 'gratis',
+      nombre: 'Gratis',
+      descripcion: 'Para comenzar de seña en seña.',
+      precio: 0,
+      color: '#FFFFFF',
+      icono: <BookOpen size={26} strokeWidth={3} />,
+      beneficios: [
+        'Lecciones básicas',
+        'Un repaso diario',
+        'Rachas y logros',
+        'Progreso en este dispositivo',
+      ],
+      accion: 'Comenzar gratis',
+      href: '/login',
+    },
+    {
+      id: 'plus',
+      nombre: 'Plus',
+      descripcion: 'Para aprender sin límites.',
+      precioMensual: 4990,
+      precioAnual: 3990,
+      color: '#FFD23F',
+      icono: <Zap size={26} strokeWidth={3} />,
+      beneficios: [
+        'Todas las lecciones',
+        'Repasos ilimitados',
+        'Práctica con cámara',
+        'Sin anuncios',
+        'Estadísticas completas',
+        'Progreso sincronizado',
+      ],
+      accion: 'Elegir Plus',
+      destacado: true,
+    },
+    {
+      id: 'familia',
+      nombre: 'Familia',
+      descripcion: 'Aprender juntos sale mejor.',
+      precioMensual: 8990,
+      precioAnual: 6990,
+      color: '#4ECDC4',
+      icono: <Users size={26} strokeWidth={3} />,
+      beneficios: [
+        'Todo lo incluido en Plus',
+        'Hasta 5 perfiles',
+        'Progreso individual',
+        'Metas compartidas',
+        'Panel familiar',
+      ],
+      accion: 'Elegir Familia',
+    },
+  ];
+
+  const mostrarPrecio = (plan) => {
+    if (plan.precio === 0) return '$0';
+    return `$${(anual ? plan.precioAnual : plan.precioMensual).toLocaleString('es-CL')}`;
+  };
+
+  return (
+    <section id="planes" className="bg-white border-b-[4px] border-black py-16 md:py-24">
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="text-center mb-9">
+          <p className="font-black uppercase text-xs tracking-[0.3em] text-black/60 mb-3">
+            Planes
+          </p>
+          <h3 className="text-3xl md:text-5xl font-black uppercase text-black leading-none">
+            Elige cómo
+            <br />
+            <span className="bg-[#7FFF6B] inline-block px-3 mt-2 border-[3px] border-black">
+              quieres aprender.
+            </span>
+          </h3>
+        </div>
+
+        <div className="flex justify-center mb-10">
+          <div
+            className="bg-[#F5F0E8] border-[3px] border-black p-1 flex"
+            style={{ boxShadow: '5px 5px 0 #000' }}
+            aria-label="Periodo de suscripción"
+          >
+            <button
+              type="button"
+              onClick={() => setPeriodo('mensual')}
+              className={`px-4 py-2 font-black uppercase text-xs transition-colors ${
+                !anual ? 'bg-black text-white' : 'text-black'
+              }`}
+              aria-pressed={!anual}
+            >
+              Mensual
+            </button>
+            <button
+              type="button"
+              onClick={() => setPeriodo('anual')}
+              className={`px-4 py-2 font-black uppercase text-xs transition-colors ${
+                anual ? 'bg-black text-[#FFD23F]' : 'text-black'
+              }`}
+              aria-pressed={anual}
+            >
+              Anual · ahorra
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-7 items-stretch">
+          {planes.map((plan) => (
+            <article
+              key={plan.nombre}
+              className="border-[4px] border-black p-6 flex flex-col relative"
+              style={{
+                backgroundColor: plan.color,
+                boxShadow: plan.destacado ? '11px 11px 0 #FF6B9D' : '8px 8px 0 #000',
+              }}
+            >
+              {plan.destacado && (
+                <div className="absolute -top-4 left-5 bg-[#FF6B9D] text-white border-[3px] border-black px-3 py-1 font-black uppercase text-xs">
+                  Más elegido
+                </div>
+              )}
+
+              <div className="flex items-center justify-between gap-4 mt-2 mb-5">
+                <div>
+                  <h4 className="font-black uppercase text-3xl text-black leading-none">
+                    {plan.nombre}
+                  </h4>
+                  <p className="font-bold text-black/65 text-sm mt-2">
+                    {plan.descripcion}
+                  </p>
+                </div>
+                <div className="bg-white border-[3px] border-black p-3 shrink-0">
+                  {plan.icono}
+                </div>
+              </div>
+
+              <div className="border-y-[3px] border-black py-5 mb-5">
+                <p className="font-black text-4xl text-black leading-none">
+                  {mostrarPrecio(plan)}
+                </p>
+                <p className="font-black uppercase text-xs text-black/60 mt-2 min-h-4">
+                  {plan.precio === 0
+                    ? 'para siempre'
+                    : anual
+                      ? 'al mes · cobro anual'
+                      : 'al mes'}
+                </p>
+              </div>
+
+              <ul className="space-y-3 mb-7 flex-1">
+                {plan.beneficios.map((beneficio) => (
+                  <li key={beneficio} className="flex items-start gap-2 font-bold text-sm text-black">
+                    <Check size={18} strokeWidth={4} className="shrink-0 mt-0.5" />
+                    {beneficio}
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href={
+                  plan.precio === 0
+                    ? plan.href
+                    : `/suscripcion?plan=${plan.id}&periodo=${periodo}`
+                }
+                className={`border-[3px] border-black px-4 py-3 font-black uppercase text-sm text-center flex items-center justify-center gap-2 hover:translate-y-[-2px] transition-transform ${
+                  plan.destacado ? 'bg-black text-[#FFD23F]' : 'bg-white text-black'
+                }`}
+                style={{ boxShadow: '5px 5px 0 #000' }}
+              >
+                {plan.accion}
+                <ArrowRight size={18} strokeWidth={3} />
+              </Link>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-10 flex items-start justify-center gap-3 max-w-3xl mx-auto text-center">
+          <ShieldCheck size={24} strokeWidth={3} className="text-black shrink-0" />
+          <p className="font-bold text-black/70">
+            Parte de cada suscripción financia contenido creado y validado junto a
+            personas sordas y docentes de LSCh.
+          </p>
         </div>
       </div>
     </section>
