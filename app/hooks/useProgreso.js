@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '../lib/supabase-client';
 
 // ============================================================
@@ -19,11 +19,10 @@ export const useProgreso = () => {
     cargando: true,
   });
 
-  const supabase = useMemo(() => createClient(), []);
-
   // Cargar progreso al montar
   useEffect(() => {
     const cargarProgreso = async () => {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         setProgreso(p => ({ ...p, cargando: false }));
@@ -52,10 +51,11 @@ export const useProgreso = () => {
     };
 
     cargarProgreso();
-  }, [supabase]);
+  }, []);
 
   // Completar lección: actualiza BD y estado local
   const completarLeccion = useCallback(async (leccionId, xp) => {
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -94,10 +94,11 @@ export const useProgreso = () => {
       xpTotal: nuevoXp,
       racha: nuevaRacha,
     }));
-  }, [progreso.xpTotal, progreso.racha, progreso.leccionesCompletadas, supabase]);
+  }, [progreso.xpTotal, progreso.racha, progreso.leccionesCompletadas]);
 
   // Reiniciar progreso (borra todo en BD)
   const reiniciar = useCallback(async () => {
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -117,7 +118,7 @@ export const useProgreso = () => {
       racha: 0,
       cargando: false,
     });
-  }, [supabase]);
+  }, []);
 
   return { progreso, completarLeccion, reiniciar };
 };

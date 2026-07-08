@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '../lib/supabase-client';
 import { detectarLogrosNuevos, LOGROS } from '../data/logros';
 
@@ -21,11 +21,10 @@ export const useLogros = (progreso) => {
   const [cargando, setCargando] = useState(true);
   const [yaVerificadoRetroactivamente, setYaVerificadoRetroactivamente] = useState(false);
 
-  const supabase = useMemo(() => createClient(), []);
-
   // Cargar logros al montar
   useEffect(() => {
     const cargar = async () => {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         setCargando(false);
@@ -42,13 +41,14 @@ export const useLogros = (progreso) => {
     };
 
     cargar();
-  }, [supabase]);
+  }, []);
 
   /**
    * Verifica logros sin mostrar modal (para verificación retroactiva silenciosa).
    * Útil al cargar la app: si ya tenías logros pendientes, los guarda.
    */
   const verificarSilencioso = useCallback(async (stats) => {
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -71,7 +71,7 @@ export const useLogros = (progreso) => {
     // vea que desbloqueó algo. Si prefieres no mostrar modal en retroactivo,
     // comenta la línea de abajo.
     setLogrosNuevos(nuevos);
-  }, [logrosObtenidos, supabase]);
+  }, [logrosObtenidos]);
 
   // Verificación retroactiva: al cargar, si ya tienes progreso pero te
   // faltan logros que te corresponden, los detecta y guarda.
@@ -99,6 +99,7 @@ export const useLogros = (progreso) => {
   /** Verificación normal (al completar lección) */
   const verificarLogros = useCallback(
     async (stats) => {
+      const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -119,7 +120,7 @@ export const useLogros = (progreso) => {
       setLogrosObtenidos((prev) => [...prev, ...nuevos.map((l) => l.id)]);
       setLogrosNuevos(nuevos);
     },
-    [logrosObtenidos, supabase]
+    [logrosObtenidos]
   );
 
   const limpiarLogrosNuevos = useCallback(() => {

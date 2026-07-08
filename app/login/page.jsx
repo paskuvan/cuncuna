@@ -12,9 +12,10 @@ import Cuncuna from '../components/mascota/Cuncuna';
 export default function LoginPage() {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState(null);
-  const supabase = createClient();
 
   const loginConGoogle = async () => {
+    const supabase = createClient();
+
     setCargando(true);
     setError(null);
 

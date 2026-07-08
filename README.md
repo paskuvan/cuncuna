@@ -6,7 +6,7 @@
 
 **La primera plataforma educativa con identidad neobrutalista para aprender LSCh**
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
@@ -42,7 +42,7 @@ El nombre viene de la **cuncuna**, oruga característica del paisaje chileno que
 
 | Categoría | Tecnología |
 |-----------|------------|
-| **Framework** | Next.js 15 (App Router) |
+| **Framework** | Next.js 16 (App Router) |
 | **UI** | React 19 + Tailwind CSS 4 |
 | **Auth** | Supabase Auth (Google OAuth) |
 | **Base de datos** | Supabase (PostgreSQL + RLS) |
