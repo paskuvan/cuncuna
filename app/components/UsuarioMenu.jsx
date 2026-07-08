@@ -1,9 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { LogOut, User } from 'lucide-react';
+import Link from 'next/link';
+import { LayoutDashboard, LogOut, User } from 'lucide-react';
 import { useUsuario } from '../hooks/useUsuario';
+import { createClient } from '../lib/supabase-client';
 
 // ============================================================
 // COMPONENTE: UsuarioMenu
@@ -14,6 +16,18 @@ import { useUsuario } from '../hooks/useUsuario';
 export default function UsuarioMenu() {
   const { usuario, cerrarSesion } = useUsuario();
   const [abierto, setAbierto] = useState(false);
+  const [esAdmin, setEsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (!usuario) return;
+    const supabase = createClient();
+    supabase
+      .from('admin_users')
+      .select('user_id')
+      .eq('user_id', usuario.id)
+      .maybeSingle()
+      .then(({ data }) => setEsAdmin(Boolean(data)));
+  }, [usuario]);
 
   if (!usuario) return null;
 
@@ -63,7 +77,16 @@ export default function UsuarioMenu() {
               </p>
             </div>
 
-            {/* Botón cerrar sesión */}
+            {esAdmin && (
+              <Link
+                href="/app/admin"
+                className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#7FFF6B] transition-colors"
+              >
+                <LayoutDashboard size={18} strokeWidth={3} />
+                Panel de contenido
+              </Link>
+            )}
+
             <button
               onClick={cerrarSesion}
               className="w-full p-4 bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FF6B6B] hover:text-white transition-colors"

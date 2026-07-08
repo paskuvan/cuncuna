@@ -15,9 +15,15 @@ import {
   obtenerFavoritosLocales,
 } from '../../lib/favoritos-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
+import { obtenerSenasPublicadas } from '../../lib/contenido-publicado';
 
 export default function PaginaDiccionario() {
-  const senas = useMemo(() => obtenerSenasDiccionario(), []);
+  const senasBase = useMemo(() => obtenerSenasDiccionario(), []);
+  const [senasPublicadas, setSenasPublicadas] = useState([]);
+  const senas = useMemo(
+    () => [...senasPublicadas, ...senasBase],
+    [senasBase, senasPublicadas]
+  );
   const niveles = useMemo(() => obtenerNivelesDiccionario(), []);
   const [busqueda, setBusqueda] = useState('');
   const [nivelActivo, setNivelActivo] = useState('todos');
@@ -27,6 +33,9 @@ export default function PaginaDiccionario() {
   useEffect(() => {
     registrarDiccionarioEstadisticas();
     registrarEventoMision('explorar_diccionario');
+    obtenerSenasPublicadas()
+      .then(setSenasPublicadas)
+      .catch(() => {});
   }, []);
 
   const senasFiltradas = useMemo(() => {
@@ -253,6 +262,18 @@ export default function PaginaDiccionario() {
                   <p className="font-bold text-black/70 text-sm mt-2">
                     {senaActiva.descripcion}
                   </p>
+                  {senaActiva.origen === 'panel' && (
+                    <div className="flex flex-wrap gap-2 mt-3">
+                      <span className="bg-[#4ECDC4] border-2 border-black px-2 py-1 font-black uppercase text-[10px]">
+                        Variante: {senaActiva.region}
+                      </span>
+                      {senaActiva.credito && (
+                        <span className="bg-[#FFD23F] border-2 border-black px-2 py-1 font-black uppercase text-[10px]">
+                          Seña por {senaActiva.credito}
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <VideoPlayer
