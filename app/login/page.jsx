@@ -95,7 +95,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-xs text-black/60 font-bold mt-6 uppercase tracking-wider">
-          Hecho para la comunidad sorda
+          Hecho para aprender LSCh
         </p>
       </div>
     </div>

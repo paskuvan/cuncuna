@@ -367,7 +367,7 @@ export default function Mapa({
             </button>
           </div>
           <p className="mt-6 font-black uppercase text-xs text-black/50 tracking-[0.2em]">
-            Hecho con cariño para la comunidad sorda
+            Hecho para quienes quieren aprender LSCh
           </p>
         </footer>
       </main>

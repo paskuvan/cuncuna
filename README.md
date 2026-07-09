@@ -15,7 +15,7 @@
 [![License](https://img.shields.io/badge/license-MIT-FFD23F?style=flat-square)](LICENSE)
 [![Status](https://img.shields.io/badge/status-en%20desarrollo-FF6B9D?style=flat-square)]()
 [![Made in Chile](https://img.shields.io/badge/made%20in-Chile%20🇨🇱-4ECDC4?style=flat-square)]()
-[![Accessibility](https://img.shields.io/badge/a11y-deaf%20first-7FFF6B?style=flat-square)]()
+[![Audience](https://img.shields.io/badge/audiencia-personas%20oyentes-7FFF6B?style=flat-square)]()
 
 </div>
 
@@ -23,7 +23,7 @@
 
 ## ✨ Sobre el proyecto
 
-**Cuncuna** es una plataforma de aprendizaje gamificada de **Lengua de Señas Chilena (LSCh)** inspirada en Duolingo, con una identidad visual neobrutalista única y un enfoque centrado en la comunidad sorda chilena.
+**Cuncuna** es una plataforma gamificada para personas oyentes que quieren aprender **Lengua de Señas Chilena (LSCh)**, inspirada en Duolingo y con una identidad visual neobrutalista.
 
 El nombre viene de la **cuncuna**, oruga característica del paisaje chileno que se transforma en mariposa — metáfora perfecta del aprendizaje paso a paso.
 
@@ -32,7 +32,7 @@ El nombre viene de la **cuncuna**, oruga característica del paisaje chileno que
 ### 🎯 ¿Por qué Cuncuna?
 
 - 🇨🇱 **Específica para Chile**: contenido en LSCh, no LSE ni ASL
-- 👀 **Visual primero**: diseñada por y para personas sordas
+- 👀 **Visual primero**: diseñada para personas oyentes que quieren aprender LSCh
 - 🎮 **Gamificada**: sistema de XP, rachas, logros y mascota emocional
 - 🎨 **Identidad propia**: estética neobrutalista que destaca entre apps educativas genéricas
 
@@ -249,7 +249,7 @@ Preguntas, diálogos, expresiones
 
 ## 🤝 Contribuir
 
-Cuncuna está construida **por y para la comunidad sorda chilena**. Si quieres aportar:
+Cuncuna está construida para **personas oyentes que quieren aprender LSCh**, con contenido que debe ser creado o validado junto a personas sordas y docentes. Si quieres aportar:
 
 - 🎥 **Contenido**: si eres usuario/a nativo/a de LSCh, tu feedback sobre las señas es invaluable
 - 🎨 **Diseño**: ideas para nuevas mascotas o estados
@@ -271,7 +271,7 @@ Por favor abre un issue antes de mandar un PR grande para discutir el cambio.
 - **Diseño y desarrollo**: [Majo Paskuvan](https://paskuvan.us) — UX/UI Designer & Frontend Dev
 - **Marca**: parte del ecosistema [Códiseñas](https://codisenas.cl)
 - **Inspiración**: [Duolingo](https://duolingo.com), pero hecho con cariño chileno
-- **Para**: la comunidad sorda chilena 🇨🇱
+- **Para**: personas oyentes que quieren aprender LSCh 🇨🇱
 
 ---
 
@@ -279,7 +279,7 @@ Por favor abre un issue antes de mandar un PR grande para discutir el cambio.
 
 ### 🤟 Hecho con cariño en Santiago, Chile
 
-**Cuncuna** es parte de **Códiseñas** — democratizando el acceso a la tecnología y educación para personas sordas.
+**Cuncuna** es parte de **Códiseñas** — acercando la Lengua de Señas Chilena a más personas.
 
 [🌐 paskuvan.us](https://paskuvan.us) · [💼 LinkedIn](https://linkedin.com/in/paskuvan) · [📧 Contacto](mailto:hola@codisenas.cl)
 

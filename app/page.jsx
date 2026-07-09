@@ -106,7 +106,7 @@ function Hero() {
           </h2>
 
           <p className="text-lg md:text-xl text-black font-bold mb-8 leading-relaxed">
-            La primera plataforma educativa diseñada por y para la comunidad sorda chilena. Lecciones interactivas, gamificadas y accesibles.
+            Una plataforma educativa para personas oyentes que quieren aprender Lengua de Señas Chilena. Lecciones interactivas, gamificadas y visuales.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -133,7 +133,7 @@ function Hero() {
             <div className="bg-white border-[3px] border-black px-3 py-1.5 font-black uppercase text-xs flex items-center gap-1.5"
               style={{ boxShadow: '3px 3px 0 #000' }}>
               <Heart size={12} strokeWidth={3} className="text-[#FF6B9D]" fill="#FF6B9D" />
-              Deaf-first
+              Para aprender LSCh
             </div>
             <div className="bg-white border-[3px] border-black px-3 py-1.5 font-black uppercase text-xs flex items-center gap-1.5"
               style={{ boxShadow: '3px 3px 0 #000' }}>
@@ -322,7 +322,7 @@ function Beneficios() {
   const beneficios = [
     'Aprende a tu ritmo, sin presión',
     'Contenido específico para Chile, no traducido',
-    'Diseño accesible pensado para personas sordas',
+    'Diseño visual pensado para personas oyentes',
     'Experiencia sin publicidad en Plus',
     'Tu progreso siempre guardado',
     'Gratuito durante el lanzamiento',
@@ -555,7 +555,7 @@ function Planes() {
           <ShieldCheck size={24} strokeWidth={3} className="text-black shrink-0" />
           <p className="font-bold text-black/70">
             Parte de cada suscripción financia contenido creado y validado junto a
-            personas sordas y docentes de LSCh.
+            personas sordas y docentes de LSCh, para enseñar con respeto y precisión.
           </p>
         </div>
       </div>
@@ -712,7 +712,7 @@ function Footer() {
           </div>
 
           <p className="text-white/60 font-bold text-sm uppercase tracking-wider text-center">
-            🤟 Hecho con cariño<br className="md:hidden" /> para la comunidad sorda chilena
+            🤟 Hecho para quienes<br className="md:hidden" /> quieren aprender LSCh
           </p>
         </div>
 
