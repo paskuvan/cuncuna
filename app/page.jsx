@@ -717,6 +717,20 @@ function Footer() {
         </div>
 
         <div className="border-t-[3px] border-white/20 mt-8 pt-6 text-center">
+          <nav className="flex flex-wrap justify-center gap-x-5 gap-y-3 mb-6">
+            <Link href="/legal/terminos" className="text-white/70 hover:text-[#FFD23F] font-black uppercase text-xs">
+              Términos
+            </Link>
+            <Link href="/legal/privacidad" className="text-white/70 hover:text-[#FFD23F] font-black uppercase text-xs">
+              Privacidad
+            </Link>
+            <Link href="/legal/reembolsos" className="text-white/70 hover:text-[#FFD23F] font-black uppercase text-xs">
+              Cancelaciones
+            </Link>
+            <Link href="/soporte" className="text-white/70 hover:text-[#FFD23F] font-black uppercase text-xs">
+              Soporte
+            </Link>
+          </nav>
           <p className="text-white/40 font-bold text-xs uppercase tracking-widest">
             © 2026 Cuncuna · Parte de Códiseñas
           </p>

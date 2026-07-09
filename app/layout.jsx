@@ -1,5 +1,6 @@
 import { Archivo, Archivo_Black } from 'next/font/google';
 import './globals.css';
+import VolverArriba from './components/VolverArriba';
 
 // Fuentes optimizadas con next/font (mejor performance que <link>)
 const archivo = Archivo({
@@ -23,7 +24,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es" className={`${archivo.variable} ${archivoBlack.variable}`}>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans">
+        {children}
+        <VolverArriba />
+      </body>
     </html>
   );
 }

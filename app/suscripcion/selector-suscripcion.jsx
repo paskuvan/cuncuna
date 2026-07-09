@@ -262,6 +262,12 @@ export default function SelectorSuscripcion() {
               Confirmar selección
               <ArrowRight size={19} strokeWidth={3} />
             </button>
+            <p className="font-bold text-[11px] text-black/60 text-center mt-4">
+              Al continuar aceptas los{' '}
+              <Link href="/legal/terminos" className="underline">términos</Link>, la{' '}
+              <Link href="/legal/privacidad" className="underline">privacidad</Link> y la política de{' '}
+              <Link href="/legal/reembolsos" className="underline">cancelaciones</Link>.
+            </p>
             <div className="flex items-start gap-2 mt-5">
               <ShieldCheck size={18} strokeWidth={3} className="shrink-0" />
               <p className="font-bold text-xs text-black/70">

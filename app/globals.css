@@ -39,6 +39,39 @@ body {
   transform: translateY(-2px);
 }
 
+.legal-content section + section {
+  border-top: 3px solid #000;
+  margin-top: 1.75rem;
+  padding-top: 1.75rem;
+}
+
+.legal-content h2 {
+  color: #000;
+  font-size: 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.legal-content p,
+.legal-content li {
+  color: rgb(0 0 0 / 0.72);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.legal-content ul {
+  list-style: square;
+  padding-left: 1.25rem;
+}
+
+.legal-content a {
+  color: #000;
+  text-decoration: underline;
+  text-decoration-color: #ff6b9d;
+  text-decoration-thickness: 3px;
+}
+
 /* Utilidades para line-clamp si tu Tailwind no las trae por defecto */
 .line-clamp-2 {
   display: -webkit-box;
