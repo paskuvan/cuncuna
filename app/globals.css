@@ -24,6 +24,74 @@ body {
   background: #f5f0e8;
 }
 
+.icono-tema-oscuro {
+  display: none;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+.dark body,
+.dark [class*="bg-[#F5F0E8]"] {
+  background-color: #121212 !important;
+}
+
+.dark .bg-white {
+  background-color: #202020 !important;
+}
+
+.dark .text-black {
+  color: #f7f4ed !important;
+}
+
+.dark [class*="text-black/"] {
+  color: rgb(247 244 237 / 0.72) !important;
+}
+
+.dark .border-black {
+  border-color: #f7f4ed !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color: #f7f4ed;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: rgb(247 244 237 / 0.48) !important;
+}
+
+.dark .legal-content h2,
+.dark .legal-content p,
+.dark .legal-content li,
+.dark .legal-content a {
+  color: #f7f4ed;
+}
+
+.dark .legal-content section + section {
+  border-color: #f7f4ed;
+}
+
+.dark .selector-tema {
+  background-color: #ffd23f !important;
+  border-color: #f7f4ed !important;
+}
+
+.dark .selector-tema .text-black {
+  color: #000 !important;
+}
+
+.dark .icono-tema-claro {
+  display: none;
+}
+
+.dark .icono-tema-oscuro {
+  display: block;
+}
+
 .campo-admin {
   width: 100%;
   border: 3px solid #000;

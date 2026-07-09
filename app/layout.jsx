@@ -1,6 +1,7 @@
 import { Archivo, Archivo_Black } from 'next/font/google';
 import './globals.css';
 import VolverArriba from './components/VolverArriba';
+import SelectorTema from './components/SelectorTema';
 
 // Fuentes optimizadas con next/font (mejor performance que <link>)
 const archivo = Archivo({
@@ -23,9 +24,28 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es" className={`${archivo.variable} ${archivoBlack.variable}`}>
+    <html
+      lang="es"
+      className={`${archivo.variable} ${archivoBlack.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const tema = localStorage.getItem('cuncuna:tema');
+                const oscuro = tema === 'oscuro' ||
+                  (!tema && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.classList.toggle('dark', oscuro);
+              } catch {}
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans">
         {children}
+        <SelectorTema />
         <VolverArriba />
       </body>
     </html>
