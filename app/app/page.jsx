@@ -7,6 +7,7 @@ import { useLogros } from '../hooks/useLogros';
 import Mapa from '../components/Mapa';
 import VistaLeccion from '../components/VistaLeccion';
 import ModalLogroNuevo from '../components/ModalLogroNuevo';
+import RecordatorioActivo from '../components/RecordatorioActivo';
 import { obtenerOnboarding } from '../lib/onboarding-local';
 
 // ============================================================
@@ -49,6 +50,8 @@ export default function AppPage() {
 
   return (
     <>
+      <RecordatorioActivo />
+
       {vista.tipo === 'mapa' && (
         <Mapa
           progreso={progreso}

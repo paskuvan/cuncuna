@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ClipboardList, LayoutDashboard, LogOut, User } from 'lucide-react';
+import { Bell, ClipboardList, LayoutDashboard, LogOut, User } from 'lucide-react';
 import { useUsuario } from '../hooks/useUsuario';
 import { createClient } from '../lib/supabase-client';
 
@@ -83,6 +83,14 @@ export default function UsuarioMenu() {
             >
               <ClipboardList size={18} strokeWidth={3} />
               Mi ruta
+            </Link>
+
+            <Link
+              href="/app/recordatorios"
+              className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FF6B9D] hover:text-white transition-colors"
+            >
+              <Bell size={18} strokeWidth={3} />
+              Recordatorios
             </Link>
 
             {esAdmin && (

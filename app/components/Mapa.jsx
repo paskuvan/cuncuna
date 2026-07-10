@@ -1,10 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { BarChart3, BookOpen, Camera, Check, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
+import { BarChart3, Bell, BookOpen, Camera, Check, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import UsuarioMenu from './UsuarioMenu';
 import Cuncuna from './mascota/Cuncuna';
+import {
+  debeRecordarHoy,
+  obtenerRecordatorios,
+} from '../lib/recordatorios-locales';
 
 // ============================================================
 // Mapa.jsx - VERSIÓN CON LOGROS
@@ -24,6 +28,8 @@ export default function Mapa({
 }) {
   const totalLecciones = CURRICULUM.reduce((acc, n) => acc + n.lecciones.length, 0);
   const completadas = progreso.leccionesCompletadas.length;
+  const recordatorios = obtenerRecordatorios();
+  const mostrarRecordatorio = debeRecordarHoy(recordatorios);
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
@@ -122,12 +128,49 @@ export default function Mapa({
               <Star size={18} strokeWidth={3} className="text-black" fill="black" />
             </Link>
 
+            <Link
+              href="/app/recordatorios"
+              className="bg-[#FF6B9D] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+              aria-label="Ver recordatorios"
+            >
+              <Bell size={18} strokeWidth={3} className="text-white" />
+            </Link>
+
             <UsuarioMenu />
           </div>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto p-4 md:p-6">
+        {mostrarRecordatorio && (
+          <section
+            className="bg-[#FF6B9D] border-[4px] border-black p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            style={{ boxShadow: '8px 8px 0 #000' }}
+          >
+            <div className="flex items-start gap-3">
+              <div className="bg-white border-[3px] border-black p-2 shrink-0">
+                <Bell size={22} strokeWidth={4} className="text-black" />
+              </div>
+              <div>
+                <p className="font-black uppercase text-white text-lg leading-none">
+                  Toca practicar
+                </p>
+                <p className="font-bold text-white/85 text-sm mt-1">
+                  Tu recordatorio de las {recordatorios.hora} está activo para hoy.
+                </p>
+              </div>
+            </div>
+            <Link
+              href={recordatorios.tipo === 'mision' ? '/app/misiones' : recordatorios.tipo === 'leccion' ? '/app' : '/app/repaso'}
+              className="bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm text-center hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '5px 5px 0 #000' }}
+            >
+              Empezar
+            </Link>
+          </section>
+        )}
+
         {/* HERO */}
         <section className="mb-8 mt-2">
           <div
@@ -232,6 +275,14 @@ export default function Mapa({
                 >
                   <Star size={18} strokeWidth={4} fill="black" />
                   Favoritos
+                </Link>
+                <Link
+                  href="/app/recordatorios"
+                  className="bg-[#FF6B9D] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <Bell size={18} strokeWidth={4} />
+                  Recordatorios
                 </Link>
               </div>
             </div>

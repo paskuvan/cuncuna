@@ -2,6 +2,8 @@
 
 /* Aplicar Archivo a todo, Archivo Black a títulos y elementos destacados */
 :root {
+  --font-archivo: Arial, Helvetica, sans-serif;
+  --font-archivo-black: Impact, Arial Black, Arial, Helvetica, sans-serif;
   --font-sans: var(--font-archivo);
   --font-display: var(--font-archivo-black);
 }
