@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useProgreso } from '../hooks/useProgreso';
 import { useLogros } from '../hooks/useLogros';
 import Mapa from '../components/Mapa';
 import VistaLeccion from '../components/VistaLeccion';
 import ModalLogroNuevo from '../components/ModalLogroNuevo';
+import { obtenerOnboarding } from '../lib/onboarding-local';
 
 // ============================================================
 // PAGE: /app  (ruta protegida, requiere login)
@@ -17,6 +19,7 @@ import ModalLogroNuevo from '../components/ModalLogroNuevo';
 // ============================================================
 
 export default function AppPage() {
+  const router = useRouter();
   const {
     progreso,
     completarLeccion,
@@ -29,6 +32,13 @@ export default function AppPage() {
     useLogros(progreso);
 
   const [vista, setVista] = useState({ tipo: 'mapa' });
+
+  useEffect(() => {
+    const onboarding = obtenerOnboarding();
+    if (!onboarding.completado) {
+      router.replace('/app/onboarding');
+    }
+  }, [router]);
 
   const handleCompletarLeccion = async (leccionId, xp) => {
     const nuevosStats = await completarLeccion(leccionId, xp);

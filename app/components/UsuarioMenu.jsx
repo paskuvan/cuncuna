@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LayoutDashboard, LogOut, User } from 'lucide-react';
+import { ClipboardList, LayoutDashboard, LogOut, User } from 'lucide-react';
 import { useUsuario } from '../hooks/useUsuario';
 import { createClient } from '../lib/supabase-client';
 
@@ -76,6 +76,14 @@ export default function UsuarioMenu() {
                 {usuario.email}
               </p>
             </div>
+
+            <Link
+              href="/app/onboarding"
+              className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FFD23F] transition-colors"
+            >
+              <ClipboardList size={18} strokeWidth={3} />
+              Mi ruta
+            </Link>
 
             {esAdmin && (
               <Link
