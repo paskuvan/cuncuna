@@ -9,6 +9,11 @@ import {
   debeRecordarHoy,
   obtenerRecordatorios,
 } from '../lib/recordatorios-locales';
+import {
+  obtenerPlanActual,
+  obtenerRequisitoLeccion,
+  puedeAccederLeccion,
+} from '../lib/acceso-plan';
 
 // ============================================================
 // Mapa.jsx - VERSIÓN CON LOGROS
@@ -30,6 +35,7 @@ export default function Mapa({
   const completadas = progreso.leccionesCompletadas.length;
   const recordatorios = obtenerRecordatorios();
   const mostrarRecordatorio = debeRecordarHoy(recordatorios);
+  const planActual = obtenerPlanActual();
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
@@ -71,6 +77,17 @@ export default function Mapa({
               <Star size={16} strokeWidth={3} className="text-black" fill="black" />
               <span className="text-black font-black text-sm">{progreso.xpTotal}</span>
             </div>
+
+            <Link
+              href="/suscripcion"
+              className="bg-white border-[3px] border-white px-2 sm:px-3 py-1.5 hidden md:flex items-center gap-1.5 hover:translate-y-[-2px] transition-transform"
+              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+              aria-label="Ver plan"
+            >
+              <span className="text-black font-black uppercase text-xs">
+                {planActual.nombre}
+              </span>
+            </Link>
 
             {/* Logros - lleva a /app/logros */}
             <Link
@@ -182,10 +199,19 @@ export default function Mapa({
               <Sparkles size={28} strokeWidth={3} className="text-black" />
             </div>
 
-            <div className="relative z-[2]">
-              <p className="font-black uppercase text-xs tracking-[0.2em] text-black mb-2">
-                Tu progreso
-              </p>
+              <div className="relative z-[2]">
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <p className="font-black uppercase text-xs tracking-[0.2em] text-black">
+                  Tu progreso
+                </p>
+                <Link
+                  href="/suscripcion"
+                  className="bg-white border-[3px] border-black px-2 py-1 font-black uppercase text-[10px] text-black"
+                  style={{ boxShadow: '3px 3px 0 #000' }}
+                >
+                  Plan {planActual.nombre}
+                </Link>
+              </div>
               <h2 className="text-4xl md:text-5xl font-black uppercase text-black leading-none mb-4 tracking-tight">
                 {completadas}
                 <span className="text-[#FF6B9D]">/</span>
@@ -210,6 +236,24 @@ export default function Mapa({
                   )}
                 </div>
               </div>
+
+              {planActual.id === 'gratis' && (
+                <div
+                  className="bg-white border-[3px] border-black p-3 mt-4 mb-1 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                  style={{ boxShadow: '5px 5px 0 #000' }}
+                >
+                  <p className="font-bold text-black text-sm">
+                    Estás en Gratis: tienes acceso a la introducción y primeras lecciones.
+                  </p>
+                  <Link
+                    href="/suscripcion?plan=plus"
+                    className="bg-black text-[#FFD23F] border-[3px] border-black px-3 py-2 font-black uppercase text-xs text-center"
+                    style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
+                  >
+                    Desbloquear
+                  </Link>
+                </div>
+              )}
 
               <div className="flex flex-wrap gap-3 mt-5">
                 <Link
@@ -340,25 +384,37 @@ export default function Mapa({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 ml-0 md:ml-6">
                   {nivel.lecciones.map((leccion, idxLeccion) => {
                     const completada = progreso.leccionesCompletadas.includes(leccion.id);
+                    const tieneAcceso = puedeAccederLeccion(leccion.id, planActual);
+                    const requisito = obtenerRequisitoLeccion(leccion.id);
                     const leccionAnterior =
                       idxLeccion === 0 ? null : nivel.lecciones[idxLeccion - 1];
                     const desbloqueada =
                       nivelDesbloqueado &&
                       (idxLeccion === 0 ||
                         progreso.leccionesCompletadas.includes(leccionAnterior?.id));
+                    const puedeAbrir = desbloqueada && tieneAcceso;
 
                     return (
                       <button
                         key={leccion.id}
-                        onClick={() => desbloqueada && onSeleccionarLeccion(leccion, nivel)}
+                        onClick={() => {
+                          if (puedeAbrir) {
+                            onSeleccionarLeccion(leccion, nivel);
+                            return;
+                          }
+
+                          if (desbloqueada && !tieneAcceso) {
+                            window.location.href = `/suscripcion?plan=${requisito}`;
+                          }
+                        }}
                         disabled={!desbloqueada}
                         className={`text-left border-[3px] border-black p-4 relative transition-all ${
-                          desbloqueada
+                          puedeAbrir || (desbloqueada && !tieneAcceso)
                             ? 'bg-white hover:translate-x-[-3px] hover:translate-y-[-3px] active:translate-x-0 active:translate-y-0 cursor-pointer'
                             : 'bg-gray-200 cursor-not-allowed opacity-70'
                         }`}
                         style={{
-                          boxShadow: desbloqueada ? '6px 6px 0 #000' : '3px 3px 0 #000',
+                          boxShadow: puedeAbrir || (desbloqueada && !tieneAcceso) ? '6px 6px 0 #000' : '3px 3px 0 #000',
                         }}
                       >
                         {completada && (
@@ -373,6 +429,14 @@ export default function Mapa({
                           <div className="absolute top-3 right-3">
                             <Lock size={20} strokeWidth={3} className="text-black/40" />
                           </div>
+                        )}
+                        {desbloqueada && !tieneAcceso && (
+                          <span
+                            className="absolute top-3 right-3 bg-[#FFD23F] border-[3px] border-black px-2 py-1 font-black uppercase text-[10px] text-black hover:translate-y-[-2px] transition-transform"
+                            style={{ boxShadow: '3px 3px 0 #000' }}
+                          >
+                            Plus
+                          </span>
                         )}
                         <div className="font-black uppercase text-[10px] tracking-[0.15em] text-black/50 mb-1">
                           Lección {idxLeccion + 1}
@@ -389,7 +453,7 @@ export default function Mapa({
                             {leccion.xp} XP
                           </div>
                           <span className="text-black/60 font-black text-[10px] uppercase tracking-wider">
-                            {leccion.ejercicios.length} ejerc.
+                            {tieneAcceso ? `${leccion.ejercicios.length} ejerc.` : 'Premium'}
                           </span>
                         </div>
                       </button>

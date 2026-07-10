@@ -6,7 +6,7 @@ export function guardarSeleccionPlan({ plan, periodo }) {
   const seleccion = {
     plan,
     periodo,
-    estado: 'pendiente',
+    estado: 'seleccionado',
     fecha: new Date().toISOString(),
   };
 

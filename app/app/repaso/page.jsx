@@ -16,9 +16,14 @@ import {
   obtenerRepasoInteligente,
   registrarRepasoEspaciado,
 } from '../../lib/repeticion-espaciada';
+import { obtenerPlanActual, puedeAccederLeccion } from '../../lib/acceso-plan';
 
 export default function PaginaRepaso() {
-  const todasLasSenas = useMemo(() => obtenerSenasDiccionario(), []);
+  const planActual = useMemo(() => obtenerPlanActual(), []);
+  const todasLasSenas = useMemo(
+    () => obtenerSenasDiccionario().filter((sena) => puedeAccederLeccion(sena.leccionId, planActual)),
+    [planActual]
+  );
   const ejercicios = useMemo(
     () => obtenerRepasoInteligente(todasLasSenas, 5),
     [todasLasSenas]
@@ -114,7 +119,33 @@ export default function PaginaRepaso() {
   if (!ejercicio) {
     return (
       <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-4">
-        <p className="font-black uppercase text-black">No hay señas para repasar todavía.</p>
+        <div
+          className="bg-white border-[4px] border-black p-6 max-w-md w-full text-center"
+          style={{ boxShadow: '12px 12px 0 #000' }}
+        >
+          <p className="font-black uppercase text-black text-2xl leading-none mb-3">
+            No hay señas para repasar todavía
+          </p>
+          <p className="font-bold text-black/70 mb-5">
+            Completa una lección disponible o desbloquea Plus para acceder a más señas.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Link
+              href="/app"
+              className="bg-white border-[3px] border-black p-3 font-black uppercase text-sm text-black"
+              style={{ boxShadow: '5px 5px 0 #000' }}
+            >
+              Ir al mapa
+            </Link>
+            <Link
+              href="/suscripcion?plan=plus"
+              className="bg-black border-[3px] border-black p-3 font-black uppercase text-sm text-[#FFD23F]"
+              style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
+            >
+              Ver Plus
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }

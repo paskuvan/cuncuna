@@ -16,14 +16,25 @@ import {
 } from '../../lib/favoritos-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
 import { obtenerSenasPublicadas } from '../../lib/contenido-publicado';
+import { obtenerPlanActual, puedeAccederLeccion } from '../../lib/acceso-plan';
 
 export default function PaginaDiccionario() {
+  const planActual = useMemo(() => obtenerPlanActual(), []);
   const senasBase = useMemo(() => obtenerSenasDiccionario(), []);
   const [senasPublicadas, setSenasPublicadas] = useState([]);
-  const senas = useMemo(
-    () => [...senasPublicadas, ...senasBase],
-    [senasBase, senasPublicadas]
+  const senasBasePermitidas = useMemo(
+    () => senasBase.filter((sena) => puedeAccederLeccion(sena.leccionId, planActual)),
+    [senasBase, planActual]
   );
+  const senasPublicadasPermitidas = useMemo(
+    () => senasPublicadas.filter((sena) => puedeAccederLeccion(sena.leccionId, planActual)),
+    [senasPublicadas, planActual]
+  );
+  const senas = useMemo(
+    () => [...senasPublicadasPermitidas, ...senasBasePermitidas],
+    [senasBasePermitidas, senasPublicadasPermitidas]
+  );
+  const senasBloqueadas = senasBase.length + senasPublicadas.length - senas.length;
   const niveles = useMemo(() => obtenerNivelesDiccionario(), []);
   const [busqueda, setBusqueda] = useState('');
   const [nivelActivo, setNivelActivo] = useState('todos');
@@ -98,6 +109,29 @@ export default function PaginaDiccionario() {
       </header>
 
       <main className="max-w-6xl mx-auto p-4 md:p-6">
+        {senasBloqueadas > 0 && (
+          <section
+            className="bg-[#FFD23F] border-[4px] border-black p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            style={{ boxShadow: '8px 8px 0 #000' }}
+          >
+            <div>
+              <p className="font-black uppercase text-black text-lg leading-none">
+                Diccionario limitado por tu plan
+              </p>
+              <p className="font-bold text-black/70 text-sm mt-1">
+                Hay {senasBloqueadas} señas premium disponibles con Plus.
+              </p>
+            </div>
+            <Link
+              href="/suscripcion?plan=plus"
+              className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm text-center"
+              style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
+            >
+              Ver Plus
+            </Link>
+          </section>
+        )}
+
         <section className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-6 items-start">
           <div className="space-y-5">
             <div

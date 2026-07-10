@@ -9,6 +9,7 @@ import VistaLeccion from '../components/VistaLeccion';
 import ModalLogroNuevo from '../components/ModalLogroNuevo';
 import RecordatorioActivo from '../components/RecordatorioActivo';
 import { obtenerOnboarding } from '../lib/onboarding-local';
+import { obtenerPlanActual, puedeAccederLeccion } from '../lib/acceso-plan';
 
 // ============================================================
 // PAGE: /app  (ruta protegida, requiere login)
@@ -48,6 +49,16 @@ export default function AppPage() {
     }
   };
 
+  const seleccionarLeccion = (leccion, nivel) => {
+    const plan = obtenerPlanActual();
+    if (!puedeAccederLeccion(leccion.id, plan)) {
+      router.push('/suscripcion?plan=plus');
+      return;
+    }
+
+    setVista({ tipo: 'leccion', leccion, nivel });
+  };
+
   return (
     <>
       <RecordatorioActivo />
@@ -56,9 +67,7 @@ export default function AppPage() {
         <Mapa
           progreso={progreso}
           logrosObtenidos={logrosObtenidos}
-          onSeleccionarLeccion={(leccion, nivel) =>
-            setVista({ tipo: 'leccion', leccion, nivel })
-          }
+          onSeleccionarLeccion={seleccionarLeccion}
           onReiniciar={reiniciar}
         />
       )}
