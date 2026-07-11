@@ -78,6 +78,14 @@ export default function UsuarioMenu() {
             </div>
 
             <Link
+              href="/app/perfil"
+              className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#4ECDC4] transition-colors"
+            >
+              <User size={18} strokeWidth={3} />
+              Mi perfil
+            </Link>
+
+            <Link
               href="/app/onboarding"
               className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FFD23F] transition-colors"
             >

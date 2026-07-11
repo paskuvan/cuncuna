@@ -1,139 +1,117 @@
 <div align="center">
 
-# 🐛 Cuncuna
+# Cuncuna
 
 ### Aprende Lengua de Señas Chilena, de seña en seña
 
-**La primera plataforma educativa con identidad neobrutalista para aprender LSCh**
+**Plataforma gamificada para personas oyentes que quieren aprender LSCh**
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
-[![License](https://img.shields.io/badge/license-MIT-FFD23F?style=flat-square)](LICENSE)
-[![Status](https://img.shields.io/badge/status-en%20desarrollo-FF6B9D?style=flat-square)]()
-[![Made in Chile](https://img.shields.io/badge/made%20in-Chile%20🇨🇱-4ECDC4?style=flat-square)]()
+[![Status](https://img.shields.io/badge/status-MVP%20en%20desarrollo-FF6B9D?style=flat-square)]()
+[![Made in Chile](https://img.shields.io/badge/made%20in-Chile-4ECDC4?style=flat-square)]()
 [![Audience](https://img.shields.io/badge/audiencia-personas%20oyentes-7FFF6B?style=flat-square)]()
 
 </div>
 
 ---
 
-## ✨ Sobre el proyecto
+## Sobre el proyecto
 
-**Cuncuna** es una plataforma gamificada para personas oyentes que quieren aprender **Lengua de Señas Chilena (LSCh)**, inspirada en Duolingo y con una identidad visual neobrutalista.
+**Cuncuna** es una app educativa tipo Duolingo para aprender **Lengua de Señas Chilena (LSCh)**. Está pensada para personas oyentes que quieren iniciar una ruta de aprendizaje visual, progresiva y respetuosa.
 
-El nombre viene de la **cuncuna**, oruga característica del paisaje chileno que se transforma en mariposa — metáfora perfecta del aprendizaje paso a paso.
+El contenido debe ser creado o validado junto a personas sordas, docentes de LSCh o usuarios nativos de la lengua.
 
-> 🤟 *"De seña en seña"*
-
-### 🎯 ¿Por qué Cuncuna?
-
-- 🇨🇱 **Específica para Chile**: contenido en LSCh, no LSE ni ASL
-- 👀 **Visual primero**: diseñada para personas oyentes que quieren aprender LSCh
-- 🎮 **Gamificada**: sistema de XP, rachas, logros y mascota emocional
-- 🎨 **Identidad propia**: estética neobrutalista que destaca entre apps educativas genéricas
+> "De seña en seña"
 
 ---
 
-## 🛠️ Stack tecnológico
+## Stack
 
-| Categoría | Tecnología |
+| Categoria | Tecnologia |
 |-----------|------------|
-| **Framework** | Next.js 16 (App Router) |
-| **UI** | React 19 + Tailwind CSS 4 |
-| **Auth** | Supabase Auth (Google OAuth) |
-| **Base de datos** | Supabase (PostgreSQL + RLS) |
-| **Storage** | Supabase Storage (videos + imágenes) |
-| **Iconos** | Lucide React |
-| **Tipografía** | Archivo Black + Archivo (Google Fonts) |
+| Framework | Next.js 16 App Router |
+| UI | React 19 + Tailwind CSS 4 |
+| Auth | Supabase Auth con Google OAuth |
+| Base de datos | Supabase PostgreSQL + RLS |
+| Storage | Supabase Storage para videos y posters |
+| Iconos | Lucide React |
+| Tipografia | Fuentes del sistema, sin dependencia de Google Fonts |
 
 ---
 
-## 🎨 Identidad visual
+## Funcionalidades implementadas
 
-Cuncuna usa una estética **neobrutalista** consistente en toda la app:
-
-- 🟨 Bordes negros gruesos (3-4px)
-- 🎯 Hard shadows sin desenfoque
-- 🌈 Paleta vibrante de alto contraste
-- 📐 Tipografía sans-serif geométrica
-
-### Paleta
-
-| Color | Hex | Uso |
-|-------|-----|-----|
-| 🟡 Amarillo | `#FFD23F` | Principal, CTAs |
-| 🩷 Rosa | `#FF6B9D` | Acentos, cachetes |
-| 🩵 Turquesa | `#4ECDC4` | Nivel 3, lágrimas |
-| 🟢 Verde | `#7FFF6B` | Acierto, confirmación |
-| 🔴 Coral | `#FF6B6B` | Error, peligro |
-| ⚫ Negro | `#000000` | Bordes, texto |
-| 🤍 Crema | `#F5F0E8` | Fondo general |
-
----
-
-## 🚀 Características
-
-### ✅ Implementado
-
-- [x] 🔐 **Autenticación con Google** (Supabase OAuth)
-- [x] 🛡️ **Row Level Security** en todas las tablas
-- [x] 📚 **Sistema de lecciones** estructuradas por niveles
-- [x] 🎬 **Reproductor de video** neobrutalista con controles
-- [x] 🎯 **Cuestionarios interactivos** de opción múltiple
-- [x] 📊 **Progreso persistente** sincronizado en la nube
-- [x] 🔥 **Sistema de rachas** y XP acumulado
-- [x] 🏆 **12 logros desbloqueables** con detección automática
-- [x] 🎉 **Modal celebratorio** al desbloquear logros
-- [x] 🐛 **Mascota con 8 estados emocionales** animados
-- [x] 🔄 **Verificación retroactiva** de logros
-- [x] 📱 **Diseño responsive** (móvil + desktop)
-
-### 🚧 En desarrollo
-
-- [ ] 🎥 Contenido de videos LSCh reales
-- [ ] 🌐 Landing page pública
-- [ ] 📊 Dashboard de estadísticas
-- [ ] 📴 Modo offline / PWA
-- [ ] 🤝 Integración con redes sociales
-- [ ] 🎓 Certificado de finalización
+- Autenticacion con Google mediante Supabase.
+- Landing publica con planes Gratis, Plus y Familia.
+- Flujo de seleccion de suscripcion en `/suscripcion`.
+- Control de acceso por plan:
+  - Gratis: introduccion y primeras lecciones.
+  - Plus/Familia: curso completo.
+- Mapa de aprendizaje con niveles, XP y racha.
+- Lecciones con video, texto, quiz, verdadero/falso, ordenar, match y completar.
+- Diccionario visual filtrado por plan.
+- Repaso inteligente con repeticion espaciada.
+- Mis errores.
+- Misiones diarias.
+- Estadisticas.
+- Conversaciones guiadas.
+- Favoritos.
+- Practica con camara local, sin grabar ni subir video.
+- Onboarding personalizado en `/app/onboarding`.
+- Perfil de usuario en `/app/perfil`.
+- Recordatorios locales en `/app/recordatorios`.
+- Modo oscuro.
+- Boton global para volver arriba.
+- Panel admin de contenido en `/app/admin`.
+- Carga de videos/posters a Supabase Storage desde admin.
+- Flujo de borrador, vista previa y publicacion de contenido.
+- Paginas legales:
+  - Terminos y condiciones.
+  - Politica de privacidad.
+  - Politica de cancelacion y reembolsos.
+  - Soporte.
+- PWA/service worker preparado para cache y push futuro.
 
 ---
 
-## 📦 Instalación
+## Estado del MVP
 
-### Pre-requisitos
+La app ya tiene la mayoria de la experiencia funcional. Antes de produccion faltan principalmente:
 
-- Node.js 18+
-- npm o yarn
-- Cuenta de [Supabase](https://supabase.com)
-- Cuenta de Google Cloud (para OAuth)
+- Integrar pagos reales con Mercado Pago.
+- Guardar el estado real de suscripcion en Supabase.
+- Cambiar el acceso por plan desde localStorage a Supabase/Mercado Pago.
+- Sincronizar datos locales: favoritos, errores, misiones, recordatorios, onboarding y repaso.
+- Subir videos reales de LSCh.
+- Revisar textos legales con un abogado en Chile antes de cobrar.
+- Probar exhaustivamente en mobile, modo oscuro y navegadores principales.
+
+---
+
+## Instalacion
+
+### Requisitos
+
+- Node.js 18 o superior.
+- npm.
+- Proyecto en Supabase.
+- Google OAuth configurado en Supabase Auth.
 
 ### Pasos
 
 ```bash
-# 1. Clonar el repo
 git clone https://github.com/paskuvan/cuncuna.git
 cd cuncuna
-
-# 2. Instalar dependencias
 npm install
-
-# 3. Configurar variables de entorno
 cp .env.local.example .env.local
-# Edita .env.local con tus credenciales de Supabase
-
-# 4. Ejecutar SQL en Supabase
-# Pega el contenido de sql/schema.sql en el SQL Editor
-
-# 5. Levantar el dev server
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
+Abre [http://localhost:3000](http://localhost:3000).
 
 ### Variables de entorno
 
@@ -144,143 +122,155 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
 
 ---
 
-## 🗂️ Estructura del proyecto
+## Supabase
 
+El proyecto usa:
+
+- Supabase Auth para login con Google.
+- PostgreSQL con RLS para datos de usuario.
+- Supabase Storage para buckets `videos` y `posters`.
+- Tabla `admin_users` para controlar acceso al panel admin.
+- Tabla `contenido_senas` para contenido subido desde el panel.
+
+Migraciones actuales:
+
+```txt
+supabase/migrations/20260708_panel_contenido.sql
+supabase/migrations/20260708_lectura_contenido_publicado.sql
 ```
+
+Para dar acceso admin:
+
+```sql
+insert into public.admin_users (user_id)
+select id
+from auth.users
+where email = 'TU_CORREO@gmail.com'
+on conflict (user_id) do nothing;
+```
+
+---
+
+## Estructura
+
+```txt
 cuncuna/
 ├── app/
+│   ├── app/
+│   │   ├── admin/
+│   │   ├── conversaciones/
+│   │   ├── diccionario/
+│   │   ├── errores/
+│   │   ├── estadisticas/
+│   │   ├── favoritos/
+│   │   ├── logros/
+│   │   ├── misiones/
+│   │   ├── onboarding/
+│   │   ├── perfil/
+│   │   ├── practica/
+│   │   ├── recordatorios/
+│   │   ├── repaso/
+│   │   └── page.jsx
 │   ├── components/
-│   │   ├── mascota/           # 8 estados de la cuncuna
-│   │   ├── Mapa.jsx           # Vista principal
-│   │   ├── VistaLeccion.jsx   # Flujo de lección
-│   │   ├── Quiz.jsx           # Cuestionarios
-│   │   ├── VideoPlayer.jsx    # Reproductor
-│   │   ├── ModalLogroNuevo.jsx
-│   │   └── UsuarioMenu.jsx
-│   │
 │   ├── data/
-│   │   ├── curriculum.js      # Contenido educativo
-│   │   └── logros.js          # Catálogo de badges
-│   │
 │   ├── hooks/
-│   │   ├── useProgreso.js     # Estado del progreso
-│   │   ├── useLogros.js       # Sistema de logros
-│   │   └── useUsuario.js      # Auth state
-│   │
+│   ├── legal/
 │   ├── lib/
-│   │   ├── supabase-client.js
-│   │   ├── supabase-server.js
-│   │   └── storage.js         # Helper de URLs
-│   │
-│   ├── login/                 # Pantalla de login
-│   ├── auth/callback/         # OAuth callback
-│   ├── logros/                # Galería de badges
+│   ├── login/
+│   ├── soporte/
+│   ├── suscripcion/
 │   ├── layout.jsx
-│   └── page.jsx               # Punto de entrada
-│
+│   └── page.jsx
 ├── public/
-│   ├── favicon.ico
-│   ├── apple-touch-icon.png
-│   ├── logos/                 # SVGs del logo
-│   └── (videos y posters van en Supabase Storage)
-│
-├── sql/
-│   ├── schema.sql             # Schema base
-│   └── logros-schema.sql      # Tablas de logros
-│
-├── middleware.js              # Protección de rutas
+├── supabase/migrations/
 └── package.json
 ```
 
 ---
 
-## 🐛 La mascota Cuncuna
+## Currículum
 
-Cuncuna tiene **8 estados emocionales** animados que reaccionan a la actividad del usuario:
+El contenido vive en `app/data/curriculum.js`.
 
-| Estado | Cuándo aparece |
-|--------|----------------|
-| 🙂 **Idle** | Header, estado base |
-| 👋 **Saludando** | Pantalla de login, bienvenida |
-| 🎉 **Celebrando** | Lección completa, logro nuevo |
-| 🤔 **Pensando** | Loaders, durante quizzes |
-| 😢 **Triste** | Quiz fallado |
-| 😴 **Durmiendo** | Empty states, sin actividad |
-| 🤓 **Estudiando** | Durante lecciones activas |
-| 🦋 **Mariposa** | Curso completado |
+Estructura actual:
 
-```jsx
-import Cuncuna from './components/mascota/Cuncuna';
+- Nivel 0: Introduccion a la LSCh.
+- Nivel 1: Fundamentos.
+- Nivel 2: Vida cotidiana.
+- Nivel 3: Conversacion.
 
-<Cuncuna estado="celebrando" size={120} />
+El curso completo referencia cerca de **85 videos**. Para un MVP de produccion conviene partir con **15 a 20 videos reales** del Nivel 1, bien grabados y validados.
+
+---
+
+## Planes
+
+El control de acceso actual esta centralizado en:
+
+```txt
+app/lib/acceso-plan.js
+```
+
+Por ahora usa la seleccion local de:
+
+```txt
+app/lib/seleccion-plan-local.js
+```
+
+Cuando Mercado Pago este conectado, este helper debe leer el estado real de suscripcion desde Supabase.
+
+---
+
+## Comandos
+
+```bash
+npm run dev
+npm run lint
+npm run build
 ```
 
 ---
 
-## 🏆 Sistema de logros
+## Privacidad y camara
 
-12 badges desbloqueables organizados en categorías:
+La practica con camara es local:
 
-- 🌱 **Inicio**: Primera Cuncuna
-- ⭐ **XP**: 100 XP, 500 XP
-- 🎯 **Niveles**: Saludador, Familiar, Conversador
-- 🔥 **Constancia**: 3, 7, 30 días seguidos
-- 📹 **Actividad**: Observador, Quiz Master
-- 🦋 **Final**: Cuncuna Mariposa
+- No graba video.
+- No sube imagenes.
+- No analiza con IA.
+- La camara se activa solo cuando el usuario lo solicita.
 
----
-
-## 📚 Contenido educativo
-
-El currículum está organizado en niveles progresivos:
-
-### 🌱 Nivel 1 · Fundamentos
-Saludos, alfabeto manual, despedidas
-
-### 🏠 Nivel 2 · Vida cotidiana
-Familia, comidas, rutinas
-
-### 💬 Nivel 3 · Conversación
-Preguntas, diálogos, expresiones
-
-> 💡 El contenido vive en `app/data/curriculum.js` — fácil de extender sin tocar lógica.
+Esto es importante para mantener confianza y privacidad, especialmente durante practica de expresiones faciales y señas.
 
 ---
 
-## 🤝 Contribuir
+## Contribuir
 
-Cuncuna está construida para **personas oyentes que quieren aprender LSCh**, con contenido que debe ser creado o validado junto a personas sordas y docentes. Si quieres aportar:
+Cuncuna debe crecer con respeto por la LSCh y por las personas sordas. Aportes utiles:
 
-- 🎥 **Contenido**: si eres usuario/a nativo/a de LSCh, tu feedback sobre las señas es invaluable
-- 🎨 **Diseño**: ideas para nuevas mascotas o estados
-- 💻 **Código**: revisa los issues abiertos
-- ♿ **Accesibilidad**: sugerencias para mejorar la experiencia
-
-Por favor abre un issue antes de mandar un PR grande para discutir el cambio.
-
----
-
-## 📜 Licencia
-
-[MIT](LICENSE) © 2026 [Majo Paskuvan](https://github.com/paskuvan)
+- Validacion linguistica y cultural.
+- Videos reales de señas.
+- Mejoras de accesibilidad.
+- Pruebas en dispositivos moviles.
+- Integracion de pagos y sincronizacion en Supabase.
 
 ---
 
-## 🌟 Créditos
+## Creditos
 
-- **Diseño y desarrollo**: [Majo Paskuvan](https://paskuvan.us) — UX/UI Designer & Frontend Dev
-- **Marca**: parte del ecosistema [Códiseñas](https://codisenas.cl)
-- **Inspiración**: [Duolingo](https://duolingo.com), pero hecho con cariño chileno
-- **Para**: personas oyentes que quieren aprender LSCh 🇨🇱
+- Diseño y desarrollo: Majo Paskuvan.
+- Marca: Códiseñas.
+- Inspiracion: Duolingo, con identidad chilena propia.
+- Audiencia: personas oyentes que quieren aprender LSCh.
 
 ---
 
 <div align="center">
 
-### 🤟 Hecho con cariño en Santiago, Chile
+### Hecho en Santiago, Chile
 
-**Cuncuna** es parte de **Códiseñas** — acercando la Lengua de Señas Chilena a más personas.
+**Cuncuna** es parte de **Códiseñas**.
 
-[🌐 paskuvan.us](https://paskuvan.us) · [💼 LinkedIn](https://linkedin.com/in/paskuvan) · [📧 Contacto](mailto:hola@codisenas.cl)
+[paskuvan.us](https://paskuvan.us) · [Contacto](mailto:hola@codisenas.cl)
 
 </div>
