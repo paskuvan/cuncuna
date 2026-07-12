@@ -1,16 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
   Check,
   CloudUpload,
+  Edit3,
   Eye,
   FileVideo,
+  Filter,
   ImageIcon,
   LoaderCircle,
   Plus,
+  RotateCcw,
+  Save,
+  Search,
   X,
 } from 'lucide-react';
 import { createClient } from '../../lib/supabase-client';
@@ -33,9 +38,30 @@ export default function PanelContenido({ usuarioId }) {
   const [video, setVideo] = useState(null);
   const [poster, setPoster] = useState(null);
   const [contenido, setContenido] = useState([]);
+  const [editandoId, setEditandoId] = useState(null);
+  const [busqueda, setBusqueda] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('todos');
+  const [filtroNivel, setFiltroNivel] = useState('todos');
   const [estado, setEstado] = useState('idle');
   const [mensaje, setMensaje] = useState('');
   const [vistaPrevia, setVistaPrevia] = useState(null);
+
+  const contenidoFiltrado = useMemo(() => {
+    const texto = busqueda.trim().toLowerCase();
+
+    return contenido.filter((item) => {
+      const coincideTexto =
+        !texto ||
+        item.palabra.toLowerCase().includes(texto) ||
+        item.descripcion.toLowerCase().includes(texto) ||
+        item.region.toLowerCase().includes(texto) ||
+        item.credito?.toLowerCase().includes(texto);
+      const coincideEstado = filtroEstado === 'todos' || item.estado === filtroEstado;
+      const coincideNivel = filtroNivel === 'todos' || item.nivel === filtroNivel;
+
+      return coincideTexto && coincideEstado && coincideNivel;
+    });
+  }, [busqueda, contenido, filtroEstado, filtroNivel]);
 
   const cargarContenido = async () => {
     const supabase = createClient();
@@ -59,6 +85,32 @@ export default function PanelContenido({ usuarioId }) {
     setFormulario((actual) => ({ ...actual, [campo]: valor }));
   };
 
+  const limpiarFormulario = () => {
+    setFormulario(ESTADO_INICIAL);
+    setVideo(null);
+    setPoster(null);
+    setEditandoId(null);
+    setMensaje('');
+    setEstado('idle');
+  };
+
+  const editarItem = (item) => {
+    setFormulario({
+      palabra: item.palabra,
+      descripcion: item.descripcion,
+      region: item.region,
+      nivel: item.nivel,
+      credito: item.credito ?? '',
+      consentimiento: item.consentimiento,
+    });
+    setVideo(null);
+    setPoster(null);
+    setEditandoId(item.id);
+    setMensaje('Editando ficha existente. Sube archivos solo si quieres reemplazarlos.');
+    setEstado('idle');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const subirArchivo = async (supabase, bucket, archivo, prefijo) => {
     if (!archivo) return null;
     const extension = archivo.name.split('.').pop()?.toLowerCase();
@@ -73,10 +125,10 @@ export default function PanelContenido({ usuarioId }) {
 
   const guardar = async (event) => {
     event.preventDefault();
-    if (!video || !formulario.consentimiento) return;
+    if ((!video && !editandoId) || !formulario.consentimiento) return;
 
     setEstado('guardando');
-    setMensaje('Subiendo archivos...');
+    setMensaje(editandoId ? 'Actualizando ficha...' : 'Subiendo archivos...');
     const supabase = createClient();
 
     try {
@@ -90,25 +142,36 @@ export default function PanelContenido({ usuarioId }) {
       const posterPath = await subirArchivo(supabase, 'posters', poster, prefijo);
 
       setMensaje('Guardando ficha...');
-      const { error } = await supabase.from('contenido_senas').insert({
+      const payload = {
         palabra: formulario.palabra.trim(),
         descripcion: formulario.descripcion.trim(),
         region: formulario.region.trim(),
         nivel: formulario.nivel,
-        video_path: videoPath,
-        poster_path: posterPath,
         credito: formulario.credito.trim() || null,
         consentimiento: formulario.consentimiento,
+        updated_at: new Date().toISOString(),
+      };
+
+      if (videoPath) payload.video_path = videoPath;
+      if (posterPath) payload.poster_path = posterPath;
+
+      const { error } = editandoId
+        ? await supabase
+          .from('contenido_senas')
+          .update(payload)
+          .eq('id', editandoId)
+        : await supabase.from('contenido_senas').insert({
+        ...payload,
+        video_path: videoPath,
+        poster_path: posterPath,
         estado: 'borrador',
         created_by: usuarioId,
       });
 
       if (error) throw error;
-      setFormulario(ESTADO_INICIAL);
-      setVideo(null);
-      setPoster(null);
+      limpiarFormulario();
       setEstado('exito');
-      setMensaje('Borrador guardado. Revísalo antes de publicar.');
+      setMensaje(editandoId ? 'Ficha actualizada.' : 'Borrador guardado. Revísalo antes de publicar.');
       await cargarContenido();
     } catch (error) {
       setEstado('error');
@@ -185,11 +248,15 @@ export default function PanelContenido({ usuarioId }) {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="bg-[#FFD23F] border-[3px] border-black p-2">
-                <Plus size={24} strokeWidth={4} />
+                {editandoId ? <Edit3 size={24} strokeWidth={4} /> : <Plus size={24} strokeWidth={4} />}
               </div>
               <div>
-                <p className="font-black uppercase text-xs text-black/50">Nueva ficha</p>
-                <h2 className="font-black uppercase text-2xl text-black">Agregar una seña</h2>
+                <p className="font-black uppercase text-xs text-black/50">
+                  {editandoId ? 'Modo edición' : 'Nueva ficha'}
+                </p>
+                <h2 className="font-black uppercase text-2xl text-black">
+                  {editandoId ? 'Editar seña' : 'Agregar una seña'}
+                </h2>
               </div>
             </div>
 
@@ -218,7 +285,7 @@ export default function PanelContenido({ usuarioId }) {
             </Campo>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <Archivo icono={<FileVideo size={24} />} etiqueta="Video MP4" archivo={video} aceptar="video/mp4" onChange={setVideo} requerido />
+              <Archivo icono={<FileVideo size={24} />} etiqueta={editandoId ? 'Reemplazar video MP4' : 'Video MP4'} archivo={video} aceptar="video/mp4" onChange={setVideo} requerido={!editandoId} />
               <Archivo icono={<ImageIcon size={24} />} etiqueta="Portada" archivo={poster} aceptar="image/jpeg,image/png,image/webp" onChange={setPoster} />
             </div>
 
@@ -238,19 +305,82 @@ export default function PanelContenido({ usuarioId }) {
 
             <button
               type="submit"
-              disabled={estado === 'guardando' || !video || !formulario.consentimiento}
+              disabled={estado === 'guardando' || (!video && !editandoId) || !formulario.consentimiento}
               className="w-full mt-5 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase flex items-center justify-center gap-2 disabled:opacity-40"
               style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
             >
-              {estado === 'guardando' ? <LoaderCircle size={20} className="animate-spin" /> : <CloudUpload size={20} strokeWidth={3} />}
-              {estado === 'guardando' ? 'Guardando...' : 'Guardar borrador'}
+              {estado === 'guardando' ? <LoaderCircle size={20} className="animate-spin" /> : editandoId ? <Save size={20} strokeWidth={3} /> : <CloudUpload size={20} strokeWidth={3} />}
+              {estado === 'guardando' ? 'Guardando...' : editandoId ? 'Actualizar ficha' : 'Guardar borrador'}
             </button>
+            {editandoId && (
+              <button
+                type="button"
+                onClick={limpiarFormulario}
+                className="w-full mt-3 bg-white text-black border-[3px] border-black p-3 font-black uppercase flex items-center justify-center gap-2"
+                style={{ boxShadow: '5px 5px 0 #000' }}
+              >
+                <RotateCcw size={18} strokeWidth={4} />
+                Cancelar edición
+              </button>
+            )}
           </form>
 
           <aside className="lg:sticky lg:top-24">
-            <h2 className="font-black uppercase text-xl text-black mb-3">Contenido reciente</h2>
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h2 className="font-black uppercase text-xl text-black">Contenido reciente</h2>
+              <span className="font-black uppercase text-xs text-black/50">
+                {contenidoFiltrado.length}/{contenido.length}
+              </span>
+            </div>
+            <div
+              className="bg-white border-[3px] border-black p-3 mb-4 space-y-3"
+              style={{ boxShadow: '5px 5px 0 #000' }}
+            >
+              <label className="bg-[#F5F0E8] border-[3px] border-black flex items-center gap-2 px-3 py-2">
+                <Search size={18} strokeWidth={3} className="text-black shrink-0" />
+                <input
+                  value={busqueda}
+                  onChange={(event) => setBusqueda(event.target.value)}
+                  placeholder="Buscar seña, región o crédito"
+                  className="w-full bg-transparent outline-none font-bold text-black placeholder:text-black/50"
+                />
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <label>
+                  <span className="flex items-center gap-1 font-black uppercase text-[10px] text-black/50 mb-1">
+                    <Filter size={12} strokeWidth={4} />
+                    Estado
+                  </span>
+                  <select
+                    value={filtroEstado}
+                    onChange={(event) => setFiltroEstado(event.target.value)}
+                    className="campo-admin text-xs p-2"
+                  >
+                    <option value="todos">Todos</option>
+                    <option value="borrador">Borrador</option>
+                    <option value="publicada">Publicada</option>
+                  </select>
+                </label>
+                <label>
+                  <span className="font-black uppercase text-[10px] text-black/50 mb-1 block">
+                    Nivel
+                  </span>
+                  <select
+                    value={filtroNivel}
+                    onChange={(event) => setFiltroNivel(event.target.value)}
+                    className="campo-admin text-xs p-2"
+                  >
+                    <option value="todos">Todos</option>
+                    <option value="nivel-0">Intro</option>
+                    <option value="nivel-1">Fundamentos</option>
+                    <option value="nivel-2">Vida cotidiana</option>
+                    <option value="nivel-3">Conversación</option>
+                  </select>
+                </label>
+              </div>
+            </div>
             <div className="space-y-3">
-              {contenido.map((item) => (
+              {contenidoFiltrado.map((item) => (
                 <article key={item.id} className="bg-white border-[3px] border-black p-4" style={{ boxShadow: '5px 5px 0 #000' }}>
                   <div className="flex items-start justify-between gap-3">
                     <div>
@@ -262,19 +392,34 @@ export default function PanelContenido({ usuarioId }) {
                       {item.estado}
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setVistaPrevia(item)}
-                    className="w-full mt-3 bg-black text-[#FFD23F] border-2 border-black p-2 font-black uppercase text-xs flex items-center justify-center gap-2"
-                  >
-                    <Eye size={15} strokeWidth={3} />
-                    Revisar
-                  </button>
+                  <div className="grid grid-cols-2 gap-2 mt-3">
+                    <button
+                      type="button"
+                      onClick={() => setVistaPrevia(item)}
+                      className="bg-black text-[#FFD23F] border-2 border-black p-2 font-black uppercase text-xs flex items-center justify-center gap-2"
+                    >
+                      <Eye size={15} strokeWidth={3} />
+                      Revisar
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => editarItem(item)}
+                      className="bg-white text-black border-2 border-black p-2 font-black uppercase text-xs flex items-center justify-center gap-2"
+                    >
+                      <Edit3 size={15} strokeWidth={3} />
+                      Editar
+                    </button>
+                  </div>
                 </article>
               ))}
               {contenido.length === 0 && (
                 <div className="bg-white border-[3px] border-black p-5 text-center font-bold text-black/60">
                   Aún no hay contenido.
+                </div>
+              )}
+              {contenido.length > 0 && contenidoFiltrado.length === 0 && (
+                <div className="bg-white border-[3px] border-black p-5 text-center font-bold text-black/60">
+                  No hay resultados con esos filtros.
                 </div>
               )}
             </div>
