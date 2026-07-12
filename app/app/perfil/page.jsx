@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -17,6 +16,7 @@ import {
   User,
 } from 'lucide-react';
 import { CURRICULUM } from '../../data/curriculum';
+import AvatarUsuario from '../../components/AvatarUsuario';
 import { useProgreso } from '../../hooks/useProgreso';
 import { useUsuario } from '../../hooks/useUsuario';
 import { obtenerPlanActual } from '../../lib/acceso-plan';
@@ -59,8 +59,7 @@ export default function PaginaPerfil() {
     : 0;
 
   const nombre = usuario?.user_metadata?.full_name || usuario?.email || 'Cuenta Cuncuna';
-  const avatar = usuario?.user_metadata?.avatar_url;
-  const inicial = nombre?.[0]?.toUpperCase() || 'C';
+  const avatar = usuario?.user_metadata?.avatar_url || usuario?.user_metadata?.picture;
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
@@ -97,23 +96,14 @@ export default function PaginaPerfil() {
           style={{ boxShadow: '12px 12px 0 #000' }}
         >
           <div className="flex flex-col sm:flex-row sm:items-center gap-5">
-            <div
-              className="w-24 h-24 bg-white border-[4px] border-black flex items-center justify-center overflow-hidden shrink-0"
+            <AvatarUsuario
+              nombre={nombre}
+              src={avatar}
+              size={96}
+              className="border-[4px]"
+              textoClassName="text-4xl"
               style={{ boxShadow: '7px 7px 0 #FF6B9D' }}
-            >
-              {avatar ? (
-                <Image
-                  src={avatar}
-                  alt={nombre}
-                  width={96}
-                  height={96}
-                  className="w-full h-full object-cover"
-                  unoptimized
-                />
-              ) : (
-                <span className="font-black text-black text-4xl">{inicial}</span>
-              )}
-            </div>
+            />
 
             <div className="flex-1 min-w-0">
               <p className="font-black uppercase text-xs tracking-[0.2em] text-black/60 mb-2">

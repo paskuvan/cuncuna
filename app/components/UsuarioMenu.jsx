@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Bell, ClipboardList, LayoutDashboard, LogOut, User } from 'lucide-react';
 import { useUsuario } from '../hooks/useUsuario';
 import { createClient } from '../lib/supabase-client';
+import AvatarUsuario from './AvatarUsuario';
 
 // ============================================================
 // COMPONENTE: UsuarioMenu
@@ -32,22 +32,22 @@ export default function UsuarioMenu() {
   if (!usuario) return null;
 
   const nombre = usuario.user_metadata?.full_name || usuario.email;
-  const avatar = usuario.user_metadata?.avatar_url;
-  const inicial = nombre?.[0]?.toUpperCase() || 'U';
+  const avatar = usuario.user_metadata?.avatar_url || usuario.user_metadata?.picture;
 
   return (
     <div className="relative">
       <button
         onClick={() => setAbierto(!abierto)}
-        className="bg-white border-[3px] border-white w-10 h-10 flex items-center justify-center overflow-hidden hover:-translate-y-0.5 transition-transform"
+        className="rounded-full hover:-translate-y-0.5 transition-transform"
         style={{ boxShadow: '3px 3px 0 #FFD23F' }}
         aria-label="Menú de usuario"
       >
-        {avatar ? (
-          <Image src={avatar} alt={nombre} width={40} height={40} className="w-full h-full object-cover" unoptimized />
-        ) : (
-          <span className="font-black text-black text-lg">{inicial}</span>
-        )}
+        <AvatarUsuario
+          nombre={nombre}
+          src={avatar}
+          size={40}
+          className="border-white"
+        />
       </button>
 
       {abierto && (
