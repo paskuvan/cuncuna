@@ -98,7 +98,7 @@ function Hero() {
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase text-black leading-[0.95] mb-6 tracking-tight">
             Aprende
             <br />
-            <span className="bg-[#FFD23F] inline-block px-2 border-[3px] border-black">
+            <span className="bg-[#FFD23F] inline-block px-2 border-[5px] border-black">
               lengua de señas
             </span>
             <br />
@@ -281,7 +281,7 @@ function ComoFunciona() {
           <h3 className="text-3xl md:text-5xl font-black uppercase text-black tracking-tight leading-none">
             Tres pasos.
             <br />
-            <span className="bg-[#FFD23F] inline-block px-3 mt-2 border-[3px] border-black">
+            <span className="bg-[#FFD23F] inline-block px-3 mt-2 border-[5px] border-black">
               Sin complicaciones.
             </span>
           </h3>
@@ -446,7 +446,7 @@ function Planes() {
           <h3 className="text-3xl md:text-5xl font-black uppercase text-black leading-none">
             Elige cómo
             <br />
-            <span className="bg-[#7FFF6B] inline-block px-3 mt-2 border-[3px] border-black">
+            <span className="bg-[#7FFF6B] inline-block px-3 mt-2 border-[5px] border-black">
               quieres aprender.
             </span>
           </h3>

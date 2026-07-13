@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import { BarChart3, Bell, BookOpen, Camera, Check, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
+import { BarChart3, Bell, BookOpen, Camera, Check, ChevronDown, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
 import UsuarioMenu from './UsuarioMenu';
 import Cuncuna from './mascota/Cuncuna';
@@ -31,25 +32,77 @@ export default function Mapa({
   onSeleccionarLeccion,
   onReiniciar,
 }) {
+  const [menuAbierto, setMenuAbierto] = useState(false);
   const totalLecciones = CURRICULUM.reduce((acc, n) => acc + n.lecciones.length, 0);
   const completadas = progreso.leccionesCompletadas.length;
   const recordatorios = obtenerRecordatorios();
   const mostrarRecordatorio = debeRecordarHoy(recordatorios);
   const planActual = obtenerPlanActual();
+  const enlacesHeader = [
+    {
+      href: '/app/diccionario',
+      titulo: 'Diccionario',
+      descripcion: 'Buscar señas',
+      icono: BookOpen,
+      color: '#FFFFFF',
+    },
+    {
+      href: '/app/misiones',
+      titulo: 'Misiones',
+      descripcion: 'Metas diarias',
+      icono: Flag,
+      color: '#FFD23F',
+    },
+    {
+      href: '/app/estadisticas',
+      titulo: 'Estadísticas',
+      descripcion: 'Ver avance',
+      icono: BarChart3,
+      color: '#4ECDC4',
+    },
+    {
+      href: '/app/conversaciones',
+      titulo: 'Conversaciones',
+      descripcion: 'Frases guiadas',
+      icono: MessageCircle,
+      color: '#A78BFA',
+    },
+    {
+      href: '/app/favoritos',
+      titulo: 'Favoritos',
+      descripcion: 'Señas guardadas',
+      icono: Star,
+      color: '#FFD23F',
+    },
+    {
+      href: '/app/recordatorios',
+      titulo: 'Recordatorios',
+      descripcion: 'Rutina diaria',
+      icono: Bell,
+      color: '#FF6B9D',
+    },
+    {
+      href: '/app/logros',
+      titulo: 'Logros',
+      descripcion: `${logrosObtenidos.length} obtenidos`,
+      icono: Trophy,
+      color: '#7FFF6B',
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
+    <div className="cuncuna-user-app min-h-screen bg-[#F5F0E8]">
       {/* HEADER */}
       <header className="bg-black border-b-[4px] border-black sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto p-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+        <div className="max-w-4xl mx-auto p-3 sm:p-4 flex items-center justify-between gap-3">
+          <Link href="/app" className="flex items-center gap-3 min-w-0">
             <div
-              className="bg-[#FFD23F] border-[3px] border-white p-2"
+              className="bg-[#FFD23F] border-[3px] border-white p-2 shrink-0"
               style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
             >
               <Cuncuna estado="idle" size={24} animado={false} />
             </div>
-            <div>
+            <div className="min-w-0">
               <h1 className="text-white font-black text-xl md:text-2xl uppercase tracking-tight leading-none">
                 Cuncuna<span className="text-[#FFD23F]">.</span>
               </h1>
@@ -57,102 +110,122 @@ export default function Mapa({
                 De seña en seña
               </p>
             </div>
-          </div>
+          </Link>
 
           <div className="flex items-center gap-2">
-            {/* Racha */}
-            <div
-              className="bg-[#FF6B9D] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5"
+            <Link
+              href="/app/practica"
+              className="bg-[#4ECDC4] border-[3px] border-white px-3 py-2 hidden md:flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
               style={{ boxShadow: '3px 3px 0 #FFD23F' }}
             >
-              <Flame size={16} strokeWidth={3} className="text-white" />
-              <span className="text-white font-black text-sm">{progreso.racha}</span>
+              <Camera size={18} strokeWidth={4} className="text-black" />
+              <span className="text-black font-black uppercase text-xs">Practicar</span>
+            </Link>
+
+            <div className="hidden sm:flex items-center gap-2">
+              <div
+                className="bg-[#FF6B9D] border-[3px] border-white px-2 py-1.5 flex items-center gap-1.5"
+                style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+                title="Racha"
+              >
+                <Flame size={16} strokeWidth={3} className="text-white" />
+                <span className="text-white font-black text-sm">{progreso.racha}</span>
+              </div>
+
+              <div
+                className="bg-[#FFD23F] border-[3px] border-white px-2 py-1.5 flex items-center gap-1.5"
+                style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
+                title="XP"
+              >
+                <Star size={16} strokeWidth={3} className="text-black" fill="black" />
+                <span className="text-black font-black text-sm">{progreso.xpTotal}</span>
+              </div>
             </div>
 
-            {/* XP */}
-            <div
-              className="bg-[#FFD23F] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5"
-              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
-            >
-              <Star size={16} strokeWidth={3} className="text-black" fill="black" />
-              <span className="text-black font-black text-sm">{progreso.xpTotal}</span>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMenuAbierto((abierto) => !abierto)}
+                className="bg-white border-[3px] border-white px-3 py-2 flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+                aria-expanded={menuAbierto}
+                aria-label="Abrir navegación"
+              >
+                <span className="text-black font-black uppercase text-xs hidden sm:inline">
+                  Más
+                </span>
+                <ChevronDown
+                  size={18}
+                  strokeWidth={4}
+                  className={`text-black transition-transform ${menuAbierto ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              {menuAbierto && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setMenuAbierto(false)}
+                  />
+                  <nav
+                    className="menu-usuario absolute right-0 top-full mt-3 w-[min(88vw,360px)] bg-white border-[3px] border-black z-50 p-3"
+                    style={{ boxShadow: '8px 8px 0 #000' }}
+                    aria-label="Navegación principal"
+                  >
+                    <div className="grid grid-cols-1 gap-2">
+                      <Link
+                        href="/suscripcion"
+                        onClick={() => setMenuAbierto(false)}
+                        className="item-menu-usuario border-[3px] border-black p-3 flex items-center justify-between gap-3 bg-[#F5F0E8] hover:bg-[#FFD23F] transition-colors"
+                      >
+                        <span>
+                          <span className="block font-black uppercase text-sm text-black">
+                            Plan {planActual.nombre}
+                          </span>
+                          <span className="block font-bold text-xs text-black/60">
+                            Ver suscripción
+                          </span>
+                        </span>
+                        <Star size={18} strokeWidth={4} className="text-black" />
+                      </Link>
+
+                      {enlacesHeader.map((enlace) => {
+                        const Icono = enlace.icono;
+
+                        return (
+                          <Link
+                            key={enlace.href}
+                            href={enlace.href}
+                            onClick={() => setMenuAbierto(false)}
+                            className="item-menu-usuario bg-white border-[3px] border-black p-3 flex items-center gap-3 hover:translate-x-[-2px] hover:translate-y-[-2px] transition-transform"
+                            style={{ boxShadow: '4px 4px 0 #000' }}
+                          >
+                            <span
+                              className="icono-menu-usuario border-[3px] border-black w-10 h-10 flex items-center justify-center shrink-0"
+                              style={{ backgroundColor: enlace.color }}
+                            >
+                              <Icono
+                                size={20}
+                                strokeWidth={4}
+                                className={enlace.color === '#A78BFA' || enlace.color === '#FF6B9D' ? 'text-white' : 'text-black'}
+                              />
+                            </span>
+                            <span className="min-w-0">
+                              <span className="block font-black uppercase text-sm text-black">
+                                {enlace.titulo}
+                              </span>
+                              <span className="block font-bold text-xs text-black/60">
+                                {enlace.descripcion}
+                              </span>
+                            </span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </nav>
+                </>
+              )}
             </div>
-
-            <Link
-              href="/suscripcion"
-              className="bg-white border-[3px] border-white px-2 sm:px-3 py-1.5 hidden md:flex items-center gap-1.5 hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Ver plan"
-            >
-              <span className="text-black font-black uppercase text-xs">
-                {planActual.nombre}
-              </span>
-            </Link>
-
-            {/* Logros - lleva a /app/logros */}
-            <Link
-              href="/app/logros"
-              className="bg-[#7FFF6B] border-[3px] border-white px-2 sm:px-3 py-1.5 flex items-center gap-1.5 hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
-              aria-label="Ver logros"
-            >
-              <Trophy size={16} strokeWidth={3} className="text-black" />
-              <span className="text-black font-black text-sm">{logrosObtenidos.length}</span>
-            </Link>
-
-            <Link
-              href="/app/diccionario"
-              className="bg-white border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Ver diccionario"
-            >
-              <BookOpen size={18} strokeWidth={3} className="text-black" />
-            </Link>
-
-            <Link
-              href="/app/misiones"
-              className="bg-[#FFD23F] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
-              aria-label="Ver misiones"
-            >
-              <Flag size={18} strokeWidth={3} className="text-black" />
-            </Link>
-
-            <Link
-              href="/app/estadisticas"
-              className="bg-[#4ECDC4] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Ver estadísticas"
-            >
-              <BarChart3 size={18} strokeWidth={3} className="text-black" />
-            </Link>
-
-            <Link
-              href="/app/conversaciones"
-              className="bg-[#A78BFA] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Ver conversaciones"
-            >
-              <MessageCircle size={18} strokeWidth={3} className="text-white" />
-            </Link>
-
-            <Link
-              href="/app/favoritos"
-              className="bg-[#FFD23F] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
-              aria-label="Ver favoritos"
-            >
-              <Star size={18} strokeWidth={3} className="text-black" fill="black" />
-            </Link>
-
-            <Link
-              href="/app/recordatorios"
-              className="bg-[#FF6B9D] border-[3px] border-white p-1.5 sm:p-2 flex items-center justify-center hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Ver recordatorios"
-            >
-              <Bell size={18} strokeWidth={3} className="text-white" />
-            </Link>
 
             <UsuarioMenu />
           </div>
