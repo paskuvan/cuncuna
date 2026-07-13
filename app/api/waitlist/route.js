@@ -6,9 +6,45 @@ import { createClient } from '../../lib/supabase-server';
 // Registra un email en la lista de espera.
 // ============================================================
 
+async function notificarNuevoRegistro({ email, origen }) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const destino = process.env.WAITLIST_NOTIFY_TO;
+  const remitente =
+    process.env.WAITLIST_NOTIFY_FROM || 'Cuncuna <onboarding@resend.dev>';
+
+  if (!apiKey || !destino) return;
+
+  const respuesta = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: remitente,
+      to: destino,
+      subject: 'Nuevo registro en la lista de espera de Cuncuna',
+      html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+          <h1>Nuevo registro en Cuncuna</h1>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Origen:</strong> ${origen}</p>
+          <p>Este correo fue enviado automáticamente desde la lista de espera.</p>
+        </div>
+      `,
+      text: `Nuevo registro en Cuncuna\nEmail: ${email}\nOrigen: ${origen}`,
+    }),
+  });
+
+  if (!respuesta.ok) {
+    const detalle = await respuesta.text();
+    throw new Error(`Resend respondió ${respuesta.status}: ${detalle}`);
+  }
+}
+
 export async function POST(request) {
   try {
-    const { email } = await request.json();
+    const { email, origen = 'landing' } = await request.json();
 
     // Validación básica
     if (!email || typeof email !== 'string') {
@@ -28,10 +64,16 @@ export async function POST(request) {
     }
 
     const supabase = await createClient();
+    const origenSeguro =
+      typeof origen === 'string'
+        ? origen.toLowerCase().trim().slice(0, 80)
+        : 'landing';
+
+    const emailNormalizado = email.toLowerCase().trim();
 
     const { error } = await supabase
       .from('waitlist')
-      .insert({ email: email.toLowerCase().trim(), origen: 'landing' });
+      .insert({ email: emailNormalizado, origen: origenSeguro || 'landing' });
 
     if (error) {
       // 23505 = email duplicado
@@ -46,6 +88,15 @@ export async function POST(request) {
         { error: 'No pudimos registrarte. Intenta de nuevo.' },
         { status: 500 }
       );
+    }
+
+    try {
+      await notificarNuevoRegistro({
+        email: emailNormalizado,
+        origen: origenSeguro || 'landing',
+      });
+    } catch (errorNotificacion) {
+      console.error('Error notificando waitlist:', errorNotificacion);
     }
 
     return NextResponse.json({ ok: true });

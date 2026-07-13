@@ -7,6 +7,7 @@ import {
   Mail, ArrowRight, Star, Zap, Users, ShieldCheck
 } from 'lucide-react';
 import Cuncuna from './components/mascota/Cuncuna';
+import FormularioListaEspera from './components/FormularioListaEspera';
 
 // ============================================================
 // LANDING PAGE (ruta /)
@@ -59,13 +60,13 @@ function NavBar() {
           >
             Planes
           </a>
-          <a
-            href="#waitlist"
+          <Link
+            href="/lista-espera"
             className="bg-[#FFD23F] text-black border-[3px] border-white px-3 sm:px-4 py-2 font-black uppercase text-xs sm:text-sm tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
             style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
           >
             Lista de espera
-          </a>
+          </Link>
           <Link
             href="/login"
             className="bg-white text-black border-[3px] border-white px-3 sm:px-4 py-2 font-black uppercase text-xs sm:text-sm tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
@@ -110,14 +111,14 @@ function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            <a
-              href="#waitlist"
+            <Link
+              href="/lista-espera"
               className="bg-black text-[#FFD23F] border-[3px] border-black px-6 py-4 font-black uppercase text-base tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform inline-flex items-center justify-center gap-2"
               style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
             >
               <Mail size={20} strokeWidth={3} />
               Únete a la lista
-            </a>
+            </Link>
             <Link
               href="/login"
               className="bg-white text-black border-[3px] border-black px-6 py-4 font-black uppercase text-base tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform inline-flex items-center justify-center gap-2"
@@ -567,41 +568,6 @@ function Planes() {
 // CTA WAITLIST
 // ─────────────────────────────────────────────
 function CtaWaitlist() {
-  const [email, setEmail] = useState('');
-  const [estado, setEstado] = useState('idle'); // idle | enviando | exito | error | duplicado
-  const [mensajeError, setMensajeError] = useState('');
-
-  const enviar = async (e) => {
-    e.preventDefault();
-    if (!email) return;
-
-    setEstado('enviando');
-    setMensajeError('');
-
-    try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (data.duplicado) {
-        setEstado('duplicado');
-      } else if (data.ok) {
-        setEstado('exito');
-        setEmail('');
-      } else {
-        setEstado('error');
-        setMensajeError(data.error || 'Error desconocido');
-      }
-    } catch (err) {
-      setEstado('error');
-      setMensajeError('Error de conexión');
-    }
-  };
-
   return (
     <section id="waitlist" className="py-16 md:py-24">
       <div className="max-w-3xl mx-auto px-4 md:px-6">
@@ -618,7 +584,7 @@ function CtaWaitlist() {
           <div className="relative z-10">
             <div className="flex justify-center mb-4">
               <Cuncuna
-                estado={estado === 'exito' ? 'celebrando' : 'idle'}
+                estado="idle"
                 size={120}
               />
             </div>
@@ -633,57 +599,7 @@ function CtaWaitlist() {
               Únete a la lista de espera y entérate cuando Cuncuna esté lista para usar. Sin spam, lo prometemos.
             </p>
 
-            {estado === 'exito' ? (
-              <div
-                className="bg-black text-[#7FFF6B] border-[3px] border-black p-6 inline-block"
-                style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
-              >
-                <p className="font-black uppercase text-base tracking-wider mb-1">
-                  ¡Listo! 🎉
-                </p>
-                <p className="text-white font-bold text-sm">
-                  Te avisaremos en cuanto estemos listos.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={enviar} className="max-w-md mx-auto">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="tu@email.cl"
-                    required
-                    disabled={estado === 'enviando'}
-                    className="flex-1 bg-white border-[3px] border-black px-4 py-3 font-black text-black placeholder-black/40 focus:outline-none focus:translate-y-[-2px] transition-transform disabled:opacity-50"
-                    style={{ boxShadow: '4px 4px 0 #000' }}
-                  />
-                  <button
-                    type="submit"
-                    disabled={estado === 'enviando'}
-                    className="bg-black text-[#FFD23F] border-[3px] border-black px-6 py-3 font-black uppercase tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform disabled:opacity-50 disabled:cursor-wait whitespace-nowrap"
-                    style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
-                  >
-                    {estado === 'enviando' ? 'Enviando...' : 'Unirme →'}
-                  </button>
-                </div>
-
-                {estado === 'duplicado' && (
-                  <p className="mt-4 font-black uppercase text-sm text-black/70">
-                    Ya estás en la lista. ¡Gracias!
-                  </p>
-                )}
-
-                {estado === 'error' && (
-                  <div
-                    className="mt-4 bg-[#FF6B6B] text-white border-[3px] border-black p-3 font-black uppercase text-sm"
-                    style={{ boxShadow: '3px 3px 0 #000' }}
-                  >
-                    {mensajeError}
-                  </div>
-                )}
-              </form>
-            )}
+            <FormularioListaEspera origen="landing" />
           </div>
         </div>
       </div>

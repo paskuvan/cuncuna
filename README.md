@@ -118,7 +118,44 @@ Abre [http://localhost:3000](http://localhost:3000).
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key
+
+# Opcional: notificar al correo admin por cada registro en lista de espera.
+RESEND_API_KEY=re_xxxxxxxxx
+WAITLIST_NOTIFY_TO=tu-correo@gmail.com
+WAITLIST_NOTIFY_FROM=Cuncuna <onboarding@resend.dev>
 ```
+
+---
+
+## Lista de espera por correo
+
+La pagina publica esta en:
+
+```txt
+/lista-espera
+```
+
+El formulario guarda cada email en la tabla `waitlist` de Supabase mediante:
+
+```txt
+/api/waitlist
+```
+
+Si quieres recibir un aviso en tu correo por cada nuevo registro:
+
+1. Crea una cuenta en Resend.
+2. Obtén una API key.
+3. Agrega estas variables a `.env.local`:
+
+```env
+RESEND_API_KEY=re_xxxxxxxxx
+WAITLIST_NOTIFY_TO=tu-correo@gmail.com
+WAITLIST_NOTIFY_FROM=Cuncuna <onboarding@resend.dev>
+```
+
+4. Reinicia el servidor con `npm run dev`.
+
+Si esas variables no existen, la lista de espera igual seguirá guardando emails en Supabase, pero no enviará aviso por correo.
 
 ---
 
@@ -271,6 +308,6 @@ Cuncuna debe crecer con respeto por la LSCh y por las personas sordas. Aportes u
 
 **Cuncuna** es parte de **Códiseñas**.
 
-[paskuvan.us](https://paskuvan.us) · [Contacto](mailto:hola@codisenas.cl)
+[codisenas.com](https://codisenas.com) · [Contacto](mailto:hola@codisenas.cl)
 
 </div>
