@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Filter, Search, Star } from 'lucide-react';
+import { BookOpen, Search, Star } from 'lucide-react';
 import VideoPlayer from '../../components/VideoPlayer';
+import AppShell from '../../components/dashboard/AppShell';
 import {
   obtenerNivelesDiccionario,
   obtenerSenasDiccionario,
@@ -17,6 +18,10 @@ import {
 import { registrarEventoMision } from '../../lib/misiones-locales';
 import { obtenerSenasPublicadas } from '../../lib/contenido-publicado';
 import { obtenerPlanActual, puedeAccederLeccion } from '../../lib/acceso-plan';
+
+// ============================================================
+// PÁGINA: /app/diccionario  (estilo suave)
+// ============================================================
 
 export default function PaginaDiccionario() {
   const planActual = useMemo(() => obtenerPlanActual(), []);
@@ -44,14 +49,11 @@ export default function PaginaDiccionario() {
   useEffect(() => {
     registrarDiccionarioEstadisticas();
     registrarEventoMision('explorar_diccionario');
-    obtenerSenasPublicadas()
-      .then(setSenasPublicadas)
-      .catch(() => {});
+    obtenerSenasPublicadas().then(setSenasPublicadas).catch(() => {});
   }, []);
 
   const senasFiltradas = useMemo(() => {
     const texto = busqueda.trim().toLowerCase();
-
     return senas.filter((sena) => {
       const coincideNivel = nivelActivo === 'todos' || sena.nivelId === nivelActivo;
       const coincideTexto =
@@ -59,7 +61,6 @@ export default function PaginaDiccionario() {
         sena.palabra.toLowerCase().includes(texto) ||
         sena.descripcion.toLowerCase().includes(texto) ||
         sena.leccionTitulo.toLowerCase().includes(texto);
-
       return coincideNivel && coincideTexto;
     });
   }, [busqueda, nivelActivo, senas]);
@@ -70,180 +71,111 @@ export default function PaginaDiccionario() {
     setSenaActiva(siguiente ?? null);
   };
 
-  const alternarFavorita = (senaId) => {
-    setFavoritos(alternarFavoritoLocal(senaId));
-  };
+  const alternarFavorita = (senaId) => setFavoritos(alternarFavoritoLocal(senaId));
+
+  const chipBase =
+    'rounded-full border px-4 py-1.5 text-sm font-medium whitespace-nowrap transition-colors';
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto p-4 flex items-center gap-3">
-          <Link
-            href="/app"
-            className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver"
-          >
-            <ArrowLeft size={20} strokeWidth={3} className="text-black" />
-          </Link>
-
-          <div className="flex items-center gap-2 flex-1 min-w-0">
-            <BookOpen size={24} strokeWidth={3} className="text-[#FFD23F]" />
-            <div className="min-w-0">
-              <h1 className="text-white font-black text-xl md:text-2xl uppercase leading-none">
-                Diccionario
-              </h1>
-              <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
-                {senas.length} señas disponibles
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="bg-[#FFD23F] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
-            style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
-          >
-            LSCh
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto p-4 md:p-6">
+    <AppShell title="Diccionario">
+      <div className="flex flex-col gap-5">
         {senasBloqueadas > 0 && (
-          <section
-            className="bg-[#FFD23F] border-[4px] border-black p-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-            style={{ boxShadow: '8px 8px 0 #000' }}
-          >
+          <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl border border-violet-200 bg-violet-50 p-4">
             <div>
-              <p className="font-black uppercase text-black text-lg leading-none">
+              <p className="font-semibold text-violet-900">
                 Diccionario limitado por tu plan
               </p>
-              <p className="font-bold text-black/70 text-sm mt-1">
+              <p className="text-sm text-violet-700/80">
                 Hay {senasBloqueadas} señas premium disponibles con Plus.
               </p>
             </div>
             <Link
               href="/suscripcion?plan=plus"
-              className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm text-center"
-              style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
+              className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white text-center hover:bg-violet-700 transition-colors"
             >
               Ver Plus
             </Link>
           </section>
         )}
 
-        <section className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-6 items-start">
-          <div className="space-y-5">
-            <div
-              className="bg-[#FFD23F] border-[4px] border-black p-5 md:p-6"
-              style={{ boxShadow: '10px 10px 0 #000' }}
-            >
-              <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70 mb-2">
-                Biblioteca visual
-              </p>
-              <h2 className="font-black uppercase text-3xl md:text-5xl text-black leading-none mb-4">
-                Señas por nivel
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-3">
-                <label
-                  className="bg-white border-[3px] border-black flex items-center gap-2 px-3 py-2"
-                  style={{ boxShadow: '4px 4px 0 #000' }}
-                >
-                  <Search size={20} strokeWidth={3} className="text-black shrink-0" />
-                  <input
-                    value={busqueda}
-                    onChange={(event) => setBusqueda(event.target.value)}
-                    placeholder="Buscar seña, lección o tema"
-                    aria-label="Buscar seña, lección o tema"
-                    className="w-full bg-transparent outline-none font-bold text-black placeholder:text-black/50"
-                  />
-                </label>
-
-                <div
-                  className="bg-black border-[3px] border-black px-3 py-2 flex items-center gap-2"
-                  style={{ boxShadow: '4px 4px 0 #fff' }}
-                >
-                  <Filter size={18} strokeWidth={3} className="text-[#FFD23F]" />
-                  <span className="font-black uppercase text-white text-xs whitespace-nowrap">
-                    {senasFiltradas.length} resultados
-                  </span>
-                </div>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-6 items-start">
+          {/* Lista */}
+          <div className="flex flex-col gap-4">
+            {/* Buscador */}
+            <div className="flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-2.5">
+              <Search size={18} className="text-neutral-400 shrink-0" />
+              <input
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder="Buscar seña, lección o tema"
+                aria-label="Buscar seña, lección o tema"
+                className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
+              />
+              <span className="text-xs text-neutral-400 shrink-0">
+                {senasFiltradas.length}
+              </span>
             </div>
 
-            <div className="flex gap-2 overflow-x-auto pb-2">
+            {/* Filtros de nivel */}
+            <div className="flex gap-2 overflow-x-auto pb-1">
               <button
                 onClick={() => seleccionarNivel('todos')}
-                className={`border-[3px] border-black px-4 py-2 font-black uppercase text-xs whitespace-nowrap transition-transform hover:translate-y-[-2px] ${
-                  nivelActivo === 'todos' ? 'bg-black text-[#FFD23F]' : 'bg-white text-black'
+                className={`${chipBase} ${
+                  nivelActivo === 'todos'
+                    ? 'bg-violet-600 border-violet-600 text-white'
+                    : 'bg-white border-black/10 text-neutral-600 hover:bg-neutral-50'
                 }`}
-                style={{ boxShadow: '4px 4px 0 #000' }}
               >
                 Todo
               </button>
-
               {niveles.map((nivel) => (
                 <button
                   key={nivel.id}
                   onClick={() => seleccionarNivel(nivel.id)}
-                  className={`border-[3px] border-black px-4 py-2 font-black uppercase text-xs whitespace-nowrap transition-transform hover:translate-y-[-2px] ${
-                    nivelActivo === nivel.id ? 'text-black' : 'bg-white text-black'
+                  className={`${chipBase} ${
+                    nivelActivo === nivel.id
+                      ? 'bg-violet-600 border-violet-600 text-white'
+                      : 'bg-white border-black/10 text-neutral-600 hover:bg-neutral-50'
                   }`}
-                  style={{
-                    backgroundColor: nivelActivo === nivel.id ? nivel.color : undefined,
-                    boxShadow: '4px 4px 0 #000',
-                  }}
                 >
                   {nivel.icono} Nivel {nivel.numero}
                 </button>
               ))}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            {/* Grid de señas */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
               {senasFiltradas.map((sena) => {
                 const activa = senaActiva?.id === sena.id;
-
                 return (
                   <button
                     key={sena.id}
                     onClick={() => setSenaActiva(sena)}
-                    className={`text-left border-[3px] border-black p-4 transition-all hover:translate-x-[-3px] hover:translate-y-[-3px] ${
-                      activa ? 'bg-[#7FFF6B]' : 'bg-white'
+                    className={`text-left rounded-2xl border bg-white p-4 shadow-sm transition-all hover:shadow-md ${
+                      activa ? 'border-violet-400 ring-2 ring-violet-200' : 'border-black/5'
                     }`}
-                    style={{ boxShadow: activa ? '7px 7px 0 #000' : '5px 5px 0 #000' }}
                   >
                     <div className="flex items-start justify-between gap-3 mb-3">
-                      <div
-                        className="border-[3px] border-black w-12 h-12 flex items-center justify-center text-2xl shrink-0"
-                        style={{
-                          backgroundColor: sena.nivelColor,
-                          boxShadow: '3px 3px 0 #000',
-                        }}
+                      <span
+                        className="grid place-items-center w-11 h-11 rounded-xl text-xl shrink-0"
+                        style={{ backgroundColor: `${sena.nivelColor}22` }}
                       >
                         {sena.nivelIcono}
-                      </div>
-                      <div className="bg-black text-[#FFD23F] px-2 py-1 border-2 border-black font-black text-[10px] uppercase">
+                      </span>
+                      <span className="rounded-full bg-neutral-100 px-2 py-1 text-[10px] font-semibold text-neutral-500">
                         Nivel {sena.nivelNumero}
-                      </div>
+                      </span>
                     </div>
-
-                    <h3 className="font-black uppercase text-xl text-black leading-tight mb-1">
-                      {sena.palabra}
-                    </h3>
-                    <p className="text-black/70 font-bold text-xs mb-3 line-clamp-2">
+                    <h3 className="font-bold text-lg leading-tight">{sena.palabra}</h3>
+                    <p className="mt-1 text-xs text-neutral-500 line-clamp-2">
                       {sena.descripcion}
                     </p>
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="font-black uppercase text-[10px] text-black/50 truncate">
+                    <div className="mt-3 flex items-center justify-between gap-3">
+                      <span className="text-[11px] text-neutral-400 truncate">
                         {sena.leccionTitulo}
                       </span>
-                      <span className="flex items-center gap-1 bg-black text-[#FFD23F] px-2 py-1 font-black text-xs shrink-0">
-                        <Star
-                          size={12}
-                          strokeWidth={3}
-                          fill={favoritos.includes(sena.id) ? '#FFD23F' : 'none'}
-                        />
+                      <span className="flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700 shrink-0">
+                        <Star size={12} fill={favoritos.includes(sena.id) ? 'currentColor' : 'none'} />
                         {sena.xp}
                       </span>
                     </div>
@@ -253,97 +185,74 @@ export default function PaginaDiccionario() {
             </div>
 
             {senasFiltradas.length === 0 && (
-              <div
-                className="bg-white border-[3px] border-black p-6 text-center"
-                style={{ boxShadow: '6px 6px 0 #000' }}
-              >
-                <p className="font-black uppercase text-black">Sin resultados</p>
+              <div className="rounded-2xl border border-black/5 bg-white p-8 text-center text-sm text-neutral-500 shadow-sm">
+                Sin resultados
               </div>
             )}
           </div>
 
+          {/* Detalle */}
           <aside className="lg:sticky lg:top-24">
             {senaActiva ? (
-              <div
-                className="bg-white border-[4px] border-black p-4"
-                style={{ boxShadow: '10px 10px 0 #000' }}
-              >
-                <div className="mb-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="font-black uppercase text-xs tracking-[0.2em] text-black/50 mb-1">
-                        {senaActiva.nivelTitulo}
-                      </p>
-                      <h2 className="font-black uppercase text-3xl text-black leading-none">
-                        {senaActiva.palabra}
-                      </h2>
-                    </div>
-                    <button
-                      onClick={() => alternarFavorita(senaActiva.id)}
-                      className={`border-[3px] border-black p-2 hover:translate-y-[-2px] transition-transform ${
-                        esFavoritaLocal(senaActiva.id) ? 'bg-[#FFD23F]' : 'bg-white'
-                      }`}
-                      style={{ boxShadow: '3px 3px 0 #000' }}
-                      aria-label="Guardar favorita"
-                    >
-                      <Star
-                        size={22}
-                        strokeWidth={3}
-                        className="text-black"
-                        fill={favoritos.includes(senaActiva.id) ? 'black' : 'none'}
-                      />
-                    </button>
+              <div className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-3 mb-3">
+                  <div>
+                    <p className="text-xs font-medium text-neutral-500">
+                      {senaActiva.nivelTitulo}
+                    </p>
+                    <h2 className="text-2xl font-bold tracking-tight">
+                      {senaActiva.palabra}
+                    </h2>
                   </div>
-                  <p className="font-bold text-black/70 text-sm mt-2">
-                    {senaActiva.descripcion}
-                  </p>
-                  {senaActiva.origen === 'panel' && (
-                    <div className="flex flex-wrap gap-2 mt-3">
-                      <span className="bg-[#4ECDC4] border-2 border-black px-2 py-1 font-black uppercase text-[10px]">
-                        Variante: {senaActiva.region}
+                  <button
+                    onClick={() => alternarFavorita(senaActiva.id)}
+                    className={`grid place-items-center w-10 h-10 rounded-xl border transition-colors ${
+                      esFavoritaLocal(senaActiva.id)
+                        ? 'border-violet-200 bg-violet-100 text-violet-700'
+                        : 'border-black/10 bg-white text-neutral-400 hover:bg-neutral-50'
+                    }`}
+                    aria-label="Guardar favorita"
+                  >
+                    <Star size={20} fill={favoritos.includes(senaActiva.id) ? 'currentColor' : 'none'} />
+                  </button>
+                </div>
+                <p className="text-sm text-neutral-500 mb-3">{senaActiva.descripcion}</p>
+
+                {senaActiva.origen === 'panel' && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[11px] font-semibold text-sky-700">
+                      Variante: {senaActiva.region}
+                    </span>
+                    {senaActiva.credito && (
+                      <span className="rounded-full bg-amber-100 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
+                        Seña por {senaActiva.credito}
                       </span>
-                      {senaActiva.credito && (
-                        <span className="bg-[#FFD23F] border-2 border-black px-2 py-1 font-black uppercase text-[10px]">
-                          Seña por {senaActiva.credito}
-                        </span>
-                      )}
-                    </div>
-                  )}
+                    )}
+                  </div>
+                )}
+
+                <div className="overflow-hidden rounded-xl">
+                  <VideoPlayer
+                    src={senaActiva.videoUrl}
+                    poster={senaActiva.posterUrl}
+                    titulo={senaActiva.palabra}
+                  />
                 </div>
 
-                <VideoPlayer
-                  src={senaActiva.videoUrl}
-                  poster={senaActiva.posterUrl}
-                  titulo={senaActiva.palabra}
-                />
-
-                <div
-                  className="mt-4 border-[3px] border-black p-3"
-                  style={{
-                    backgroundColor: senaActiva.nivelColor,
-                    boxShadow: '4px 4px 0 #000',
-                  }}
-                >
-                  <p className="font-black uppercase text-xs text-black/70">
-                    Lección
-                  </p>
-                  <p className="font-black uppercase text-black">
-                    {senaActiva.leccionTitulo}
-                  </p>
+                <div className="mt-4 rounded-xl bg-neutral-50 border border-black/5 p-3">
+                  <p className="text-xs text-neutral-500">Lección</p>
+                  <p className="font-semibold">{senaActiva.leccionTitulo}</p>
                 </div>
               </div>
             ) : (
-              <div
-                className="bg-white border-[4px] border-black p-6 text-center"
-                style={{ boxShadow: '10px 10px 0 #000' }}
-              >
-                <BookOpen size={42} strokeWidth={3} className="mx-auto text-black mb-3" />
-                <p className="font-black uppercase text-black">Elige una seña</p>
+              <div className="rounded-2xl border border-black/5 bg-white p-8 text-center shadow-sm">
+                <BookOpen size={36} className="mx-auto text-neutral-300 mb-3" />
+                <p className="text-sm text-neutral-500">Elige una seña</p>
               </div>
             )}
           </aside>
-        </section>
-      </main>
-    </div>
+        </div>
+      </div>
+    </AppShell>
   );
 }
