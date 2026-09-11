@@ -1,9 +1,9 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
-import { ArrowLeft, Check, ChevronRight, RotateCcw, Target, Trash2, X } from 'lucide-react';
+import { Check, ChevronRight, RotateCcw, Target, Trash2, X } from 'lucide-react';
 import VideoPlayer from '../../components/VideoPlayer';
+import AppShell from '../../components/dashboard/AppShell';
 import { crearOpcionesRepaso, obtenerSenasDiccionario } from '../../lib/diccionario';
 import {
   enriquecerSenasConErrores,
@@ -14,6 +14,10 @@ import {
 } from '../../lib/errores-locales';
 import { registrarPracticaErroresEstadisticas } from '../../lib/estadisticas-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
+
+// ============================================================
+// PÁGINA: /app/errores  (estilo suave)
+// ============================================================
 
 export default function PaginaErrores() {
   const todasLasSenas = useMemo(() => obtenerSenasDiccionario(), []);
@@ -57,7 +61,6 @@ export default function PaginaErrores() {
   const siguiente = () => {
     const acerto = seleccion?.id === ejercicio.id;
     const nuevosErrores = registrarResultadoSena(ejercicio.id, acerto);
-
     if (indice === ejercicios.length - 1) {
       const siguientesResultados = [...resultados, acerto];
       registrarPracticaErroresEstadisticas({
@@ -73,137 +76,78 @@ export default function PaginaErrores() {
     setIndice(indice + 1);
   };
 
-  const limpiarSena = (senaId) => {
-    setErrores(limpiarErrorLocal(senaId));
-  };
+  const limpiarSena = (senaId) => setErrores(limpiarErrorLocal(senaId));
+  const limpiarTodo = () => setErrores(limpiarTodosLosErroresLocales());
 
-  const limpiarTodo = () => {
-    setErrores(limpiarTodosLosErroresLocales());
-  };
-
+  // ─── Completa ───
   if (practicaCompleta) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-4">
-        <div
-          className="bg-[#FFD23F] border-[4px] border-black p-6 md:p-8 max-w-md w-full text-center"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="text-6xl mb-4">🎯</div>
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70 mb-2">
-            Práctica terminada
-          </p>
-          <h1 className="font-black uppercase text-4xl text-black leading-none mb-4">
-            {aciertos}/{ejercicios.length}
-            <span className="block text-lg mt-2 text-black/70">señas recuperadas</span>
-          </h1>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={empezarPractica}
-              className="bg-white border-[3px] border-black p-3 font-black uppercase text-sm text-black hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #000' }}
-            >
-              Repetir
-            </button>
-            <button
-              onClick={salirPractica}
-              className="bg-black border-[3px] border-black p-3 font-black uppercase text-sm text-[#FFD23F] hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #fff' }}
-            >
-              Ver lista
-            </button>
+      <AppShell title="Mis errores">
+        <div className="grid place-items-center py-10">
+          <div className="rounded-2xl border border-black/5 bg-white p-8 max-w-md w-full text-center shadow-sm">
+            <div className="text-5xl mb-3">🎯</div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
+              Práctica terminada
+            </p>
+            <h1 className="mt-2 text-4xl font-bold tracking-tight">
+              {aciertos}/{ejercicios.length}
+            </h1>
+            <p className="text-neutral-500">señas recuperadas</p>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <button onClick={empezarPractica} className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors">
+                Repetir
+              </button>
+              <button onClick={salirPractica} className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-colors">
+                Ver lista
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
+  // ─── En práctica ───
   if (modoPractica && ejercicio) {
     const progreso = ((indice + 1) / ejercicios.length) * 100;
-
     return (
-      <div className="min-h-screen bg-[#F5F0E8]">
-        <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-          <div className="max-w-3xl mx-auto p-4 flex items-center gap-4">
-            <button
-              onClick={salirPractica}
-              className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Volver"
-            >
-              <ArrowLeft size={20} strokeWidth={3} className="text-black" />
+      <AppShell title="Mis errores">
+        <div className="max-w-3xl mx-auto flex flex-col gap-5">
+          <div className="flex items-center gap-3">
+            <button onClick={salirPractica} className="text-sm font-medium text-neutral-500 hover:text-neutral-800 transition-colors shrink-0">
+              ← Salir
             </button>
-            <div className="flex-1">
-              <div
-                className="h-5 bg-white border-[3px] border-white overflow-hidden"
-                style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              >
-                <div
-                  className="h-full bg-[#FF6B9D] transition-all duration-300"
-                  style={{ width: `${progreso}%` }}
-                />
-              </div>
+            <div className="flex-1 h-2.5 rounded-full bg-neutral-100 overflow-hidden">
+              <div className="h-full rounded-full bg-violet-600 transition-all" style={{ width: `${progreso}%` }} />
             </div>
-            <span className="font-black text-white text-sm uppercase shrink-0">
+            <span className="text-sm font-semibold text-neutral-500 shrink-0">
               {indice + 1}/{ejercicios.length}
             </span>
           </div>
-        </header>
 
-        <main className="max-w-3xl mx-auto p-4 md:p-6">
-          <section
-            className="bg-[#FF6B9D] border-[4px] border-black p-5 md:p-6 mb-6"
-            style={{ boxShadow: '10px 10px 0 #000' }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <Target size={22} strokeWidth={3} className="text-black" />
-              <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80">
-                Mis errores
-              </p>
+          <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+            <div className="overflow-hidden rounded-xl">
+              <VideoPlayer src={ejercicio.videoUrl} poster={ejercicio.posterUrl} titulo={ejercicio.palabra} />
             </div>
-            <h1 className="font-black uppercase text-3xl md:text-5xl text-white leading-none">
-              Recupera esta seña
-            </h1>
-          </section>
 
-          <section
-            className="bg-white border-[4px] border-black p-5 md:p-6"
-            style={{ boxShadow: '10px 10px 0 #000' }}
-          >
-            <VideoPlayer
-              src={ejercicio.videoUrl}
-              poster={ejercicio.posterUrl}
-              titulo={ejercicio.palabra}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+            <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {opciones.map((opcion) => {
                 const estaSeleccionada = seleccion?.id === opcion.id;
                 const esCorrecta = opcion.id === ejercicio.id;
-                let fondo = 'bg-white';
-                let texto = 'text-black';
-
-                if (verificado && esCorrecta) {
-                  fondo = 'bg-[#7FFF6B]';
-                } else if (verificado && estaSeleccionada) {
-                  fondo = 'bg-[#FF6B6B]';
-                  texto = 'text-black';
-                } else if (estaSeleccionada) {
-                  fondo = 'bg-[#FFD23F]';
-                }
-
+                let clases = 'border-black/10 bg-white text-neutral-800 hover:bg-neutral-50';
+                if (verificado && esCorrecta) clases = 'border-emerald-300 bg-emerald-50 text-emerald-800';
+                else if (verificado && estaSeleccionada) clases = 'border-rose-300 bg-rose-50 text-rose-800';
+                else if (estaSeleccionada) clases = 'border-violet-300 bg-violet-50 text-violet-800';
                 return (
                   <button
                     key={opcion.id}
                     onClick={() => !verificado && setSeleccion(opcion)}
                     disabled={verificado}
-                    className={`${fondo} ${texto} border-[3px] border-black p-4 font-black uppercase text-left flex items-center justify-between gap-3 transition-all ${
-                      !verificado ? 'hover:translate-x-[-2px] hover:translate-y-[-2px]' : ''
-                    }`}
-                    style={{ boxShadow: estaSeleccionada || esCorrecta ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
+                    className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left font-semibold transition-colors ${clases}`}
                   >
                     <span>{opcion.palabra}</span>
-                    {verificado && esCorrecta && <Check size={22} strokeWidth={4} />}
-                    {verificado && estaSeleccionada && !esCorrecta && <X size={22} strokeWidth={4} />}
+                    {verificado && esCorrecta && <Check size={18} />}
+                    {verificado && estaSeleccionada && !esCorrecta && <X size={18} />}
                   </button>
                 );
               })}
@@ -211,140 +155,95 @@ export default function PaginaErrores() {
 
             {verificado && (
               <div
-                className={`mt-6 border-[3px] border-black p-4 ${
-                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-black'
+                className={`mt-5 rounded-xl border p-4 ${
+                  seleccion?.id === ejercicio.id
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'border-rose-200 bg-rose-50'
                 }`}
-                style={{ boxShadow: '5px 5px 0 #000' }}
               >
-                <p className="font-black uppercase">
+                <p className="font-semibold">
                   {seleccion?.id === ejercicio.id ? '¡Recuperada!' : `Era: ${ejercicio.palabra}`}
                 </p>
-                <p className="font-bold text-sm mt-1">{ejercicio.descripcion}</p>
+                <p className="mt-1 text-sm text-neutral-600">{ejercicio.descripcion}</p>
               </div>
             )}
 
             <button
               onClick={verificado ? siguiente : () => seleccion && setVerificado(true)}
               disabled={!seleccion}
-              className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-lg tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
+              className="mt-5 inline-flex w-full items-center justify-center gap-1 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {verificado ? 'Siguiente' : 'Verificar'}
-              <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
+              {verificado && <ChevronRight size={18} />}
             </button>
-          </section>
-        </main>
-      </div>
+          </div>
+        </div>
+      </AppShell>
     );
   }
 
+  // ─── Lista ───
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto p-4 flex items-center gap-3">
-          <Link
-            href="/app"
-            className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver"
-          >
-            <ArrowLeft size={20} strokeWidth={3} className="text-black" />
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-white font-black text-xl md:text-2xl uppercase leading-none">
-              Mis errores
-            </h1>
-            <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
-              Señas para recuperar
-            </p>
+    <AppShell title="Mis errores">
+      <div className="flex flex-col gap-6 max-w-5xl">
+        <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+          <div>
+            <p className="text-xs font-medium text-neutral-500">Entrenamiento enfocado</p>
+            <h2 className="text-2xl font-bold tracking-tight">
+              {senasDebiles.length} señas para recuperar
+            </h2>
           </div>
-          <div
-            className="bg-[#FF6B9D] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-          >
-            {senasDebiles.length}
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto p-4 md:p-6">
-        <section
-          className="bg-[#FF6B9D] border-[4px] border-black p-5 md:p-6 mb-6"
-          style={{ boxShadow: '10px 10px 0 #000' }}
-        >
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80 mb-2">
-            Entrenamiento enfocado
-          </p>
-          <h2 className="font-black uppercase text-3xl md:text-5xl text-black leading-none mb-4">
-            Vuelve fuerte
-          </h2>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={empezarPractica}
               disabled={senasDebiles.length === 0}
-              className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #FFD23F' }}
+              className="inline-flex items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <RotateCcw size={18} strokeWidth={4} />
-              Practicar errores
+              <RotateCcw size={16} />
+              Practicar
             </button>
             <button
               onClick={limpiarTodo}
               disabled={senasDebiles.length === 0}
-              className="bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #000' }}
+              className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
-              <Trash2 size={18} strokeWidth={4} />
-              Limpiar lista
+              <Trash2 size={16} />
+              Limpiar
             </button>
           </div>
         </section>
 
         {senasDebiles.length === 0 ? (
-          <div
-            className="bg-white border-[4px] border-black p-8 text-center"
-            style={{ boxShadow: '10px 10px 0 #000' }}
-          >
-            <Target size={46} strokeWidth={3} className="mx-auto text-black mb-3" />
-            <p className="font-black uppercase text-black text-xl">Aún no hay errores</p>
-            <p className="font-bold text-black/60 mt-2">
+          <div className="rounded-2xl border border-black/5 bg-white p-10 text-center shadow-sm">
+            <Target size={40} className="mx-auto text-neutral-300 mb-3" />
+            <p className="font-semibold">Aún no hay errores</p>
+            <p className="mt-1 text-sm text-neutral-500">
               Cuando falles una seña en el repaso diario, aparecerá aquí.
             </p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {senasDebiles.map((sena) => (
-              <article
-                key={sena.id}
-                className="bg-white border-[3px] border-black p-4"
-                style={{ boxShadow: '6px 6px 0 #000' }}
-              >
+              <article key={sena.id} className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="font-black uppercase text-[10px] tracking-[0.15em] text-black/50">
-                      {sena.leccionTitulo}
-                    </p>
-                    <h3 className="font-black uppercase text-2xl text-black leading-none mt-1">
-                      {sena.palabra}
-                    </h3>
+                    <p className="text-[11px] text-neutral-400">{sena.leccionTitulo}</p>
+                    <h3 className="text-xl font-bold tracking-tight">{sena.palabra}</h3>
                   </div>
                   <button
                     onClick={() => limpiarSena(sena.id)}
-                    className="bg-[#7FFF6B] border-[3px] border-black p-2 hover:translate-y-[-2px] transition-transform"
-                    style={{ boxShadow: '3px 3px 0 #000' }}
+                    className="grid place-items-center w-9 h-9 rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors"
                     aria-label={`Marcar ${sena.palabra} como recuperada`}
                   >
-                    <Check size={18} strokeWidth={4} className="text-black" />
+                    <Check size={16} />
                   </button>
                 </div>
-                <p className="font-bold text-black/70 text-sm mt-2 line-clamp-2">
-                  {sena.descripcion}
-                </p>
-                <div className="grid grid-cols-2 gap-2 mt-4">
-                  <div className="bg-[#FF6B6B] text-black border-[3px] border-black p-2 font-black uppercase text-center">
+                <p className="mt-2 text-sm text-neutral-500 line-clamp-2">{sena.descripcion}</p>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-xl bg-rose-50 border border-rose-100 p-2 text-center text-sm font-semibold text-rose-600">
                     {sena.fallos} fallos
                   </div>
-                  <div className="bg-[#7FFF6B] text-black border-[3px] border-black p-2 font-black uppercase text-center">
+                  <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-2 text-center text-sm font-semibold text-emerald-600">
                     {sena.aciertos} aciertos
                   </div>
                 </div>
@@ -352,7 +251,7 @@ export default function PaginaErrores() {
             ))}
           </div>
         )}
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }
