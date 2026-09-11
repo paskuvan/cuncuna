@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '../lib/supabase-client';
 
 // ============================================================
@@ -9,6 +10,7 @@ import { createClient } from '../lib/supabase-client';
 // ============================================================
 
 export function useUsuario() {
+  const router = useRouter();
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
@@ -34,7 +36,10 @@ export function useUsuario() {
   const cerrarSesion = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
-    window.location.href = '/'; // Redirigir al inicio después de cerrar sesión /login
+    // Redirigir al inicio después de cerrar sesión y refrescar para que
+    // el proxy re-evalúe la sesión.
+    router.push('/');
+    router.refresh();
   };
 
   return { usuario, cargando, cerrarSesion };

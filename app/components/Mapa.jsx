@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { BarChart3, Bell, BookOpen, Camera, Check, ChevronDown, Flag, Lock, MessageCircle, RotateCcw, Star, Flame, Sparkles, Target, Trophy } from 'lucide-react';
 import { CURRICULUM } from '../data/curriculum';
@@ -32,6 +33,7 @@ export default function Mapa({
   onSeleccionarLeccion,
   onReiniciar,
 }) {
+  const router = useRouter();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const totalLecciones = CURRICULUM.reduce((acc, n) => acc + n.lecciones.length, 0);
   const completadas = progreso.leccionesCompletadas.length;
@@ -477,7 +479,7 @@ export default function Mapa({
                           }
 
                           if (desbloqueada && !tieneAcceso) {
-                            window.location.href = `/suscripcion?plan=${requisito}`;
+                            router.push(`/suscripcion?plan=${requisito}`);
                           }
                         }}
                         disabled={!desbloqueada}
