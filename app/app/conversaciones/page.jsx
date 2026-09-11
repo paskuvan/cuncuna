@@ -1,11 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { ArrowLeft, Check, ChevronRight, MessageCircle, RotateCcw, X } from 'lucide-react';
+import { Check, ChevronRight, MessageCircle, X } from 'lucide-react';
 import { CONVERSACIONES } from '../../data/conversaciones';
 import { registrarConversacionEstadisticas } from '../../lib/estadisticas-locales';
 import { registrarEventoMision } from '../../lib/misiones-locales';
+import AppShell from '../../components/dashboard/AppShell';
+
+// ============================================================
+// PÁGINA: /app/conversaciones  (estilo suave)
+// ============================================================
 
 export default function PaginaConversaciones() {
   const [conversacion, setConversacion] = useState(null);
@@ -37,7 +41,6 @@ export default function PaginaConversaciones() {
   const siguiente = () => {
     const acerto = seleccion === paso.correcta;
     const nuevosResultados = [...resultados, acerto];
-
     if (indice === conversacion.pasos.length - 1) {
       registrarConversacionEstadisticas({
         correctas: nuevosResultados.filter(Boolean).length,
@@ -45,144 +48,100 @@ export default function PaginaConversaciones() {
       });
       registrarEventoMision('conversacion');
     }
-
     setResultados(nuevosResultados);
     setSeleccion(null);
     setVerificada(false);
     setIndice(indice + 1);
   };
 
+  // ─── Completada ───
   if (completada) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-4">
-        <div
-          className="bg-[#A78BFA] border-[4px] border-black p-6 md:p-8 max-w-md w-full text-center"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="text-6xl mb-4">💬</div>
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80 mb-2">
-            Conversación completada
-          </p>
-          <h1 className="font-black uppercase text-4xl text-black leading-none mb-4">
-            {aciertos}/{conversacion.pasos.length}
-            <span className="block text-lg mt-2 text-black/80">decisiones correctas</span>
-          </h1>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => empezar(conversacion)}
-              className="bg-white border-[3px] border-black p-3 font-black uppercase text-sm text-black hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #000' }}
-            >
-              Repetir
-            </button>
-            <button
-              onClick={volverLista}
-              className="bg-black border-[3px] border-black p-3 font-black uppercase text-sm text-[#FFD23F] hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #fff' }}
-            >
-              Ver más
-            </button>
+      <AppShell title="Conversaciones">
+        <div className="grid place-items-center py-10">
+          <div className="rounded-2xl border border-black/5 bg-white p-8 max-w-md w-full text-center shadow-sm">
+            <div className="text-5xl mb-3">💬</div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
+              Conversación completada
+            </p>
+            <h1 className="mt-2 text-4xl font-bold tracking-tight">
+              {aciertos}/{conversacion.pasos.length}
+            </h1>
+            <p className="text-neutral-500">decisiones correctas</p>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <button
+                onClick={() => empezar(conversacion)}
+                className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
+              >
+                Repetir
+              </button>
+              <button
+                onClick={volverLista}
+                className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-colors"
+              >
+                Ver más
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
+  // ─── En conversación ───
   if (conversacion && paso) {
     const progreso = ((indice + 1) / conversacion.pasos.length) * 100;
-
     return (
-      <div className="min-h-screen bg-[#F5F0E8]">
-        <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-          <div className="max-w-3xl mx-auto p-4 flex items-center gap-4">
+      <AppShell title={conversacion.titulo}>
+        <div className="max-w-3xl mx-auto flex flex-col gap-5">
+          <div className="flex items-center gap-3">
             <button
               onClick={volverLista}
-              className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              aria-label="Volver"
+              className="text-sm font-medium text-neutral-500 hover:text-neutral-800 transition-colors shrink-0"
             >
-              <ArrowLeft size={20} strokeWidth={3} className="text-black" />
+              ← Salir
             </button>
-            <div className="flex-1">
+            <div className="flex-1 h-2.5 rounded-full bg-neutral-100 overflow-hidden">
               <div
-                className="h-5 bg-white border-[3px] border-white overflow-hidden"
-                style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-              >
-                <div
-                  className="h-full bg-[#A78BFA] transition-all duration-300"
-                  style={{ width: `${progreso}%` }}
-                />
-              </div>
+                className="h-full rounded-full bg-violet-600 transition-all"
+                style={{ width: `${progreso}%` }}
+              />
             </div>
-            <span className="font-black text-white text-sm uppercase shrink-0">
+            <span className="text-sm font-semibold text-neutral-500 shrink-0">
               {indice + 1}/{conversacion.pasos.length}
             </span>
           </div>
-        </header>
 
-        <main className="max-w-3xl mx-auto p-4 md:p-6">
-          <section
-            className="border-[4px] border-black p-5 md:p-6 mb-6"
-            style={{ backgroundColor: conversacion.color, boxShadow: '10px 10px 0 #000' }}
-          >
-            <div className="flex items-center gap-2 mb-2">
-              <MessageCircle size={22} strokeWidth={3} className="text-black" />
-              <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70">
-                {conversacion.titulo}
-              </p>
-            </div>
-            <h1 className="font-black uppercase text-3xl md:text-5xl text-black leading-none">
-              Decide en contexto
-            </h1>
-          </section>
-
-          <section
-            className="bg-white border-[4px] border-black p-5 md:p-6"
-            style={{ boxShadow: '10px 10px 0 #000' }}
-          >
-            <div
-              className="bg-[#F5F0E8] border-[3px] border-black p-4 mb-5"
-              style={{ boxShadow: '5px 5px 0 #000' }}
-            >
-              <p className="font-black uppercase text-xs tracking-[0.15em] text-black/50 mb-2">
-                Escena
-              </p>
-              <p className="font-bold text-black text-lg">{paso.escena}</p>
+          <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+            <div className="rounded-xl bg-neutral-50 border border-black/5 p-4 mb-5">
+              <p className="text-xs font-medium text-neutral-500 mb-1">Escena</p>
+              <p className="text-neutral-800">{paso.escena}</p>
             </div>
 
-            <h2 className="font-black uppercase text-2xl md:text-3xl text-black leading-tight mb-5">
-              {paso.pregunta}
-            </h2>
+            <h2 className="text-xl font-bold tracking-tight mb-5">{paso.pregunta}</h2>
 
             <div className="grid grid-cols-1 gap-3">
               {paso.opciones.map((opcion, idx) => {
                 const estaSeleccionada = seleccion === idx;
                 const esCorrecta = idx === paso.correcta;
-                let fondo = 'bg-white';
-                let texto = 'text-black';
-
+                let clases = 'border-black/10 bg-white text-neutral-800 hover:bg-neutral-50';
                 if (verificada && esCorrecta) {
-                  fondo = 'bg-[#7FFF6B]';
+                  clases = 'border-emerald-300 bg-emerald-50 text-emerald-800';
                 } else if (verificada && estaSeleccionada) {
-                  fondo = 'bg-[#FF6B6B]';
-                  texto = 'text-black';
+                  clases = 'border-rose-300 bg-rose-50 text-rose-800';
                 } else if (estaSeleccionada) {
-                  fondo = 'bg-[#FFD23F]';
+                  clases = 'border-violet-300 bg-violet-50 text-violet-800';
                 }
-
                 return (
                   <button
                     key={opcion}
                     onClick={() => !verificada && setSeleccion(idx)}
                     disabled={verificada}
-                    className={`${fondo} ${texto} border-[3px] border-black p-4 font-black uppercase text-left flex items-center justify-between gap-3 transition-all ${
-                      !verificada ? 'hover:translate-x-[-2px] hover:translate-y-[-2px]' : ''
-                    }`}
-                    style={{ boxShadow: estaSeleccionada || esCorrecta ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
+                    className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left font-medium transition-colors ${clases}`}
                   >
                     <span>{opcion}</span>
-                    {verificada && esCorrecta && <Check size={22} strokeWidth={4} />}
-                    {verificada && estaSeleccionada && !esCorrecta && <X size={22} strokeWidth={4} />}
+                    {verificada && esCorrecta && <Check size={18} />}
+                    {verificada && estaSeleccionada && !esCorrecta && <X size={18} />}
                   </button>
                 );
               })}
@@ -190,107 +149,64 @@ export default function PaginaConversaciones() {
 
             {verificada && (
               <div
-                className={`mt-5 border-[3px] border-black p-4 ${
-                  seleccion === paso.correcta ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-black'
+                className={`mt-5 rounded-xl border p-4 ${
+                  seleccion === paso.correcta
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'border-rose-200 bg-rose-50'
                 }`}
-                style={{ boxShadow: '5px 5px 0 #000' }}
               >
-                <p className="font-black uppercase">
-                  {seleccion === paso.correcta ? '¡Buena decisión!' : 'Otra respuesta encaja mejor'}
+                <p className="font-semibold">
+                  {seleccion === paso.correcta
+                    ? '¡Buena decisión!'
+                    : 'Otra respuesta encaja mejor'}
                 </p>
-                <p className="font-bold text-sm mt-1">{paso.explicacion}</p>
+                <p className="mt-1 text-sm text-neutral-600">{paso.explicacion}</p>
               </div>
             )}
 
             <button
               onClick={verificada ? siguiente : () => seleccion !== null && setVerificada(true)}
               disabled={seleccion === null}
-              className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-lg tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '6px 6px 0 #A78BFA' }}
+              className="mt-6 inline-flex w-full items-center justify-center gap-1 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               {verificada ? 'Siguiente' : 'Verificar'}
-              {verificada ? (
-                <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
-              ) : null}
+              {verificada && <ChevronRight size={18} />}
             </button>
-          </section>
-        </main>
-      </div>
+          </div>
+        </div>
+      </AppShell>
     );
   }
 
+  // ─── Lista ───
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto p-4 flex items-center gap-3">
-          <Link
-            href="/app"
-            className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver"
-          >
-            <ArrowLeft size={20} strokeWidth={3} className="text-black" />
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-white font-black text-xl md:text-2xl uppercase leading-none">
-              Conversaciones
-            </h1>
-            <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
-              Situaciones reales
-            </p>
-          </div>
-          <div
-            className="bg-[#A78BFA] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-          >
-            {CONVERSACIONES.length}
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto p-4 md:p-6">
-        <section
-          className="bg-[#A78BFA] border-[4px] border-black p-5 md:p-7 mb-6"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <MessageCircle size={24} strokeWidth={3} className="text-black" />
-            <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80">
-              Práctica contextual
-            </p>
-          </div>
-          <h2 className="font-black uppercase text-4xl md:text-5xl text-white leading-none">
-            Mini diálogos
-          </h2>
-        </section>
-
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <AppShell title="Conversaciones">
+      <div className="flex flex-col gap-6">
+        <p className="text-neutral-500">
+          Practica decisiones en situaciones reales con mini diálogos.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {CONVERSACIONES.map((item) => (
             <button
               key={item.id}
               onClick={() => empezar(item)}
-              className="text-left border-[3px] border-black p-4 bg-white hover:translate-x-[-3px] hover:translate-y-[-3px] transition-transform"
-              style={{ boxShadow: '6px 6px 0 #000' }}
+              className="text-left rounded-2xl border border-black/5 bg-white p-5 shadow-sm hover:shadow-md transition-shadow"
             >
-              <div
-                className="border-[3px] border-black w-12 h-12 flex items-center justify-center mb-4"
-                style={{ backgroundColor: item.color, boxShadow: '3px 3px 0 #000' }}
+              <span
+                className="grid place-items-center w-11 h-11 rounded-xl mb-4"
+                style={{ backgroundColor: `${item.color}22` }}
               >
-                <MessageCircle size={24} strokeWidth={3} className="text-black" />
-              </div>
-              <h3 className="font-black uppercase text-2xl text-black leading-none mb-2">
-                {item.titulo}
-              </h3>
-              <p className="font-bold text-black/70 text-sm mb-4">
-                {item.contexto}
-              </p>
-              <div className="bg-black text-[#FFD23F] border-[3px] border-black px-3 py-2 inline-block font-black uppercase text-xs">
+                <MessageCircle size={20} style={{ color: item.color }} />
+              </span>
+              <h3 className="text-lg font-bold tracking-tight">{item.titulo}</h3>
+              <p className="mt-1 text-sm text-neutral-500">{item.contexto}</p>
+              <span className="mt-4 inline-block rounded-full bg-violet-100 px-3 py-1 text-xs font-semibold text-violet-700">
                 {item.pasos.length} decisiones
-              </div>
+              </span>
             </button>
           ))}
-        </section>
-      </main>
-    </div>
+        </div>
+      </div>
+    </AppShell>
   );
 }
