@@ -11,8 +11,8 @@ export default function SelectorTema() {
     window.localStorage.setItem('cuncuna:tema', oscuro ? 'oscuro' : 'claro');
   };
 
-  // La zona /app usa el estilo claro (dashboard); ocultamos el toggle ahí.
-  if (pathname?.startsWith('/app')) return null;
+  // La landing y la zona /app usan el estilo claro; ocultamos el toggle ahí.
+  if (pathname === '/' || pathname?.startsWith('/app')) return null;
 
   return (
     <button
