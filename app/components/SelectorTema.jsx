@@ -1,12 +1,18 @@
 'use client';
 
 import { Moon, Sun } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 
 export default function SelectorTema() {
+  const pathname = usePathname();
+
   const alternarTema = () => {
     const oscuro = document.documentElement.classList.toggle('dark');
     window.localStorage.setItem('cuncuna:tema', oscuro ? 'oscuro' : 'claro');
   };
+
+  // La zona /app usa el estilo claro (dashboard); ocultamos el toggle ahí.
+  if (pathname?.startsWith('/app')) return null;
 
   return (
     <button
