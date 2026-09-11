@@ -298,7 +298,7 @@ export default function PanelContenido({ usuarioId }) {
             </label>
 
             {mensaje && (
-              <div className={`border-[3px] border-black p-3 mt-5 font-bold text-sm ${estado === 'error' ? 'bg-[#FF6B6B] text-white' : 'bg-[#FFD23F] text-black'}`}>
+              <div className={`border-[3px] border-black p-3 mt-5 font-bold text-sm ${estado === 'error' ? 'bg-[#FF6B6B] text-black' : 'bg-[#FFD23F] text-black'}`}>
                 {mensaje}
               </div>
             )}

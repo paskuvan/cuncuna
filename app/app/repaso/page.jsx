@@ -219,7 +219,7 @@ export default function PaginaRepaso() {
                 fondo = 'bg-[#7FFF6B]';
               } else if (verificado && estaSeleccionada) {
                 fondo = 'bg-[#FF6B6B]';
-                texto = 'text-white';
+                texto = 'text-black';
               } else if (estaSeleccionada) {
                 fondo = 'bg-[#FFD23F]';
               }
@@ -246,7 +246,7 @@ export default function PaginaRepaso() {
             <>
               <div
                 className={`mt-6 border-[3px] border-black p-4 ${
-                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-white'
+                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-black'
                 }`}
                 style={{ boxShadow: '5px 5px 0 #000' }}
               >

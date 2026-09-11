@@ -155,6 +155,7 @@ export default function PaginaDiccionario() {
                     value={busqueda}
                     onChange={(event) => setBusqueda(event.target.value)}
                     placeholder="Buscar seña, lección o tema"
+                    aria-label="Buscar seña, lección o tema"
                     className="w-full bg-transparent outline-none font-bold text-black placeholder:text-black/50"
                   />
                 </label>

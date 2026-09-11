@@ -171,7 +171,7 @@ export default function PaginaFavoritos() {
                   fondo = 'bg-[#7FFF6B]';
                 } else if (verificada && estaSeleccionada) {
                   fondo = 'bg-[#FF6B6B]';
-                  texto = 'text-white';
+                  texto = 'text-black';
                 } else if (estaSeleccionada) {
                   fondo = 'bg-[#FFD23F]';
                 }
@@ -305,7 +305,7 @@ export default function PaginaFavoritos() {
                     style={{ boxShadow: '3px 3px 0 #000' }}
                     aria-label={`Quitar ${sena.palabra} de favoritos`}
                   >
-                    <X size={18} strokeWidth={4} className="text-white" />
+                    <X size={18} strokeWidth={4} className="text-black" />
                   </button>
                 </div>
                 <p className="font-bold text-black/70 text-sm mt-2 line-clamp-2">

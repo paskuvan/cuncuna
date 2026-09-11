@@ -86,7 +86,7 @@ export default function LoginPage() {
         {/* Error */}
         {error && (
           <div
-            className="mt-4 bg-[#FF6B6B] border-[3px] border-black p-3 text-white font-black text-sm uppercase"
+            className="mt-4 bg-[#FF6B6B] border-[3px] border-black p-3 text-black font-black text-sm uppercase"
             style={{ boxShadow: '4px 4px 0 #000' }}
           >
             Error: {error}

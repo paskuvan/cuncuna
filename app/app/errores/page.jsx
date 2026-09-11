@@ -155,8 +155,8 @@ export default function PaginaErrores() {
             style={{ boxShadow: '10px 10px 0 #000' }}
           >
             <div className="flex items-center gap-2 mb-2">
-              <Target size={22} strokeWidth={3} className="text-white" />
-              <p className="font-black uppercase text-xs tracking-[0.2em] text-white/80">
+              <Target size={22} strokeWidth={3} className="text-black" />
+              <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80">
                 Mis errores
               </p>
             </div>
@@ -186,7 +186,7 @@ export default function PaginaErrores() {
                   fondo = 'bg-[#7FFF6B]';
                 } else if (verificado && estaSeleccionada) {
                   fondo = 'bg-[#FF6B6B]';
-                  texto = 'text-white';
+                  texto = 'text-black';
                 } else if (estaSeleccionada) {
                   fondo = 'bg-[#FFD23F]';
                 }
@@ -212,7 +212,7 @@ export default function PaginaErrores() {
             {verificado && (
               <div
                 className={`mt-6 border-[3px] border-black p-4 ${
-                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-white'
+                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-black'
                 }`}
                 style={{ boxShadow: '5px 5px 0 #000' }}
               >
@@ -259,7 +259,7 @@ export default function PaginaErrores() {
             </p>
           </div>
           <div
-            className="bg-[#FF6B9D] border-[3px] border-white px-3 py-1.5 font-black text-white text-sm"
+            className="bg-[#FF6B9D] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
             style={{ boxShadow: '3px 3px 0 #FFD23F' }}
           >
             {senasDebiles.length}
@@ -272,10 +272,10 @@ export default function PaginaErrores() {
           className="bg-[#FF6B9D] border-[4px] border-black p-5 md:p-6 mb-6"
           style={{ boxShadow: '10px 10px 0 #000' }}
         >
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-white/80 mb-2">
+          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80 mb-2">
             Entrenamiento enfocado
           </p>
-          <h2 className="font-black uppercase text-3xl md:text-5xl text-white leading-none mb-4">
+          <h2 className="font-black uppercase text-3xl md:text-5xl text-black leading-none mb-4">
             Vuelve fuerte
           </h2>
           <div className="flex flex-wrap gap-3">
@@ -341,7 +341,7 @@ export default function PaginaErrores() {
                   {sena.descripcion}
                 </p>
                 <div className="grid grid-cols-2 gap-2 mt-4">
-                  <div className="bg-[#FF6B6B] text-white border-[3px] border-black p-2 font-black uppercase text-center">
+                  <div className="bg-[#FF6B6B] text-black border-[3px] border-black p-2 font-black uppercase text-center">
                     {sena.fallos} fallos
                   </div>
                   <div className="bg-[#7FFF6B] text-black border-[3px] border-black p-2 font-black uppercase text-center">

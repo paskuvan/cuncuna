@@ -72,6 +72,7 @@ export default function FormularioListaEspera({
           value={email}
           onChange={(event) => setEmail(event.target.value)}
           placeholder="tu@email.cl"
+          aria-label="Correo electrónico para la lista de espera"
           required
           disabled={estado === 'enviando'}
           className="flex-1 bg-white border-[3px] border-black px-4 py-3 font-black text-black placeholder-black/40 focus:outline-none focus:translate-y-[-2px] transition-transform disabled:opacity-50"
@@ -96,7 +97,7 @@ export default function FormularioListaEspera({
 
       {estado === 'error' && (
         <div
-          className="mt-4 bg-[#FF6B6B] text-white border-[3px] border-black p-3 font-black uppercase text-sm"
+          className="mt-4 bg-[#FF6B6B] text-black border-[3px] border-black p-3 font-black uppercase text-sm"
           style={{ boxShadow: '3px 3px 0 #000' }}
         >
           {mensajeError}

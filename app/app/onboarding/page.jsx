@@ -344,12 +344,12 @@ export default function OnboardingPage() {
                     }`}
                     style={{ boxShadow: '5px 5px 0 #000' }}
                   >
-                    <Bell size={24} strokeWidth={3} className={datos.recordatorio ? 'text-white' : 'text-black'} />
+                    <Bell size={24} strokeWidth={3} className={datos.recordatorio ? 'text-black' : 'text-black'} />
                     <span>
-                      <span className={`block font-black uppercase ${datos.recordatorio ? 'text-white' : 'text-black'}`}>
+                      <span className={`block font-black uppercase ${datos.recordatorio ? 'text-black' : 'text-black'}`}>
                         Recordarme practicar
                       </span>
-                      <span className={`block text-sm font-bold ${datos.recordatorio ? 'text-white/80' : 'text-black/70'}`}>
+                      <span className={`block text-sm font-bold ${datos.recordatorio ? 'text-black/80' : 'text-black/70'}`}>
                         Preparado para notificaciones cuando activemos recordatorios reales.
                       </span>
                     </span>

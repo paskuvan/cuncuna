@@ -272,7 +272,7 @@ export default function PaginaRecordatorios() {
             <button
               onClick={() => actualizar({ activo: !config.activo })}
               className={`w-full border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center justify-center gap-2 ${
-                config.activo ? 'bg-[#FF6B6B] text-white' : 'bg-[#7FFF6B] text-black'
+                config.activo ? 'bg-[#FF6B6B] text-black' : 'bg-[#7FFF6B] text-black'
               }`}
               style={{ boxShadow: '5px 5px 0 #000' }}
             >

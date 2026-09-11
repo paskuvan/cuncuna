@@ -95,7 +95,7 @@ export default function UsuarioMenu() {
 
             <Link
               href="/app/recordatorios"
-              className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FF6B9D] hover:text-white transition-colors"
+              className="w-full p-4 border-b-[3px] border-black bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FF6B9D] hover:text-black transition-colors"
             >
               <Bell size={18} strokeWidth={3} />
               Recordatorios
@@ -113,7 +113,7 @@ export default function UsuarioMenu() {
 
             <button
               onClick={cerrarSesion}
-              className="w-full p-4 bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FF6B6B] hover:text-white transition-colors"
+              className="w-full p-4 bg-white text-black font-black uppercase text-sm flex items-center gap-3 hover:bg-[#FF6B6B] hover:text-black transition-colors"
             >
               <LogOut size={18} strokeWidth={3} />
               Cerrar sesión

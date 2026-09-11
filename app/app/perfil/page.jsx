@@ -187,7 +187,7 @@ export default function PaginaPerfil() {
             <InfoLine etiqueta="Días" valor={`${recordatorios.dias.length} días activos`} />
             <Link
               href="/app/recordatorios"
-              className="mt-4 bg-[#FF6B9D] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm inline-flex items-center gap-2"
+              className="mt-4 bg-[#FF6B9D] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm inline-flex items-center gap-2"
               style={{ boxShadow: '5px 5px 0 #000' }}
             >
               <Bell size={18} strokeWidth={4} />
@@ -204,7 +204,7 @@ export default function PaginaPerfil() {
             </div>
             <button
               onClick={cerrarSesion}
-              className="mt-4 w-full bg-[#FF6B6B] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center justify-center gap-2"
+              className="mt-4 w-full bg-[#FF6B6B] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center justify-center gap-2"
               style={{ boxShadow: '5px 5px 0 #000' }}
             >
               <LogOut size={18} strokeWidth={4} />

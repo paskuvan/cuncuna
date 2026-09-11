@@ -140,7 +140,7 @@ export default function PaginaEstadisticas() {
           </Link>
           <button
             onClick={reiniciar}
-            className="bg-[#FF6B6B] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+            className="bg-[#FF6B6B] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
             style={{ boxShadow: '5px 5px 0 #000' }}
           >
             <RotateCcw size={18} strokeWidth={4} />

@@ -60,12 +60,12 @@ export default function PaginaConversaciones() {
           style={{ boxShadow: '12px 12px 0 #000' }}
         >
           <div className="text-6xl mb-4">💬</div>
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-white/80 mb-2">
+          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80 mb-2">
             Conversación completada
           </p>
-          <h1 className="font-black uppercase text-4xl text-white leading-none mb-4">
+          <h1 className="font-black uppercase text-4xl text-black leading-none mb-4">
             {aciertos}/{conversacion.pasos.length}
-            <span className="block text-lg mt-2 text-white/80">decisiones correctas</span>
+            <span className="block text-lg mt-2 text-black/80">decisiones correctas</span>
           </h1>
           <div className="grid grid-cols-2 gap-3">
             <button
@@ -165,7 +165,7 @@ export default function PaginaConversaciones() {
                   fondo = 'bg-[#7FFF6B]';
                 } else if (verificada && estaSeleccionada) {
                   fondo = 'bg-[#FF6B6B]';
-                  texto = 'text-white';
+                  texto = 'text-black';
                 } else if (estaSeleccionada) {
                   fondo = 'bg-[#FFD23F]';
                 }
@@ -191,7 +191,7 @@ export default function PaginaConversaciones() {
             {verificada && (
               <div
                 className={`mt-5 border-[3px] border-black p-4 ${
-                  seleccion === paso.correcta ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-white'
+                  seleccion === paso.correcta ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-black'
                 }`}
                 style={{ boxShadow: '5px 5px 0 #000' }}
               >
@@ -240,7 +240,7 @@ export default function PaginaConversaciones() {
             </p>
           </div>
           <div
-            className="bg-[#A78BFA] border-[3px] border-white px-3 py-1.5 font-black text-white text-sm"
+            className="bg-[#A78BFA] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
             style={{ boxShadow: '3px 3px 0 #FFD23F' }}
           >
             {CONVERSACIONES.length}
@@ -254,8 +254,8 @@ export default function PaginaConversaciones() {
           style={{ boxShadow: '12px 12px 0 #000' }}
         >
           <div className="flex items-center gap-2 mb-2">
-            <MessageCircle size={24} strokeWidth={3} className="text-white" />
-            <p className="font-black uppercase text-xs tracking-[0.2em] text-white/80">
+            <MessageCircle size={24} strokeWidth={3} className="text-black" />
+            <p className="font-black uppercase text-xs tracking-[0.2em] text-black/80">
               Práctica contextual
             </p>
           </div>

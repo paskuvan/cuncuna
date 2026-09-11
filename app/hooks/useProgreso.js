@@ -83,15 +83,20 @@ export const useProgreso = () => {
     const nuevoXp = progreso.xpTotal + xp;
     const nuevaRacha = progreso.racha + 1;
 
+    // Usamos upsert para crear la fila si el usuario aún no tiene una
+    // (evita perder el progreso si no existe un trigger que la cree).
     await supabase
       .from('progreso')
-      .update({
-        xp_total: nuevoXp,
-        racha: nuevaRacha,
-        ultimo_dia: new Date().toISOString().split('T')[0],
-        actualizado_en: new Date().toISOString(),
-      })
-      .eq('user_id', user.id);
+      .upsert(
+        {
+          user_id: user.id,
+          xp_total: nuevoXp,
+          racha: nuevaRacha,
+          ultimo_dia: new Date().toISOString().split('T')[0],
+          actualizado_en: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      );
 
     // 3. Actualizar estado local
     const nuevasLecciones = [...progreso.leccionesCompletadas, leccionId];
@@ -128,11 +133,14 @@ export const useProgreso = () => {
 
     await supabase
       .from('progreso')
-      .update({
-        videos_vistos: nuevoValor,
-        actualizado_en: new Date().toISOString(),
-      })
-      .eq('user_id', user.id);
+      .upsert(
+        {
+          user_id: user.id,
+          videos_vistos: nuevoValor,
+          actualizado_en: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      );
 
     setProgreso(prev => ({ ...prev, videosVistos: prev.videosVistos + 1 }));
 
@@ -161,11 +169,14 @@ export const useProgreso = () => {
 
     await supabase
       .from('progreso')
-      .update({
-        quizzes_acertados: nuevoValor,
-        actualizado_en: new Date().toISOString(),
-      })
-      .eq('user_id', user.id);
+      .upsert(
+        {
+          user_id: user.id,
+          quizzes_acertados: nuevoValor,
+          actualizado_en: new Date().toISOString(),
+        },
+        { onConflict: 'user_id' }
+      );
 
     setProgreso(prev => ({ ...prev, quizzesAcertados: prev.quizzesAcertados + 1 }));
 
@@ -197,14 +208,17 @@ export const useProgreso = () => {
 
     await supabase
       .from('progreso')
-      .update({
-        xp_total: 0,
-        racha: 0,
-        videos_vistos: 0,
-        quizzes_acertados: 0,
-        ultimo_dia: null,
-      })
-      .eq('user_id', user.id);
+      .upsert(
+        {
+          user_id: user.id,
+          xp_total: 0,
+          racha: 0,
+          videos_vistos: 0,
+          quizzes_acertados: 0,
+          ultimo_dia: null,
+        },
+        { onConflict: 'user_id' }
+      );
 
     setProgreso({
       leccionesCompletadas: [],
