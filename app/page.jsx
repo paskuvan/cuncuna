@@ -90,7 +90,7 @@ function Hero() {
         {/* Texto */}
         <div>
           <div
-            className="inline-block bg-[#FF6B9D] text-white border-[3px] border-black px-4 py-2 mb-6 font-black uppercase text-xs tracking-[0.2em]"
+            className="inline-block bg-[#FF6B9D] text-black border-[3px] border-black px-4 py-2 mb-6 font-black uppercase text-xs tracking-[0.2em]"
             style={{ boxShadow: '4px 4px 0 #000' }}
           >
             🇨🇱 Hecho en Chile
@@ -161,7 +161,7 @@ function Hero() {
               className="absolute -top-4 -right-4 bg-[#FF6B9D] border-[3px] border-black p-2"
               style={{ boxShadow: '4px 4px 0 #000' }}
             >
-              <Sparkles size={20} strokeWidth={3} className="text-white" />
+              <Sparkles size={20} strokeWidth={3} className="text-black" />
             </div>
             <div
               className="absolute -bottom-4 -left-4 bg-[#4ECDC4] border-[3px] border-black px-3 py-1.5 font-black uppercase text-xs tracking-wider text-black"
@@ -211,7 +211,7 @@ function Caracteristicas() {
           <h3 className="text-3xl md:text-5xl font-black uppercase text-black tracking-tight leading-none">
             Pensado para aprender
             <br />
-            <span className="bg-[#FF6B9D] text-white inline-block px-3 mt-2 border-[3px] border-black">
+            <span className="bg-[#FF6B9D] text-black inline-block px-3 mt-2 border-[3px] border-black">
               de verdad
             </span>
           </h3>
@@ -340,7 +340,7 @@ function Beneficios() {
             <h3 className="text-3xl md:text-5xl font-black uppercase text-white tracking-tight leading-none mb-8">
               Una app
               <br />
-              <span className="bg-[#FF6B9D] text-white inline-block px-3 mt-2 border-[3px] border-white">
+              <span className="bg-[#FF6B9D] text-black inline-block px-3 mt-2 border-[3px] border-white">
                 con propósito.
               </span>
             </h3>
@@ -493,7 +493,7 @@ function Planes() {
               }}
             >
               {plan.destacado && (
-                <div className="absolute -top-4 left-5 bg-[#FF6B9D] text-white border-[3px] border-black px-3 py-1 font-black uppercase text-xs">
+                <div className="absolute -top-4 left-5 bg-[#FF6B9D] text-black border-[3px] border-black px-3 py-1 font-black uppercase text-xs">
                   Más elegido
                 </div>
               )}

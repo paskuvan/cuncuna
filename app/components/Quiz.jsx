@@ -67,7 +67,7 @@ function QuizMultiple({ ejercicio, onResponder }) {
           let bg = 'bg-white', text = 'text-black';
           if (verificada) {
             if (esCorrOp) bg = 'bg-[#7FFF6B]';
-            else if (esSel) { bg = 'bg-[#FF6B6B]'; text = 'text-white'; }
+            else if (esSel) { bg = 'bg-[#FF6B6B]'; text = 'text-black'; }
             else bg = 'bg-gray-100';
           } else if (esSel) bg = 'bg-[#FFD23F]';
 
@@ -181,7 +181,7 @@ function QuizOrdenar({ ejercicio, onResponder }) {
             key={posicion}
             onClick={() => quitar(posicion)}
             disabled={verificada}
-            className="bg-white border-[3px] border-black px-3 py-2 font-black uppercase text-sm hover:bg-[#FF6B9D] hover:text-white transition-colors"
+            className="bg-white border-[3px] border-black px-3 py-2 font-black uppercase text-sm hover:bg-[#FF6B9D] hover:text-black transition-colors"
             style={{ boxShadow: '3px 3px 0 #000' }}
           >
             {ejercicio.palabras[palabraIdx]}

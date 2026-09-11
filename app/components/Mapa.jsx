@@ -130,8 +130,8 @@ export default function Mapa({
                 style={{ boxShadow: '3px 3px 0 #FFD23F' }}
                 title="Racha"
               >
-                <Flame size={16} strokeWidth={3} className="text-white" />
-                <span className="text-white font-black text-sm">{progreso.racha}</span>
+                <Flame size={16} strokeWidth={3} className="text-black" />
+                <span className="text-black font-black text-sm">{progreso.racha}</span>
               </div>
 
               <div
@@ -357,7 +357,7 @@ export default function Mapa({
                 </Link>
                 <Link
                   href="/app/errores"
-                  className="bg-[#FF6B9D] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  className="bg-[#FF6B9D] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
                   style={{ boxShadow: '5px 5px 0 #000' }}
                 >
                   <Target size={18} strokeWidth={4} />
@@ -381,7 +381,7 @@ export default function Mapa({
                 </Link>
                 <Link
                   href="/app/conversaciones"
-                  className="bg-[#A78BFA] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  className="bg-[#A78BFA] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
                   style={{ boxShadow: '5px 5px 0 #000' }}
                 >
                   <MessageCircle size={18} strokeWidth={4} />
@@ -397,7 +397,7 @@ export default function Mapa({
                 </Link>
                 <Link
                   href="/app/recordatorios"
-                  className="bg-[#FF6B9D] text-white border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
+                  className="bg-[#FF6B9D] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
                   style={{ boxShadow: '5px 5px 0 #000' }}
                 >
                   <Bell size={18} strokeWidth={4} />
@@ -550,7 +550,7 @@ export default function Mapa({
               onClick={() => {
                 if (confirm('¿Seguro? Perderás todo tu progreso y logros.')) onReiniciar();
               }}
-              className="bg-[#FF6B6B] text-white border-[3px] border-black px-4 py-2 font-black uppercase text-xs tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
+              className="bg-[#FF6B6B] text-black border-[3px] border-black px-4 py-2 font-black uppercase text-xs tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
               style={{ boxShadow: '4px 4px 0 #000' }}
             >
               Reiniciar progreso
