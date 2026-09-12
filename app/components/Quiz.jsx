@@ -5,19 +5,9 @@ import Image from 'next/image';
 import { Check, X, ChevronRight } from 'lucide-react';
 
 // ============================================================
-// COMPONENTE: Quiz (versión expandida)
-// ⚠️ REEMPLAZA el Quiz.jsx anterior.
-//
-// AHORA SOPORTA 6 TIPOS DE EJERCICIOS:
-//   - quiz             → opción múltiple (texto)
-//   - quiz-imagen      → opción múltiple con imagen
-//   - quiz-video       → opción múltiple con video
-//   - verdadero-falso  → afirmación V/F
-//   - ordenar          → ordenar palabras para formar frase
-//   - match            → relacionar parejas
-//   - completar        → igual que quiz pero con framing distinto
-//
-// Cada tipo se renderiza por su sub-componente.
+// COMPONENTE: Quiz  (estilo suave)
+// Soporta: quiz, quiz-imagen, quiz-video, verdadero-falso,
+// ordenar, match, completar.
 // ============================================================
 
 export default function Quiz({ ejercicio, onResponder }) {
@@ -38,8 +28,19 @@ export default function Quiz({ ejercicio, onResponder }) {
   }
 }
 
+// Clases de una opción según su estado
+function clasesOpcion({ verificada, esSel, esCorrOp }) {
+  if (verificada) {
+    if (esCorrOp) return 'border-emerald-300 bg-emerald-50 text-emerald-800';
+    if (esSel) return 'border-rose-300 bg-rose-50 text-rose-800';
+    return 'border-black/10 bg-neutral-50 text-neutral-400';
+  }
+  if (esSel) return 'border-violet-300 bg-violet-50 text-violet-800';
+  return 'border-black/10 bg-white text-neutral-800 hover:bg-neutral-50';
+}
+
 // ─────────────────────────────────────────────
-// SUB: Opción múltiple clásica (con imagen opcional)
+// SUB: Opción múltiple (con imagen opcional)
 // ─────────────────────────────────────────────
 function QuizMultiple({ ejercicio, onResponder }) {
   const [seleccionada, setSeleccionada] = useState(null);
@@ -53,35 +54,27 @@ function QuizMultiple({ ejercicio, onResponder }) {
   return (
     <div className="w-full">
       {ejercicio.imagenUrl && !imgError && (
-        <div className="mb-6 bg-white border-[3px] border-black overflow-hidden aspect-video relative" style={{ boxShadow: '8px 8px 0 #000' }}>
+        <div className="mb-6 rounded-xl border border-black/5 overflow-hidden aspect-video relative">
           <Image src={ejercicio.imagenUrl} alt="" fill className="object-cover" unoptimized onError={() => setImgError(true)} />
         </div>
       )}
 
-      <h3 className="text-2xl md:text-3xl font-black text-black uppercase mb-6 leading-tight">{ejercicio.pregunta}</h3>
+      <h3 className="text-xl font-bold tracking-tight mb-5">{ejercicio.pregunta}</h3>
 
-      <div className="space-y-3 mb-6">
+      <div className="flex flex-col gap-3 mb-5">
         {ejercicio.opciones.map((opcion, idx) => {
           const esSel = seleccionada === idx;
           const esCorrOp = idx === ejercicio.correcta;
-          let bg = 'bg-white', text = 'text-black';
-          if (verificada) {
-            if (esCorrOp) bg = 'bg-[#7FFF6B]';
-            else if (esSel) { bg = 'bg-[#FF6B6B]'; text = 'text-black'; }
-            else bg = 'bg-gray-100';
-          } else if (esSel) bg = 'bg-[#FFD23F]';
-
           return (
             <button
               key={idx}
               onClick={() => !verificada && setSeleccionada(idx)}
               disabled={verificada}
-              className={`w-full text-left p-4 border-[3px] border-black ${bg} ${text} font-black text-lg uppercase transition-all ${!verificada ? 'hover:-translate-x-0.5 hover:-translate-y-0.5' : ''} flex items-center justify-between gap-3`}
-              style={{ boxShadow: esSel || (verificada && esCorrOp) ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
+              className={`w-full text-left rounded-xl border px-4 py-3 font-semibold transition-colors flex items-center justify-between gap-3 ${clasesOpcion({ verificada, esSel, esCorrOp })}`}
             >
               <span className="flex-1">{opcion}</span>
-              {verificada && esCorrOp && <Check size={24} strokeWidth={4} />}
-              {verificada && esSel && !esCorrOp && <X size={24} strokeWidth={4} />}
+              {verificada && esCorrOp && <Check size={18} />}
+              {verificada && esSel && !esCorrOp && <X size={18} />}
             </button>
           );
         })}
@@ -106,29 +99,21 @@ function QuizVerdaderoFalso({ ejercicio, onResponder }) {
 
   return (
     <div className="w-full">
-      <div className="bg-[#FFD23F] border-[3px] border-black p-4 mb-6" style={{ boxShadow: '6px 6px 0 #000' }}>
-        <p className="font-black uppercase text-xs tracking-[0.2em] text-black mb-2">Afirmación:</p>
-        <p className="text-xl md:text-2xl font-black text-black leading-tight">{ejercicio.pregunta}</p>
+      <div className="rounded-xl bg-neutral-50 border border-black/5 p-4 mb-5">
+        <p className="text-xs font-medium text-neutral-500 mb-1">Afirmación</p>
+        <p className="text-lg font-semibold leading-snug">{ejercicio.pregunta}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-2 gap-3 mb-5">
         {[true, false].map((valor) => {
           const esSel = respuesta === valor;
           const esCorrOp = valor === ejercicio.correcta;
-          let bg = 'bg-white';
-          if (verificada) {
-            if (esCorrOp) bg = 'bg-[#7FFF6B]';
-            else if (esSel) bg = 'bg-[#FF6B6B]';
-            else bg = 'bg-gray-100';
-          } else if (esSel) bg = 'bg-[#FFD23F]';
-
           return (
             <button
               key={valor.toString()}
               onClick={() => !verificada && setRespuesta(valor)}
               disabled={verificada}
-              className={`p-6 border-[3px] border-black ${bg} font-black uppercase text-2xl tracking-wider transition-all ${!verificada ? 'hover:-translate-y-0.5' : ''}`}
-              style={{ boxShadow: esSel || (verificada && esCorrOp) ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
+              className={`rounded-xl border px-4 py-5 text-lg font-bold transition-colors ${clasesOpcion({ verificada, esSel, esCorrOp })}`}
             >
               {valor ? '✓ Verdadero' : '✗ Falso'}
             </button>
@@ -149,48 +134,34 @@ function QuizOrdenar({ ejercicio, onResponder }) {
   const [orden, setOrden] = useState([]);
   const [verificada, setVerificada] = useState(false);
 
-  const palabrasDisponibles = ejercicio.palabras.filter((_, idx) => !orden.includes(idx));
-
-  const agregar = (idx) => {
-    if (verificada) return;
-    setOrden([...orden, idx]);
-  };
-
-  const quitar = (idx) => {
-    if (verificada) return;
-    setOrden(orden.filter((_, i) => i !== idx));
-  };
+  const agregar = (idx) => { if (!verificada) setOrden([...orden, idx]); };
+  const quitar = (idx) => { if (!verificada) setOrden(orden.filter((_, i) => i !== idx)); };
 
   const verificar = () => orden.length === ejercicio.palabras.length && setVerificada(true);
-  const continuar = () => {
-    const correcto = JSON.stringify(orden) === JSON.stringify(ejercicio.ordenCorrecto);
-    onResponder(correcto);
-  };
-
+  const continuar = () => onResponder(JSON.stringify(orden) === JSON.stringify(ejercicio.ordenCorrecto));
   const esCorrecta = JSON.stringify(orden) === JSON.stringify(ejercicio.ordenCorrecto);
 
   return (
     <div className="w-full">
-      <h3 className="text-2xl md:text-3xl font-black text-black uppercase mb-6 leading-tight">{ejercicio.pregunta}</h3>
+      <h3 className="text-xl font-bold tracking-tight mb-5">{ejercicio.pregunta}</h3>
 
-      {/* Zona de orden */}
-      <div className="bg-[#FFD23F] border-[3px] border-black p-4 mb-4 min-h-20 flex flex-wrap gap-2" style={{ boxShadow: '6px 6px 0 #000' }}>
-        {orden.length === 0 && <p className="font-bold text-black/50 italic">Toca las palabras abajo para ordenarlas aquí</p>}
+      <div className="rounded-xl bg-violet-50 border border-violet-100 p-4 mb-4 min-h-20 flex flex-wrap gap-2">
+        {orden.length === 0 && (
+          <p className="text-sm text-neutral-400 italic">Toca las palabras abajo para ordenarlas aquí</p>
+        )}
         {orden.map((palabraIdx, posicion) => (
           <button
             key={posicion}
             onClick={() => quitar(posicion)}
             disabled={verificada}
-            className="bg-white border-[3px] border-black px-3 py-2 font-black uppercase text-sm hover:bg-[#FF6B9D] hover:text-black transition-colors"
-            style={{ boxShadow: '3px 3px 0 #000' }}
+            className="rounded-lg border border-black/10 bg-white px-3 py-2 text-sm font-semibold hover:bg-neutral-50 transition-colors"
           >
             {ejercicio.palabras[palabraIdx]}
           </button>
         ))}
       </div>
 
-      {/* Palabras disponibles */}
-      <div className="flex flex-wrap gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-5">
         {ejercicio.palabras.map((palabra, idx) => {
           if (orden.includes(idx)) return null;
           return (
@@ -198,8 +169,7 @@ function QuizOrdenar({ ejercicio, onResponder }) {
               key={idx}
               onClick={() => agregar(idx)}
               disabled={verificada}
-              className="bg-black text-[#FFD23F] border-[3px] border-black px-3 py-2 font-black uppercase text-sm hover:-translate-y-0.5 transition-transform"
-              style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
+              className="rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white hover:bg-violet-700 transition-colors"
             >
               {palabra}
             </button>
@@ -213,9 +183,6 @@ function QuizOrdenar({ ejercicio, onResponder }) {
   );
 }
 
-// ─────────────────────────────────────────────
-// HELPER: Imagen dentro del match con fallback
-// ─────────────────────────────────────────────
 function MatchImagen({ src }) {
   const [error, setError] = useState(false);
   if (error) return <span className="text-2xl">🖼️</span>;
@@ -233,77 +200,60 @@ function QuizMatch({ ejercicio, onResponder }) {
   const [seleccionIzq, setSeleccionIzq] = useState(null);
   const [emparejados, setEmparejados] = useState({});
   const [verificada, setVerificada] = useState(false);
-
-  // Mezclar la columna derecha aleatoriamente (una sola vez)
-  const [derechaMezclada] = useState(() =>
-    [...ejercicio.parejas].sort(() => Math.random() - 0.5)
-  );
+  const [derechaMezclada] = useState(() => [...ejercicio.parejas].sort(() => Math.random() - 0.5));
 
   const seleccionarIzq = (idx) => {
     if (verificada || emparejados[idx]) return;
     setSeleccionIzq(idx);
   };
-
   const seleccionarDer = (derItem) => {
     if (verificada || seleccionIzq === null) return;
     if (Object.values(emparejados).includes(derItem.derecha)) return;
-
     setEmparejados({ ...emparejados, [seleccionIzq]: derItem.derecha });
     setSeleccionIzq(null);
   };
 
   const todoEmparejado = Object.keys(emparejados).length === ejercicio.parejas.length;
-
   const verificar = () => todoEmparejado && setVerificada(true);
-  const continuar = () => {
-    const todoCorrect = ejercicio.parejas.every((p, i) => emparejados[i] === p.derecha);
-    onResponder(todoCorrect);
-  };
+  const continuar = () => onResponder(ejercicio.parejas.every((p, i) => emparejados[i] === p.derecha));
   const esCorrecta = ejercicio.parejas.every((p, i) => emparejados[i] === p.derecha);
 
   return (
     <div className="w-full">
-      <h3 className="text-2xl md:text-3xl font-black text-black uppercase mb-6 leading-tight">{ejercicio.pregunta}</h3>
+      <h3 className="text-xl font-bold tracking-tight mb-5">{ejercicio.pregunta}</h3>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        {/* Columna izquierda */}
-        <div className="space-y-2">
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className="flex flex-col gap-2">
           {ejercicio.parejas.map((p, idx) => {
             const emparejado = !!emparejados[idx];
             const seleccionado = seleccionIzq === idx;
+            const clase = emparejado
+              ? 'border-emerald-300 bg-emerald-50'
+              : seleccionado
+                ? 'border-violet-300 bg-violet-50'
+                : 'border-black/10 bg-white hover:bg-neutral-50';
             return (
               <button
                 key={idx}
                 onClick={() => seleccionarIzq(idx)}
                 disabled={verificada || emparejado}
-                className={`w-full p-3 border-[3px] border-black font-black text-center transition-all ${
-                  emparejado ? 'bg-[#7FFF6B]' : seleccionado ? 'bg-[#FFD23F]' : 'bg-white hover:-translate-y-0.5'
-                }`}
-                style={{ boxShadow: '4px 4px 0 #000' }}
+                className={`w-full rounded-xl border p-3 text-center font-semibold transition-colors ${clase}`}
               >
-                {p.tipo_izquierda === 'imagen' ? (
-                  <MatchImagen src={p.izquierda} />
-                ) : (
-                  <span className="text-2xl">{p.izquierda}</span>
-                )}
+                {p.tipo_izquierda === 'imagen' ? <MatchImagen src={p.izquierda} /> : <span className="text-2xl">{p.izquierda}</span>}
               </button>
             );
           })}
         </div>
-
-        {/* Columna derecha */}
-        <div className="space-y-2">
+        <div className="flex flex-col gap-2">
           {derechaMezclada.map((p, idx) => {
             const yaUsado = Object.values(emparejados).includes(p.derecha);
+            const clase = yaUsado ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-black/10 bg-white text-neutral-800 hover:bg-neutral-50';
             return (
               <button
                 key={idx}
                 onClick={() => seleccionarDer(p)}
                 disabled={verificada || yaUsado || seleccionIzq === null}
-                className={`w-full p-3 border-[3px] border-black font-black text-sm uppercase transition-all ${
-                  yaUsado ? 'bg-[#7FFF6B]' : 'bg-white hover:-translate-y-0.5'
-                } ${seleccionIzq === null ? 'opacity-50' : ''}`}
-                style={{ boxShadow: '4px 4px 0 #000' }}
+                className={`w-full rounded-xl border p-3 text-sm font-semibold transition-colors ${clase} ${seleccionIzq === null ? 'opacity-50' : ''}`}
               >
                 {p.derecha}
               </button>
@@ -324,13 +274,8 @@ function QuizMatch({ ejercicio, onResponder }) {
 function QuizVideo({ ejercicio, onResponder }) {
   return (
     <div className="w-full">
-      <div className="mb-6 bg-black border-[3px] border-black overflow-hidden" style={{ boxShadow: '8px 8px 0 #000' }}>
-        <video
-          src={ejercicio.videoUrl}
-          controls
-          className="w-full aspect-video"
-          onError={(e) => { e.target.parentElement.innerHTML = '<div class="aspect-video bg-yellow-300 flex items-center justify-center font-black uppercase">Video no disponible</div>'; }}
-        />
+      <div className="mb-6 rounded-xl overflow-hidden border border-black/5 bg-neutral-900">
+        <video src={ejercicio.videoUrl} controls className="w-full aspect-video" />
       </div>
       <QuizMultiple ejercicio={ejercicio} onResponder={onResponder} />
     </div>
@@ -343,9 +288,9 @@ function QuizVideo({ ejercicio, onResponder }) {
 function Feedback({ verificada, esCorrecta, explicacion }) {
   if (!verificada) return null;
   return (
-    <div className={`p-4 border-[3px] border-black mb-6 ${esCorrecta ? 'bg-[#7FFF6B]' : 'bg-[#FFD23F]'}`} style={{ boxShadow: '6px 6px 0 #000' }}>
-      <p className="font-black uppercase text-sm mb-1">{esCorrecta ? '¡Excelente!' : 'Casi...'}</p>
-      <p className="font-bold text-black">{explicacion}</p>
+    <div className={`rounded-xl border p-4 mb-5 ${esCorrecta ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
+      <p className="font-semibold mb-1">{esCorrecta ? '¡Excelente!' : 'Casi…'}</p>
+      <p className="text-sm text-neutral-600">{explicacion}</p>
     </div>
   );
 }
@@ -355,22 +300,18 @@ function BotonAccion({ verificada, habilitado, onVerificar, onContinuar }) {
     return (
       <button
         onClick={onContinuar}
-        className="w-full p-4 border-[3px] border-black bg-[#7FFF6B] text-black font-black uppercase text-xl tracking-wider hover:-translate-y-0.5 active:translate-y-0 transition-transform"
-        style={{ boxShadow: '6px 6px 0 #000' }}
+        className="inline-flex w-full items-center justify-center gap-1 rounded-xl bg-violet-600 px-4 py-3.5 text-base font-semibold text-white hover:bg-violet-700 transition-colors"
       >
-        Continuar <ChevronRight className="inline ml-1" size={24} strokeWidth={4} />
+        Continuar
+        <ChevronRight size={20} />
       </button>
     );
   }
-
   return (
     <button
       onClick={onVerificar}
       disabled={!habilitado}
-      className={`w-full p-4 border-[3px] border-black font-black uppercase text-xl tracking-wider transition-all ${
-        habilitado ? 'bg-black text-[#FFD23F] hover:-translate-y-0.5' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      }`}
-      style={{ boxShadow: habilitado ? '6px 6px 0 #FFD23F' : 'none' }}
+      className="inline-flex w-full items-center justify-center rounded-xl bg-violet-600 px-4 py-3.5 text-base font-semibold text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
     >
       Verificar
     </button>

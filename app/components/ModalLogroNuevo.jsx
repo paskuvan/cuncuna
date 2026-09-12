@@ -1,13 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Sparkles, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import Cuncuna from './mascota/Cuncuna';
 
 // ============================================================
-// COMPONENTE: ModalLogroNuevo
-// Se muestra cuando el usuario desbloquea uno o más logros.
-// Si hay varios, los muestra de a uno con botón "Siguiente".
+// COMPONENTE: ModalLogroNuevo  (estilo suave)
+// Se muestra al desbloquear uno o más logros.
 // ============================================================
 
 export default function ModalLogroNuevo({ logrosNuevos, onCerrar }) {
@@ -30,70 +29,53 @@ export default function ModalLogroNuevo({ logrosNuevos, onCerrar }) {
   const siguiente = () => {
     if (ultimo) {
       onCerrar();
-      setIndice(0); // Reset para próxima vez
+      setIndice(0);
     } else {
       setIndice(indice + 1);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
       <div
-        className={`bg-white border-[4px] border-black p-6 md:p-8 max-w-md w-full text-center transition-transform ${
-          animar ? 'scale-110' : 'scale-100'
+        className={`rounded-3xl border border-black/5 bg-white p-8 max-w-md w-full text-center shadow-xl transition-transform ${
+          animar ? 'scale-105' : 'scale-100'
         }`}
-        style={{ boxShadow: '12px 12px 0 #000' }}
       >
-        {/* Tag superior */}
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <Sparkles size={20} strokeWidth={3} className="text-[#FFD23F]" />
-          <span className="font-black uppercase text-xs tracking-[0.2em] text-black">
-            <Cuncuna estado="celebrando" size={80} />
-          </span>
-          <Sparkles size={20} strokeWidth={3} className="text-[#FFD23F]" />
+        <div className="flex justify-center mb-2">
+          <Cuncuna estado="celebrando" size={72} />
         </div>
+        <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 mb-4">
+          ¡Logro desbloqueado!
+        </p>
 
-        {/* Badge gigante */}
-        <div className="flex justify-center mb-6">
-          <div
-            className="border-[4px] border-black w-32 h-32 flex items-center justify-center text-7xl"
-            style={{
-              backgroundColor: logro.color,
-              boxShadow: '8px 8px 0 #000',
-            }}
+        <div className="flex justify-center mb-5">
+          <span
+            className="grid place-items-center w-28 h-28 rounded-3xl text-6xl"
+            style={{ backgroundColor: `${logro.color}22` }}
           >
             {logro.emoji}
-          </div>
+          </span>
         </div>
 
-        {/* Título */}
-        <h2 className="text-3xl md:text-4xl font-black uppercase text-black leading-none mb-3 tracking-tight">
-          {logro.titulo}
-        </h2>
+        <h2 className="text-2xl font-bold tracking-tight mb-3">{logro.titulo}</h2>
 
-        {/* Descripción */}
-        <div
-          className="bg-[#FFD23F] border-[3px] border-black p-3 mb-6"
-          style={{ boxShadow: '4px 4px 0 #000' }}
-        >
-          <p className="font-bold text-black">{logro.descripcion}</p>
+        <div className="rounded-xl bg-neutral-50 border border-black/5 p-3 mb-6">
+          <p className="text-sm text-neutral-600">{logro.descripcion}</p>
         </div>
 
-        {/* Indicador si hay más */}
         {logrosNuevos.length > 1 && (
-          <p className="font-black uppercase text-xs text-black/60 mb-3 tracking-wider">
+          <p className="text-xs text-neutral-400 mb-3">
             {indice + 1} de {logrosNuevos.length} logros
           </p>
         )}
 
-        {/* Botón continuar */}
         <button
           onClick={siguiente}
-          className="w-full p-4 border-[3px] border-black bg-black text-[#FFD23F] font-black uppercase text-lg tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform"
-          style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
+          className="inline-flex w-full items-center justify-center gap-1 rounded-xl bg-violet-600 px-4 py-3.5 text-base font-semibold text-white hover:bg-violet-700 transition-colors"
         >
           {ultimo ? '¡Genial!' : 'Siguiente'}
-          <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
+          <ChevronRight size={20} />
         </button>
       </div>
     </div>

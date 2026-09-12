@@ -17,7 +17,7 @@ export default function AvatarUsuario({
 
   return (
     <div
-      className={`relative bg-white border-[3px] border-black rounded-full flex items-center justify-center overflow-hidden shrink-0 ${className}`}
+      className={`relative bg-violet-100 border border-black/10 rounded-full flex items-center justify-center overflow-hidden shrink-0 ${className}`}
       style={{ width: size, height: size, ...style }}
     >
       {mostrarImagen ? (
@@ -32,7 +32,7 @@ export default function AvatarUsuario({
           onError={() => setSrcConError(src)}
         />
       ) : (
-        <span className={`font-black text-black leading-none ${textoClassName}`}>
+        <span className={`font-semibold text-violet-700 leading-none ${textoClassName}`}>
           {inicial}
         </span>
       )}
