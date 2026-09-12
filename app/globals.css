@@ -128,10 +128,9 @@ body {
 }
 
 .dark .campo-admin {
-  background-color: var(--cuncuna-dark-surface-soft) !important;
-  border-color: var(--cuncuna-dark-border) !important;
+  background-color: #202024 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
   color: var(--cuncuna-dark-text) !important;
-  box-shadow: 4px 4px 0 var(--cuncuna-dark-border);
 }
 
 .dark option {
@@ -233,17 +232,18 @@ body {
 
 .campo-admin {
   width: 100%;
-  border: 3px solid #000;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
   background: #fff;
-  padding: 0.75rem;
-  color: #000;
-  font-weight: 700;
+  padding: 0.625rem 0.75rem;
+  color: #171717;
+  font-weight: 500;
   outline: none;
-  box-shadow: 4px 4px 0 #000;
 }
 
 .campo-admin:focus {
-  transform: translateY(-2px);
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
 }
 
 .legal-content section + section {
