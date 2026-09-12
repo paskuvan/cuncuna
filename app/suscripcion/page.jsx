@@ -11,10 +11,11 @@ export default function PaginaSuscripcion() {
 
 function CargandoSuscripcion() {
   return (
-    <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-4">
-      <p className="bg-[#FFD23F] border-[4px] border-black p-5 font-black uppercase text-black">
-        Preparando planes...
-      </p>
+    <div className="min-h-screen bg-[#F6F1EC] flex items-center justify-center p-4">
+      <div className="inline-flex items-center gap-3 rounded-2xl border border-black/5 bg-white px-6 py-4 shadow-sm">
+        <span className="w-5 h-5 rounded-full border-2 border-violet-200 border-t-violet-600 animate-spin" />
+        <p className="text-sm font-semibold text-neutral-600">Preparando planes…</p>
+      </div>
     </div>
   );
 }

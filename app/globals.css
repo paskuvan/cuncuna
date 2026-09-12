@@ -139,15 +139,21 @@ body {
   color: var(--cuncuna-dark-text);
 }
 
-.dark .legal-content h2,
+.dark .legal-content h2 {
+  color: #f2f2f2;
+}
+
 .dark .legal-content p,
-.dark .legal-content li,
+.dark .legal-content li {
+  color: #adadad;
+}
+
 .dark .legal-content a {
-  color: #f7f4ed;
+  color: #c4b5fd;
 }
 
 .dark .legal-content section + section {
-  border-color: #f7f4ed;
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .dark .icono-tema-claro {
@@ -241,36 +247,36 @@ body {
 }
 
 .legal-content section + section {
-  border-top: 3px solid #000;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
   margin-top: 1.75rem;
   padding-top: 1.75rem;
 }
 
 .legal-content h2 {
-  color: #000;
-  font-size: 1.25rem;
-  font-weight: 900;
-  text-transform: uppercase;
+  color: #171717;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   margin-bottom: 0.75rem;
 }
 
 .legal-content p,
 .legal-content li {
-  color: rgb(0 0 0 / 0.72);
-  font-weight: 700;
+  color: #525252;
+  font-weight: 400;
   line-height: 1.7;
 }
 
 .legal-content ul {
-  list-style: square;
+  list-style: disc;
   padding-left: 1.25rem;
 }
 
 .legal-content a {
-  color: #000;
+  color: #7c3aed;
   text-decoration: underline;
-  text-decoration-color: #ff6b9d;
-  text-decoration-thickness: 3px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
 /* Utilidades para line-clamp si tu Tailwind no las trae por defecto */
