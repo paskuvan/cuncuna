@@ -6,32 +6,51 @@ export const metadata = { title: 'Soporte · Cuncuna' };
 
 export default function SoportePage() {
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black">
-        <div className="max-w-4xl mx-auto p-4">
-          <Link href="/" className="inline-flex bg-white border-[3px] border-white p-2" aria-label="Volver">
-            <ArrowLeft size={20} strokeWidth={3} />
+    <div className="min-h-screen bg-[#F6F1EC] text-neutral-900">
+      <header className="border-b border-black/5 bg-[#F6F1EC]/80 backdrop-blur">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-3.5">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
+          >
+            <ArrowLeft size={16} />
+            Inicio
           </Link>
         </div>
       </header>
-      <main className="max-w-4xl mx-auto p-4 md:p-8">
-        <section className="bg-[#4ECDC4] border-[4px] border-black p-6 md:p-9" style={{ boxShadow: '12px 12px 0 #000' }}>
-          <MessageCircle size={42} strokeWidth={3} className="mb-4" />
-          <h1 className="font-black uppercase text-4xl md:text-5xl text-black leading-none">¿Necesitas ayuda?</h1>
-          <p className="font-bold text-black/70 text-lg mt-4 max-w-2xl">Cuéntanos qué ocurrió e incluye la información necesaria para encontrar una solución.</p>
+
+      <main className="max-w-4xl mx-auto px-4 md:px-6 py-10 md:py-14 flex flex-col gap-6">
+        <section className="rounded-3xl bg-gradient-to-br from-violet-600 to-violet-700 p-6 md:p-10 text-white">
+          <MessageCircle size={36} className="mb-4" />
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight">
+            ¿Necesitas ayuda?
+          </h1>
+          <p className="mt-4 text-white/80 text-lg max-w-2xl">
+            Cuéntanos qué ocurrió e incluye la información necesaria para encontrar una solución.
+          </p>
         </section>
 
-        <section className="bg-white border-[4px] border-black p-6 md:p-8 mt-8" style={{ boxShadow: '10px 10px 0 #000' }}>
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/50">Correo de soporte</p>
-          <a href={`mailto:${EMAIL_SOPORTE}?subject=Soporte%20Cuncuna`} className="font-black text-xl md:text-3xl text-black underline decoration-[#FF6B9D] decoration-4 break-all">
+        <section className="rounded-2xl border border-black/5 bg-white p-6 md:p-8 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
+            Correo de soporte
+          </p>
+          <a
+            href={`mailto:${EMAIL_SOPORTE}?subject=Soporte%20Cuncuna`}
+            className="mt-1 block text-xl md:text-2xl font-bold tracking-tight text-violet-600 hover:text-violet-700 break-all transition-colors"
+          >
             {EMAIL_SOPORTE}
           </a>
-          <div className="flex items-start gap-3 mt-6 bg-[#FFD23F] border-[3px] border-black p-4">
-            <Mail size={22} strokeWidth={3} className="shrink-0" />
-            <p className="font-bold text-sm">Incluye el correo de tu cuenta, dispositivo, navegador y una descripción del problema. Nunca envíes contraseñas ni datos completos de tarjetas.</p>
+
+          <div className="mt-6 flex items-start gap-3 rounded-xl bg-neutral-50 border border-black/5 p-4">
+            <Mail size={20} className="text-violet-600 shrink-0" />
+            <p className="text-sm text-neutral-600">
+              Incluye el correo de tu cuenta, dispositivo, navegador y una descripción del
+              problema. Nunca envíes contraseñas ni datos completos de tarjetas.
+            </p>
           </div>
-          <div className="flex items-center gap-2 mt-5 font-bold text-sm text-black/60">
-            <ShieldCheck size={20} strokeWidth={3} />
+
+          <div className="mt-5 flex items-center gap-2 text-sm text-neutral-500">
+            <ShieldCheck size={18} />
             Responderemos tan pronto como sea posible.
           </div>
         </section>

@@ -9,7 +9,8 @@ export default function GlobalError({ error, reset }) {
         <div
           style={{
             minHeight: '100vh',
-            background: '#F5F0E8',
+            background: '#F6F1EC',
+            color: '#171717',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -19,39 +20,32 @@ export default function GlobalError({ error, reset }) {
           <div
             style={{
               background: '#fff',
-              border: '4px solid #000',
+              border: '1px solid rgba(0,0,0,0.06)',
+              borderRadius: 16,
               padding: 32,
               maxWidth: 420,
               width: '100%',
               textAlign: 'center',
-              boxShadow: '12px 12px 0 #000',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
             }}
           >
-            <div style={{ fontSize: 56, marginBottom: 12 }}>🐛</div>
-            <h1
-              style={{
-                fontSize: 24,
-                fontWeight: 900,
-                textTransform: 'uppercase',
-                margin: '0 0 12px',
-              }}
-            >
+            <div style={{ fontSize: 44, marginBottom: 12 }}>🐛</div>
+            <h1 style={{ fontSize: 20, fontWeight: 700, margin: '0 0 8px' }}>
               Error inesperado
             </h1>
-            <p style={{ color: '#00000099', fontWeight: 700, margin: '0 0 24px' }}>
+            <p style={{ color: '#737373', margin: '0 0 24px' }}>
               La aplicación tuvo un problema grave. Intenta recargar.
             </p>
             <button
               onClick={() => reset()}
               style={{
-                background: '#FFD23F',
-                border: '3px solid #000',
+                background: '#7c3aed',
+                color: '#fff',
+                border: 'none',
+                borderRadius: 12,
                 padding: '12px 24px',
-                fontWeight: 900,
-                textTransform: 'uppercase',
+                fontWeight: 600,
                 fontSize: 14,
-                letterSpacing: '0.05em',
-                boxShadow: '6px 6px 0 #FF6B9D',
                 cursor: 'pointer',
               }}
             >
