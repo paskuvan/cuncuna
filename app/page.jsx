@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   Sparkles, BookOpen, Trophy, Play, Check,
@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import Cuncuna from './components/mascota/Cuncuna';
 import FormularioListaEspera from './components/FormularioListaEspera';
+import ThemeToggle from './components/ThemeToggle';
 
 // ============================================================
 // LANDING PAGE (ruta /)
@@ -15,10 +16,6 @@ import FormularioListaEspera from './components/FormularioListaEspera';
 // ============================================================
 
 export default function LandingPage() {
-  useEffect(() => {
-    document.documentElement.classList.remove('dark');
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#F6F1EC] text-neutral-900 overflow-x-hidden">
       <NavBar />
@@ -54,6 +51,7 @@ function NavBar() {
           >
             Planes
           </a>
+          <ThemeToggle className="grid place-items-center w-9 h-9 rounded-xl border border-black/10 bg-white text-neutral-600 hover:bg-neutral-50 transition-colors" />
           <Link
             href="/lista-espera"
             className="rounded-xl border border-black/10 bg-white px-3 sm:px-4 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"

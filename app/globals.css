@@ -9,11 +9,11 @@
   --cuncuna-ink: #000000;
   --cuncuna-paper: #ffffff;
   --cuncuna-cream: #f5f0e8;
-  --cuncuna-dark-bg: #121212;
-  --cuncuna-dark-surface: #202020;
-  --cuncuna-dark-surface-soft: #2b2b2b;
-  --cuncuna-dark-text: #f7f4ed;
-  --cuncuna-dark-muted: rgb(247 244 237 / 0.72);
+  --cuncuna-dark-bg: #111113;
+  --cuncuna-dark-surface: #1b1b1f;
+  --cuncuna-dark-surface-soft: #26262b;
+  --cuncuna-dark-text: #ededed;
+  --cuncuna-dark-muted: rgb(237 237 237 / 0.62);
   --cuncuna-dark-border: #f7f4ed;
 }
 
@@ -87,8 +87,7 @@ body {
 .dark [class*="bg-[#FFD23F]"],
 .dark [class*="bg-[#7FFF6B]"],
 .dark [class*="bg-[#4ECDC4]"],
-.dark [class*="bg-[#F5F0E8]"][class*="border"],
-.dark .selector-tema {
+.dark [class*="bg-[#F5F0E8]"][class*="border"] {
   color: #000 !important;
 }
 
@@ -97,8 +96,7 @@ body {
 .dark [class*="bg-[#7FFF6B]"] .text-black,
 .dark [class*="bg-[#7FFF6B]"] [class*="text-black/"],
 .dark [class*="bg-[#4ECDC4]"] .text-black,
-.dark [class*="bg-[#4ECDC4]"] [class*="text-black/"],
-.dark .selector-tema .text-black {
+.dark [class*="bg-[#4ECDC4]"] [class*="text-black/"] {
   color: #000 !important;
 }
 
@@ -150,11 +148,6 @@ body {
 
 .dark .legal-content section + section {
   border-color: #f7f4ed;
-}
-
-.dark .selector-tema {
-  background-color: #ffd23f !important;
-  border-color: var(--cuncuna-dark-border) !important;
 }
 
 .dark .icono-tema-claro {
@@ -287,3 +280,88 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* ============================================================
+   TEMA OSCURO — estilo suave (dashboard + landing)
+   Mapea las utilidades del rediseño a una paleta oscura.
+   Va después de las reglas neobrutalistas para ganar donde
+   se solapan. No afecta las páginas viejas (usan text-black).
+   ============================================================ */
+
+/* Fondo de página */
+.dark [class*="bg-[#F6F1EC]"] {
+  background-color: var(--cuncuna-dark-bg) !important;
+}
+
+/* Superficies neutras */
+.dark .bg-neutral-50 {
+  background-color: #202024 !important;
+}
+.dark .bg-neutral-100 {
+  background-color: #2a2a30 !important;
+}
+
+/* Texto neutro */
+.dark .text-neutral-900 {
+  color: #f2f2f2 !important;
+}
+.dark .text-neutral-800 {
+  color: #dcdcdc !important;
+}
+.dark .text-neutral-700 {
+  color: #c8c8c8 !important;
+}
+.dark .text-neutral-600 {
+  color: #adadad !important;
+}
+.dark .text-neutral-500 {
+  color: #909096 !important;
+}
+.dark .text-neutral-400 {
+  color: #74747a !important;
+}
+
+/* Bordes suaves */
+.dark [class*="border-black/5"] {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+.dark [class*="border-black/10"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Hover neutro */
+.dark .hover\:bg-neutral-50:hover {
+  background-color: #26262b !important;
+}
+
+/* Inputs suaves (sobrescribe el borde brillante neobrutalista) */
+.dark input:not(.campo-admin),
+.dark textarea:not(.campo-admin),
+.dark select:not(.campo-admin) {
+  background-color: #202024 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ededed !important;
+}
+
+/* Chips de acento: fondo translúcido para que no “brillen” sobre oscuro */
+.dark .bg-violet-100 { background-color: rgba(139, 92, 246, 0.22) !important; }
+.dark .bg-violet-50 { background-color: rgba(139, 92, 246, 0.14) !important; }
+.dark .bg-emerald-100 { background-color: rgba(16, 185, 129, 0.20) !important; }
+.dark .bg-emerald-50 { background-color: rgba(16, 185, 129, 0.14) !important; }
+.dark .bg-amber-100 { background-color: rgba(245, 158, 11, 0.20) !important; }
+.dark .bg-orange-100 { background-color: rgba(249, 115, 22, 0.20) !important; }
+.dark .bg-rose-100 { background-color: rgba(244, 63, 94, 0.20) !important; }
+.dark .bg-rose-50 { background-color: rgba(244, 63, 94, 0.14) !important; }
+.dark .bg-sky-100 { background-color: rgba(14, 165, 233, 0.20) !important; }
+
+/* Texto de acento: aclarar para contraste sobre chip oscuro */
+.dark .text-violet-700, .dark .text-violet-800 { color: #c4b5fd !important; }
+.dark .text-emerald-600, .dark .text-emerald-800 { color: #6ee7b7 !important; }
+.dark .text-amber-600 { color: #fcd34d !important; }
+.dark .text-orange-600 { color: #fdba74 !important; }
+.dark .text-rose-600, .dark .text-rose-800 { color: #fda4af !important; }
+.dark .text-sky-600 { color: #7dd3fc !important; }
+
+/* Banners de acento claros (violet-50 en diccionario) */
+.dark .text-violet-900 { color: #ddd6fe !important; }
+.dark .border-violet-200 { border-color: rgba(139, 92, 246, 0.35) !important; }

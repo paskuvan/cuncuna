@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, BellRing, Check, Mail, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowLeft, BellRing, Check, Mail, ShieldCheck } from 'lucide-react';
 import Cuncuna from '../components/mascota/Cuncuna';
 import FormularioListaEspera from '../components/FormularioListaEspera';
 
@@ -16,115 +16,85 @@ const razones = [
 
 export default function PaginaListaEspera() {
   return (
-    <main className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black">
-        <div className="max-w-5xl mx-auto p-4 flex items-center justify-between gap-4">
+    <main className="min-h-screen bg-[#F6F1EC] text-neutral-900">
+      {/* Nav */}
+      <header className="border-b border-black/5 bg-[#F6F1EC]/80 backdrop-blur">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-3.5 flex items-center justify-between gap-4">
           <Link
             href="/"
-            className="bg-white border-[3px] border-white p-2 hover:-translate-y-0.5 transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver al inicio"
+            className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
           >
-            <ArrowLeft size={20} strokeWidth={4} className="text-black" />
+            <ArrowLeft size={16} />
+            Inicio
           </Link>
-          <div className="flex items-center gap-3">
-            <div
-              className="bg-[#FFD23F] border-[3px] border-white p-1.5"
-              style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
-            >
-              <Cuncuna estado="idle" size={32} animado={false} />
-            </div>
-            <div>
-              <p className="text-white font-black uppercase text-lg leading-none">
-                Cuncuna
-              </p>
-              <p className="text-white/60 text-xs font-bold uppercase tracking-wider">
-                Lista de espera
-              </p>
-            </div>
+          <div className="flex items-center gap-2.5">
+            <span className="grid place-items-center w-9 h-9 rounded-xl bg-violet-600">
+              <Cuncuna estado="idle" size={22} animado={false} />
+            </span>
+            <span className="text-lg font-bold tracking-tight">Cuncuna</span>
           </div>
         </div>
       </header>
 
       <section className="max-w-5xl mx-auto px-4 md:px-6 py-10 md:py-16">
-        <div className="grid lg:grid-cols-[1fr_0.9fr] gap-7 items-center">
-          <div
-            className="bg-[#FFD23F] border-[4px] border-black p-6 md:p-9 relative overflow-hidden"
-            style={{ boxShadow: '12px 12px 0 #000' }}
-          >
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-[#FF6B9D] border-[4px] border-black rounded-full" />
-            <Sparkles
-              size={30}
-              strokeWidth={4}
-              className="absolute top-5 right-5 text-black"
-            />
+        <div className="grid lg:grid-cols-[1fr_0.9fr] gap-6 items-stretch">
+          {/* CTA principal */}
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600 to-violet-700 p-6 md:p-10 text-white">
+            <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-white/10" />
             <div className="relative z-10">
-              <div
-                className="inline-flex items-center gap-2 bg-white border-[3px] border-black px-3 py-2 mb-6"
-                style={{ boxShadow: '4px 4px 0 #000' }}
-              >
-                <BellRing size={18} strokeWidth={4} className="text-black" />
-                <span className="font-black uppercase text-xs text-black tracking-[0.15em]">
-                  Acceso anticipado
-                </span>
-              </div>
-
-              <h1 className="font-black uppercase text-5xl md:text-7xl text-black leading-[0.9] tracking-tight">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold mb-6">
+                <BellRing size={15} />
+                Acceso anticipado
+              </span>
+              <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.05]">
                 Súmate a la lista de espera
               </h1>
-              <p className="font-bold text-black/75 text-lg md:text-xl mt-6 max-w-2xl">
-                Cuncuna está preparando una experiencia para personas oyentes que quieren aprender Lengua de Señas Chilena paso a paso.
+              <p className="mt-5 text-white/80 text-lg max-w-2xl">
+                Cuncuna está preparando una experiencia para personas oyentes que quieren
+                aprender Lengua de Señas Chilena paso a paso.
               </p>
-
               <div className="mt-8 max-w-xl">
                 <FormularioListaEspera origen="pagina-lista-espera" variante="grande" />
               </div>
             </div>
           </div>
 
-          <aside
-            className="bg-white border-[4px] border-black p-6 md:p-8"
-            style={{ boxShadow: '10px 10px 0 #000' }}
-          >
+          {/* Aside */}
+          <aside className="rounded-3xl border border-black/5 bg-white p-6 md:p-8 shadow-sm">
             <div className="flex justify-center mb-6">
-              <div
-                className="bg-[#4ECDC4] border-[4px] border-black p-5"
-                style={{ boxShadow: '7px 7px 0 #FF6B9D' }}
-              >
-                <Cuncuna estado="saludando" size={130} />
-              </div>
+              <span className="grid place-items-center rounded-2xl bg-gradient-to-br from-violet-100 to-amber-100 p-5">
+                <Cuncuna estado="saludando" size={120} />
+              </span>
             </div>
 
-            <h2 className="font-black uppercase text-3xl text-black leading-none mb-4">
-              ¿Qué recibirás?
-            </h2>
-            <div className="space-y-3">
+            <h2 className="text-xl font-bold tracking-tight mb-4">¿Qué recibirás?</h2>
+            <div className="flex flex-col gap-3">
               {razones.map((razon) => (
                 <div
                   key={razon}
-                  className="bg-[#F5F0E8] border-[3px] border-black p-3 flex items-start gap-3"
-                  style={{ boxShadow: '4px 4px 0 #000' }}
+                  className="flex items-start gap-3 rounded-xl bg-neutral-50 border border-black/5 p-3"
                 >
-                  <span className="bg-[#7FFF6B] border-[3px] border-black p-1 shrink-0">
-                    <Check size={16} strokeWidth={4} className="text-black" />
+                  <span className="grid place-items-center w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 shrink-0">
+                    <Check size={15} />
                   </span>
-                  <p className="font-bold text-black">{razon}</p>
+                  <p className="text-sm font-medium text-neutral-700">{razon}</p>
                 </div>
               ))}
             </div>
 
-            <div className="mt-6 border-t-[3px] border-black pt-5">
+            <div className="mt-6 border-t border-black/5 pt-5">
               <div className="flex items-start gap-3">
-                <ShieldCheck size={24} strokeWidth={4} className="text-black shrink-0" />
-                <p className="font-bold text-black/70 text-sm">
-                  Usaremos tu correo solo para avisarte sobre Cuncuna. Puedes revisar nuestra política de privacidad cuando quieras.
+                <ShieldCheck size={20} className="text-violet-600 shrink-0" />
+                <p className="text-sm text-neutral-500">
+                  Usaremos tu correo solo para avisarte sobre Cuncuna. Puedes revisar nuestra
+                  política de privacidad cuando quieras.
                 </p>
               </div>
               <Link
                 href="/legal/privacidad"
-                className="mt-4 inline-flex items-center gap-2 font-black uppercase text-xs text-black underline decoration-[#FF6B9D] decoration-[3px]"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-violet-600 hover:text-violet-700 transition-colors"
               >
-                <Mail size={16} strokeWidth={4} />
+                <Mail size={16} />
                 Política de privacidad
               </Link>
             </div>

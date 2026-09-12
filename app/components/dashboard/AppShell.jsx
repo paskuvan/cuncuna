@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
@@ -18,6 +17,7 @@ import {
   Plus,
 } from 'lucide-react';
 import Cuncuna from '../mascota/Cuncuna';
+import ThemeToggle from '../ThemeToggle';
 
 // ============================================================
 // AppShell — chrome de la zona /app (estilo SaaS suave).
@@ -45,11 +45,6 @@ export default function AppShell({
   children,
 }) {
   const pathname = usePathname();
-
-  // El dashboard usa estilo claro; nos aseguramos de no heredar el .dark global.
-  useEffect(() => {
-    document.documentElement.classList.remove('dark');
-  }, []);
 
   return (
     <div className="min-h-screen bg-[#F6F1EC] text-neutral-900 flex">
@@ -122,6 +117,7 @@ export default function AppShell({
                 className="w-32 bg-transparent text-sm outline-none placeholder:text-neutral-400"
               />
             </div>
+            <ThemeToggle />
             <button
               type="button"
               aria-label="Notificaciones"

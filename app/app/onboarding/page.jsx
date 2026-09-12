@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Bell,
@@ -61,10 +61,6 @@ export default function OnboardingPage() {
       recordatorio: g.recordatorio,
     };
   });
-
-  useEffect(() => {
-    document.documentElement.classList.remove('dark');
-  }, []);
 
   const pasos = useMemo(
     () => [
