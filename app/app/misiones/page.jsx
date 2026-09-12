@@ -2,136 +2,95 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Check, Flag, RotateCcw, Star } from 'lucide-react';
+import { Check, Flag, RotateCcw, Star } from 'lucide-react';
 import {
   obtenerMisionesConProgreso,
   reiniciarMisionesHoy,
 } from '../../lib/misiones-locales';
+import AppShell from '../../components/dashboard/AppShell';
+
+// ============================================================
+// PÁGINA: /app/misiones  (estilo suave)
+// ============================================================
 
 export default function PaginaMisiones() {
   const [misiones, setMisiones] = useState(() => obtenerMisionesConProgreso());
 
-  const completadas = misiones.filter((mision) => mision.completada).length;
-  const xpGanado = misiones
-    .filter((mision) => mision.completada)
-    .reduce((total, mision) => total + mision.xp, 0);
-  const xpDisponible = misiones.reduce((total, mision) => total + mision.xp, 0);
-  const porcentaje = (completadas / misiones.length) * 100;
+  const completadas = misiones.filter((m) => m.completada).length;
+  const xpGanado = misiones.filter((m) => m.completada).reduce((t, m) => t + m.xp, 0);
+  const xpDisponible = misiones.reduce((t, m) => t + m.xp, 0);
+  const porcentaje = misiones.length ? (completadas / misiones.length) * 100 : 0;
 
-  const reiniciar = () => {
-    setMisiones(reiniciarMisionesHoy());
-  };
+  const reiniciar = () => setMisiones(reiniciarMisionesHoy());
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto p-4 flex items-center gap-3">
-          <Link
-            href="/app"
-            className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver"
-          >
-            <ArrowLeft size={20} strokeWidth={3} className="text-black" />
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-white font-black text-xl md:text-2xl uppercase leading-none">
-              Misiones
-            </h1>
-            <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
-              Metas diarias
-            </p>
-          </div>
-          <div
-            className="bg-[#FFD23F] border-[3px] border-white px-3 py-1.5 font-black text-black text-sm"
-            style={{ boxShadow: '3px 3px 0 #FF6B9D' }}
-          >
-            {completadas}/{misiones.length}
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto p-4 md:p-6">
-        <section
-          className="bg-[#FFD23F] border-[4px] border-black p-5 md:p-7 mb-6"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Flag size={24} strokeWidth={3} className="text-black" />
-            <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70">
-              Hoy
-            </p>
-          </div>
-          <h2 className="font-black uppercase text-4xl md:text-5xl text-black leading-none mb-4">
-            {xpGanado}
-            <span className="text-[#FF6B9D]">/</span>
-            {xpDisponible}
-            <span className="block text-lg md:text-xl text-black/70 mt-2">
-              XP de misiones
+    <AppShell title="Misiones">
+      <div className="flex flex-col gap-6 max-w-5xl">
+        {/* Resumen del día */}
+        <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-2 text-violet-600">
+            <Flag size={16} />
+            <span className="text-xs font-semibold uppercase tracking-wider">
+              Metas de hoy
             </span>
-          </h2>
-          <div
-            className="h-6 bg-white border-[3px] border-black overflow-hidden"
-            style={{ boxShadow: '4px 4px 0 #000' }}
-          >
-            <div
-              className="h-full bg-black transition-all duration-300 flex items-center justify-end pr-2"
-              style={{ width: `${porcentaje}%` }}
-            >
-              {completadas > 0 && (
-                <span className="text-[#FFD23F] font-black text-xs">
-                  {Math.round(porcentaje)}%
-                </span>
-              )}
-            </div>
           </div>
+          <div className="mt-2 flex items-end gap-2">
+            <span className="text-4xl font-bold tracking-tight">{xpGanado}</span>
+            <span className="text-lg text-neutral-400 mb-1">/ {xpDisponible} XP</span>
+          </div>
+          <div className="mt-4 h-2.5 rounded-full bg-neutral-100 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-violet-600 transition-all"
+              style={{ width: `${porcentaje}%` }}
+            />
+          </div>
+          <p className="mt-2 text-sm text-neutral-500">
+            {completadas} de {misiones.length} misiones completas
+          </p>
         </section>
 
+        {/* Lista de misiones */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {misiones.map((mision) => {
-            const progreso = (mision.progreso / mision.objetivo) * 100;
-
+            const progreso = mision.objetivo
+              ? (mision.progreso / mision.objetivo) * 100
+              : 0;
             return (
               <article
                 key={mision.id}
-                className="bg-white border-[3px] border-black p-4"
-                style={{ boxShadow: '6px 6px 0 #000' }}
+                className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm"
               >
                 <div className="flex items-start justify-between gap-3 mb-4">
-                  <div
-                    className="border-[3px] border-black w-12 h-12 flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: mision.color, boxShadow: '3px 3px 0 #000' }}
-                  >
-                    {mision.completada ? (
-                      <Check size={24} strokeWidth={4} className="text-black" />
-                    ) : (
-                      <Flag size={24} strokeWidth={3} className="text-black" />
-                    )}
+                  <div className="flex items-start gap-3 min-w-0">
+                    <span
+                      className="grid place-items-center w-11 h-11 rounded-xl shrink-0"
+                      style={{ backgroundColor: `${mision.color}22` }}
+                    >
+                      {mision.completada ? (
+                        <Check size={20} className="text-emerald-600" />
+                      ) : (
+                        <Flag size={20} style={{ color: mision.color }} />
+                      )}
+                    </span>
+                    <div className="min-w-0">
+                      <h3 className="font-semibold leading-tight">{mision.titulo}</h3>
+                      <p className="mt-0.5 text-sm text-neutral-500">
+                        {mision.descripcion}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-black uppercase text-xl text-black leading-none">
-                      {mision.titulo}
-                    </h3>
-                    <p className="font-bold text-black/70 text-sm mt-1">
-                      {mision.descripcion}
-                    </p>
-                  </div>
-                  <div className="bg-black text-[#FFD23F] px-2 py-1 border-2 border-black font-black text-xs flex items-center gap-1 shrink-0">
-                    <Star size={12} strokeWidth={3} fill="#FFD23F" />
+                  <span className="inline-flex items-center gap-1 rounded-full bg-violet-100 px-2 py-0.5 text-xs font-semibold text-violet-700 shrink-0">
+                    <Star size={12} fill="currentColor" />
                     {mision.xp}
-                  </div>
+                  </span>
                 </div>
-
-                <div
-                  className="h-5 bg-[#F5F0E8] border-[3px] border-black overflow-hidden"
-                  style={{ boxShadow: '3px 3px 0 #000' }}
-                >
+                <div className="h-2 rounded-full bg-neutral-100 overflow-hidden">
                   <div
-                    className="h-full transition-all duration-300"
+                    className="h-full rounded-full transition-all"
                     style={{ width: `${progreso}%`, backgroundColor: mision.color }}
                   />
                 </div>
-                <p className="font-black uppercase text-xs text-black/60 mt-2">
+                <p className="mt-2 text-xs text-neutral-500">
                   {mision.progreso}/{mision.objetivo}
                 </p>
               </article>
@@ -139,31 +98,23 @@ export default function PaginaMisiones() {
           })}
         </section>
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href="/app/repaso"
-            className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm hover:translate-y-[-2px] transition-transform"
-            style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
-          >
+        {/* Acciones */}
+        <div className="flex flex-wrap gap-3">
+          <Link href="/app/repaso" className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-colors">
             Ir a repaso
           </Link>
-          <Link
-            href="/app/diccionario"
-            className="bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm hover:translate-y-[-2px] transition-transform"
-            style={{ boxShadow: '5px 5px 0 #000' }}
-          >
+          <Link href="/app/diccionario" className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors">
             Abrir diccionario
           </Link>
           <button
             onClick={reiniciar}
-            className="bg-[#FF6B6B] text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2 hover:translate-y-[-2px] transition-transform"
-            style={{ boxShadow: '5px 5px 0 #000' }}
+            className="ml-auto inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-sm font-semibold text-rose-600 hover:bg-rose-100 transition-colors"
           >
-            <RotateCcw size={18} strokeWidth={4} />
+            <RotateCcw size={16} />
             Reiniciar hoy
           </button>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

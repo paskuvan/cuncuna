@@ -3,49 +3,39 @@ import { ArrowLeft } from 'lucide-react';
 
 export default function PaginaLegal({ etiqueta, titulo, introduccion, children }) {
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black">
-        <div className="max-w-4xl mx-auto p-4 flex items-center gap-3">
+    <div className="min-h-screen bg-[#F6F1EC] text-neutral-900">
+      <header className="border-b border-black/5 bg-[#F6F1EC]/80 backdrop-blur">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-3.5 flex items-center gap-3">
           <Link
             href="/"
-            className="bg-white border-[3px] border-white p-2"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
+            className="inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-2 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
             aria-label="Volver al inicio"
           >
-            <ArrowLeft size={20} strokeWidth={3} />
+            <ArrowLeft size={16} />
+            Inicio
           </Link>
           <div>
-            <p className="text-[#FFD23F] font-black uppercase text-xs tracking-[0.2em]">
+            <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
               Cuncuna
             </p>
-            <p className="text-white font-black uppercase text-lg leading-none">
-              Información legal
-            </p>
+            <p className="text-sm font-bold tracking-tight leading-none">Información legal</p>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto p-4 md:p-8">
-        <section
-          className="bg-[#FFD23F] border-[4px] border-black p-6 md:p-8 mb-7"
-          style={{ boxShadow: '10px 10px 0 #000' }}
-        >
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/60 mb-2">
+      <main className="max-w-4xl mx-auto px-4 md:px-6 py-8 md:py-12 flex flex-col gap-6">
+        <section className="rounded-2xl border border-black/5 bg-white p-6 md:p-8 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 mb-2">
             {etiqueta}
           </p>
-          <h1 className="font-black uppercase text-3xl md:text-5xl text-black leading-none">
-            {titulo}
-          </h1>
-          <p className="font-bold text-black/70 mt-4 max-w-2xl">{introduccion}</p>
-          <p className="font-black uppercase text-[10px] tracking-[0.15em] text-black/50 mt-5">
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight">{titulo}</h1>
+          <p className="text-neutral-500 mt-4 max-w-2xl">{introduccion}</p>
+          <p className="text-xs text-neutral-400 mt-5">
             Última actualización: 8 de julio de 2026
           </p>
         </section>
 
-        <article
-          className="bg-white border-[4px] border-black p-6 md:p-8 legal-content"
-          style={{ boxShadow: '10px 10px 0 #000' }}
-        >
+        <article className="rounded-2xl border border-black/5 bg-white p-6 md:p-8 shadow-sm legal-content">
           {children}
         </article>
       </main>

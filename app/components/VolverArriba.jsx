@@ -19,12 +19,11 @@ export default function VolverArriba() {
     <button
       type="button"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-      className="fixed bottom-5 right-5 z-40 w-12 h-12 bg-[#FFD23F] border-[3px] border-black flex items-center justify-center hover:-translate-y-1 active:translate-y-0 transition-transform"
-      style={{ boxShadow: '5px 5px 0 #000' }}
+      className="fixed bottom-5 right-5 z-40 grid place-items-center w-11 h-11 rounded-xl bg-violet-600 text-white shadow-lg hover:bg-violet-700 transition-colors"
       aria-label="Volver arriba"
       title="Volver arriba"
     >
-      <ArrowUp size={24} strokeWidth={4} className="text-black" />
+      <ArrowUp size={20} />
     </button>
   );
 }

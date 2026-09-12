@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Check, ChevronRight, RotateCcw, Sparkles, X } from 'lucide-react';
+import { Check, ChevronRight, RotateCcw, Sparkles, X } from 'lucide-react';
 import VideoPlayer from '../../components/VideoPlayer';
+import AppShell from '../../components/dashboard/AppShell';
 import {
   crearOpcionesRepaso,
   obtenerSenasDiccionario,
@@ -18,10 +19,18 @@ import {
 } from '../../lib/repeticion-espaciada';
 import { obtenerPlanActual, puedeAccederLeccion } from '../../lib/acceso-plan';
 
+// ============================================================
+// PÁGINA: /app/repaso  (estilo suave)
+// Repaso inteligente con repetición espaciada.
+// ============================================================
+
 export default function PaginaRepaso() {
   const planActual = useMemo(() => obtenerPlanActual(), []);
   const todasLasSenas = useMemo(
-    () => obtenerSenasDiccionario().filter((sena) => puedeAccederLeccion(sena.leccionId, planActual)),
+    () =>
+      obtenerSenasDiccionario().filter((sena) =>
+        puedeAccederLeccion(sena.leccionId, planActual)
+      ),
     [planActual]
   );
   const ejercicios = useMemo(
@@ -50,12 +59,8 @@ export default function PaginaRepaso() {
   const siguiente = (calidad) => {
     const acerto = seleccion?.id === ejercicio.id;
     const siguientesResultados = [...resultados, acerto];
-
     registrarResultadoSena(ejercicio.id, acerto);
-    registrarRepasoEspaciado(
-      ejercicio.id,
-      acerto ? calidad : 'incorrecta'
-    );
+    registrarRepasoEspaciado(ejercicio.id, acerto ? calidad : 'incorrecta');
     if (indice === ejercicios.length - 1) {
       registrarRepasoEstadisticas({
         correctas: siguientesResultados.filter(Boolean).length,
@@ -80,163 +85,132 @@ export default function PaginaRepaso() {
     setResultados([]);
   };
 
+  // ─── Terminado ───
   if (completado) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-4">
-        <div
-          className="bg-[#7FFF6B] border-[4px] border-black p-6 md:p-8 max-w-md w-full text-center"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="text-6xl mb-4">✨</div>
-          <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70 mb-2">
-            Repaso inteligente terminado
-          </p>
-          <h1 className="font-black uppercase text-4xl text-black leading-none mb-4">
-            {aciertos}/{ejercicios.length}
-            <span className="block text-lg mt-2 text-black/70">respuestas correctas</span>
-          </h1>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={reiniciar}
-              className="bg-white border-[3px] border-black p-3 font-black uppercase text-sm text-black hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #000' }}
-            >
-              Repetir
-            </button>
-            <Link
-              href="/app"
-              className="bg-black border-[3px] border-black p-3 font-black uppercase text-sm text-[#FFD23F] hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '5px 5px 0 #fff' }}
-            >
-              Mapa
-            </Link>
+      <AppShell title="Repaso">
+        <div className="grid place-items-center py-10">
+          <div className="rounded-2xl border border-black/5 bg-white p-8 max-w-md w-full text-center shadow-sm">
+            <div className="text-5xl mb-3">✨</div>
+            <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">
+              Repaso terminado
+            </p>
+            <h1 className="mt-2 text-4xl font-bold tracking-tight">
+              {aciertos}/{ejercicios.length}
+            </h1>
+            <p className="text-neutral-500">respuestas correctas</p>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <button
+                onClick={reiniciar}
+                className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
+              >
+                Repetir
+              </button>
+              <Link
+                href="/app"
+                className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-colors"
+              >
+                Dashboard
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
+  // ─── Sin señas ───
   if (!ejercicio) {
     return (
-      <div className="min-h-screen bg-[#F5F0E8] flex items-center justify-center p-4">
-        <div
-          className="bg-white border-[4px] border-black p-6 max-w-md w-full text-center"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <p className="font-black uppercase text-black text-2xl leading-none mb-3">
-            No hay señas para repasar todavía
-          </p>
-          <p className="font-bold text-black/70 mb-5">
-            Completa una lección disponible o desbloquea Plus para acceder a más señas.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Link
-              href="/app"
-              className="bg-white border-[3px] border-black p-3 font-black uppercase text-sm text-black"
-              style={{ boxShadow: '5px 5px 0 #000' }}
-            >
-              Ir al mapa
-            </Link>
-            <Link
-              href="/suscripcion?plan=plus"
-              className="bg-black border-[3px] border-black p-3 font-black uppercase text-sm text-[#FFD23F]"
-              style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
-            >
-              Ver Plus
-            </Link>
+      <AppShell title="Repaso">
+        <div className="grid place-items-center py-10">
+          <div className="rounded-2xl border border-black/5 bg-white p-8 max-w-md w-full text-center shadow-sm">
+            <h1 className="text-2xl font-bold tracking-tight">
+              No hay señas para repasar todavía
+            </h1>
+            <p className="mt-2 text-neutral-500">
+              Completa una lección disponible o desbloquea Plus para acceder a más señas.
+            </p>
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Link
+                href="/app"
+                className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
+              >
+                Ir al dashboard
+              </Link>
+              <Link
+                href="/suscripcion?plan=plus"
+                className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 transition-colors"
+              >
+                Ver Plus
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      </AppShell>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-        <div className="max-w-3xl mx-auto p-4 flex items-center gap-4">
-          <Link
-            href="/app"
-            className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver"
-          >
-            <ArrowLeft size={20} strokeWidth={3} className="text-black" />
-          </Link>
-          <div className="flex-1">
+    <AppShell title="Repaso">
+      <div className="max-w-3xl mx-auto flex flex-col gap-5">
+        {/* Progreso */}
+        <div className="flex items-center gap-3">
+          <div className="flex-1 h-2.5 rounded-full bg-neutral-100 overflow-hidden">
             <div
-              className="h-5 bg-white border-[3px] border-white overflow-hidden"
-              style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            >
-              <div
-                className="h-full bg-[#7FFF6B] transition-all duration-300"
-                style={{ width: `${progreso}%` }}
-              />
-            </div>
+              className="h-full rounded-full bg-violet-600 transition-all"
+              style={{ width: `${progreso}%` }}
+            />
           </div>
-          <span className="font-black text-white text-sm uppercase shrink-0">
+          <span className="text-sm font-semibold text-neutral-500 shrink-0">
             {indice + 1}/{ejercicios.length}
           </span>
         </div>
-      </header>
 
-      <main className="max-w-3xl mx-auto p-4 md:p-6">
-        <section
-          className="bg-[#FFD23F] border-[4px] border-black p-5 md:p-6 mb-6"
-          style={{ boxShadow: '10px 10px 0 #000' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles size={22} strokeWidth={3} className="text-black" />
-            <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70">
+        {/* Pregunta */}
+        <div className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-2 text-violet-600">
+            <Sparkles size={16} />
+            <span className="text-xs font-semibold uppercase tracking-wider">
               Repaso inteligente
-            </p>
+            </span>
           </div>
-          <h1 className="font-black uppercase text-3xl md:text-5xl text-black leading-none">
-            ¿Qué seña ves?
-          </h1>
-          <p className="font-bold text-black/70 mt-2">
+          <h1 className="mt-2 text-2xl font-bold tracking-tight">¿Qué seña ves?</h1>
+          <p className="mt-1 text-sm text-neutral-500">
             Mira el video y elige la respuesta correcta.
           </p>
-        </section>
 
-        <section
-          className="bg-white border-[4px] border-black p-5 md:p-6"
-          style={{ boxShadow: '10px 10px 0 #000' }}
-        >
-          <VideoPlayer
-            src={ejercicio.videoUrl}
-            poster={ejercicio.posterUrl}
-            titulo={ejercicio.palabra}
-          />
+          <div className="mt-5 overflow-hidden rounded-xl">
+            <VideoPlayer
+              src={ejercicio.videoUrl}
+              poster={ejercicio.posterUrl}
+              titulo={ejercicio.palabra}
+            />
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+          {/* Opciones */}
+          <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
             {opciones.map((opcion) => {
               const estaSeleccionada = seleccion?.id === opcion.id;
               const esCorrecta = opcion.id === ejercicio.id;
-              let fondo = 'bg-white';
-              let texto = 'text-black';
-
+              let clases = 'border-black/10 bg-white text-neutral-800 hover:bg-neutral-50';
               if (verificado && esCorrecta) {
-                fondo = 'bg-[#7FFF6B]';
+                clases = 'border-emerald-300 bg-emerald-50 text-emerald-800';
               } else if (verificado && estaSeleccionada) {
-                fondo = 'bg-[#FF6B6B]';
-                texto = 'text-black';
+                clases = 'border-rose-300 bg-rose-50 text-rose-800';
               } else if (estaSeleccionada) {
-                fondo = 'bg-[#FFD23F]';
+                clases = 'border-violet-300 bg-violet-50 text-violet-800';
               }
-
               return (
                 <button
                   key={opcion.id}
                   onClick={() => !verificado && setSeleccion(opcion)}
                   disabled={verificado}
-                  className={`${fondo} ${texto} border-[3px] border-black p-4 font-black uppercase text-left flex items-center justify-between gap-3 transition-all ${
-                    !verificado ? 'hover:translate-x-[-2px] hover:translate-y-[-2px]' : ''
-                  }`}
-                  style={{ boxShadow: estaSeleccionada || esCorrecta ? '6px 6px 0 #000' : '4px 4px 0 #000' }}
+                  className={`flex items-center justify-between gap-3 rounded-xl border px-4 py-3 text-left font-semibold transition-colors ${clases}`}
                 >
                   <span>{opcion.palabra}</span>
-                  {verificado && esCorrecta && <Check size={22} strokeWidth={4} />}
-                  {verificado && estaSeleccionada && !esCorrecta && <X size={22} strokeWidth={4} />}
+                  {verificado && esCorrecta && <Check size={18} />}
+                  {verificado && estaSeleccionada && !esCorrecta && <X size={18} />}
                 </button>
               );
             })}
@@ -245,36 +219,35 @@ export default function PaginaRepaso() {
           {verificado && (
             <>
               <div
-                className={`mt-6 border-[3px] border-black p-4 ${
-                  seleccion?.id === ejercicio.id ? 'bg-[#7FFF6B]' : 'bg-[#FF6B6B] text-black'
+                className={`mt-5 rounded-xl border p-4 ${
+                  seleccion?.id === ejercicio.id
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'border-rose-200 bg-rose-50'
                 }`}
-                style={{ boxShadow: '5px 5px 0 #000' }}
               >
-                <p className="font-black uppercase">
-                  {seleccion?.id === ejercicio.id ? '¡Correcto!' : `Era: ${ejercicio.palabra}`}
+                <p className="font-semibold">
+                  {seleccion?.id === ejercicio.id
+                    ? '¡Correcto!'
+                    : `Era: ${ejercicio.palabra}`}
                 </p>
-                <p className="font-bold text-sm mt-1">{ejercicio.descripcion}</p>
+                <p className="mt-1 text-sm text-neutral-600">{ejercicio.descripcion}</p>
               </div>
 
               {seleccion?.id === ejercicio.id ? (
-                <div className="mt-6">
-                  <p className="font-black uppercase text-xs tracking-[0.15em] text-black/60 mb-3">
+                <div className="mt-5">
+                  <p className="mb-2 text-sm font-medium text-neutral-500">
                     ¿Qué tan fácil fue recordarla?
                   </p>
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      { id: 'dificil', texto: 'Difícil', color: '#FF6B9D' },
-                      { id: 'bien', texto: 'Bien', color: '#FFD23F' },
-                      { id: 'facil', texto: 'Fácil', color: '#7FFF6B' },
+                      { id: 'dificil', texto: 'Difícil' },
+                      { id: 'bien', texto: 'Bien' },
+                      { id: 'facil', texto: 'Fácil' },
                     ].map((calidad) => (
                       <button
                         key={calidad.id}
                         onClick={() => siguiente(calidad.id)}
-                        className="border-[3px] border-black p-3 font-black uppercase text-xs text-black hover:translate-y-[-2px] transition-transform"
-                        style={{
-                          backgroundColor: calidad.color,
-                          boxShadow: '4px 4px 0 #000',
-                        }}
+                        className="rounded-xl border border-black/10 bg-white px-3 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
                         title={describirProximoRepaso(calidad.id)}
                       >
                         {calidad.texto}
@@ -285,11 +258,10 @@ export default function PaginaRepaso() {
               ) : (
                 <button
                   onClick={() => siguiente('incorrecta')}
-                  className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-base"
-                  style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
+                  className="mt-5 inline-flex w-full items-center justify-center gap-1 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-700 transition-colors"
                 >
                   Practicar de nuevo pronto
-                  <ChevronRight className="inline ml-1" size={22} strokeWidth={4} />
+                  <ChevronRight size={18} />
                 </button>
               )}
             </>
@@ -299,15 +271,13 @@ export default function PaginaRepaso() {
             <button
               onClick={verificar}
               disabled={!seleccion}
-              className="w-full mt-6 bg-black text-[#FFD23F] border-[3px] border-black p-4 font-black uppercase text-lg tracking-wider disabled:opacity-40 disabled:cursor-not-allowed hover:translate-y-[-2px] transition-transform"
-              style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-violet-600 px-4 py-3 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Verificar
-              <RotateCcw className="inline ml-2" size={20} strokeWidth={4} />
             </button>
           )}
-        </section>
-      </main>
-    </div>
+        </div>
+      </div>
+    </AppShell>
   );
 }

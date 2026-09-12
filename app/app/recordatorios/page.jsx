@@ -1,16 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Link from 'next/link';
-import {
-  ArrowLeft,
-  Bell,
-  BellRing,
-  CalendarDays,
-  Check,
-  Clock,
-  RotateCcw,
-} from 'lucide-react';
+import { Bell, CalendarDays, Check, Clock, RotateCcw } from 'lucide-react';
 import {
   enviarNotificacionPrueba,
   guardarRecordatorios,
@@ -18,6 +9,11 @@ import {
   obtenerRecordatorios,
   pedirPermisoNotificaciones,
 } from '../../lib/recordatorios-locales';
+import AppShell from '../../components/dashboard/AppShell';
+
+// ============================================================
+// PÁGINA: /app/recordatorios  (estilo suave)
+// ============================================================
 
 const dias = [
   { id: 'lunes', corto: 'L', nombre: 'Lunes' },
@@ -30,21 +26,9 @@ const dias = [
 ];
 
 const tipos = [
-  {
-    id: 'repaso',
-    titulo: 'Repaso diario',
-    texto: 'Volver a practicar señas que ya viste.',
-  },
-  {
-    id: 'mision',
-    titulo: 'Misiones',
-    texto: 'Completar una meta corta del día.',
-  },
-  {
-    id: 'leccion',
-    titulo: 'Nueva lección',
-    texto: 'Avanzar en el mapa principal.',
-  },
+  { id: 'repaso', titulo: 'Repaso diario', texto: 'Volver a practicar señas que ya viste.' },
+  { id: 'mision', titulo: 'Misiones', texto: 'Completar una meta corta del día.' },
+  { id: 'leccion', titulo: 'Nueva lección', texto: 'Avanzar en el mapa principal.' },
 ];
 
 function describirEstado(estado) {
@@ -61,12 +45,11 @@ export default function PaginaRecordatorios() {
 
   const diasActivos = useMemo(
     () => dias.filter((dia) => config.dias.includes(dia.id)).map((dia) => dia.nombre),
-    [config.dias],
+    [config.dias]
   );
 
   const actualizar = (cambios) => {
-    const siguiente = guardarRecordatorios({ ...config, ...cambios });
-    setConfig(siguiente);
+    setConfig(guardarRecordatorios({ ...config, ...cambios }));
   };
 
   const alternarDia = (diaId) => {
@@ -74,7 +57,6 @@ export default function PaginaRecordatorios() {
     const siguientes = existe
       ? config.dias.filter((dia) => dia !== diaId)
       : [...config.dias, diaId];
-
     actualizar({ dias: siguientes });
   };
 
@@ -96,158 +78,105 @@ export default function PaginaRecordatorios() {
   const probar = () => {
     const enviada = enviarNotificacionPrueba();
     setMensaje(
-      enviada
-        ? 'Notificación de prueba enviada.'
-        : 'Primero activa el permiso de notificaciones.',
+      enviada ? 'Notificación de prueba enviada.' : 'Primero activa el permiso de notificaciones.'
     );
   };
 
   const restablecer = () => {
-    const siguiente = guardarRecordatorios({
-      activo: true,
-      hora: '19:00',
-      dias: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'],
-      tipo: 'repaso',
-      ultimoAviso: null,
-    });
-    setConfig(siguiente);
+    setConfig(
+      guardarRecordatorios({
+        activo: true,
+        hora: '19:00',
+        dias: ['lunes', 'martes', 'miercoles', 'jueves', 'viernes'],
+        tipo: 'repaso',
+        ultimoAviso: null,
+      })
+    );
     setMensaje('Recordatorio restablecido a días hábiles a las 19:00.');
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F0E8]">
-      <header className="bg-black border-b-[4px] border-black sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto p-4 flex items-center gap-3">
-          <Link
-            href="/app"
-            className="bg-white border-[3px] border-white p-2 hover:translate-x-[-2px] transition-transform"
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-            aria-label="Volver"
-          >
-            <ArrowLeft size={20} strokeWidth={3} className="text-black" />
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-white font-black text-xl md:text-2xl uppercase leading-none">
-              Recordatorios
-            </h1>
-            <p className="text-white/70 text-xs font-bold uppercase tracking-wider hidden sm:block">
-              Practicar con constancia
-            </p>
-          </div>
-          <div
-            className={`border-[3px] border-white px-3 py-1.5 font-black text-sm ${
-              config.activo ? 'bg-[#7FFF6B] text-black' : 'bg-white text-black'
-            }`}
-            style={{ boxShadow: '3px 3px 0 #FFD23F' }}
-          >
-            {config.activo ? 'Activo' : 'Pausado'}
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-5xl mx-auto p-4 md:p-6">
-        <section
-          className="bg-[#FFD23F] border-[4px] border-black p-5 md:p-7 mb-6"
-          style={{ boxShadow: '12px 12px 0 #000' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <BellRing size={24} strokeWidth={3} className="text-black" />
-            <p className="font-black uppercase text-xs tracking-[0.2em] text-black/70">
-              Tu rutina
-            </p>
-          </div>
-          <h2 className="font-black uppercase text-4xl md:text-5xl text-black leading-none mb-3">
-            {config.hora}
-            <span className="block text-lg md:text-xl text-black/70 mt-2">
-              {diasActivos.length ? diasActivos.join(', ') : 'Sin días seleccionados'}
+    <AppShell title="Recordatorios">
+      <div className="flex flex-col gap-6 max-w-5xl">
+        {/* Resumen */}
+        <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-2 text-violet-600">
+            <Bell size={16} />
+            <span className="text-xs font-semibold uppercase tracking-wider">Tu rutina</span>
+            <span
+              className={`ml-auto rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                config.activo ? 'bg-emerald-100 text-emerald-700' : 'bg-neutral-100 text-neutral-500'
+              }`}
+            >
+              {config.activo ? 'Activo' : 'Pausado'}
             </span>
-          </h2>
-          <p className="font-bold text-black/75 max-w-2xl">
-            Estos recordatorios son locales del navegador. Para enviar push aunque la app esté cerrada,
-            después conectamos webhooks o Supabase Edge Functions.
+          </div>
+          <h2 className="mt-2 text-4xl font-bold tracking-tight">{config.hora}</h2>
+          <p className="mt-1 text-sm text-neutral-500">
+            {diasActivos.length ? diasActivos.join(', ') : 'Sin días seleccionados'}
+          </p>
+          <p className="mt-3 text-sm text-neutral-500 max-w-2xl">
+            Estos recordatorios son locales del navegador. Para enviar push aunque la app esté
+            cerrada, después conectamos webhooks o Supabase Edge Functions.
           </p>
         </section>
 
-        <section className="grid lg:grid-cols-[0.9fr_1.1fr] gap-5">
-          <div
-            className="bg-white border-[4px] border-black p-5"
-            style={{ boxShadow: '8px 8px 0 #000' }}
-          >
+        <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-5">
+          {/* Permiso */}
+          <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <Bell size={22} strokeWidth={3} className="text-black" />
-              <h2 className="font-black uppercase text-2xl text-black leading-none">
-                Permiso del navegador
-              </h2>
+              <Bell size={18} className="text-neutral-500" />
+              <h3 className="font-bold tracking-tight">Permiso del navegador</h3>
             </div>
-
-            <div
-              className="bg-[#F5F0E8] border-[3px] border-black p-4 mb-4"
-              style={{ boxShadow: '4px 4px 0 #000' }}
-            >
-              <p className="font-black uppercase text-black">
-                {describirEstado(permiso)}
-              </p>
-              <p className="font-bold text-black/70 text-sm mt-1">
+            <div className="rounded-xl bg-neutral-50 border border-black/5 p-4 mb-4">
+              <p className="font-semibold">{describirEstado(permiso)}</p>
+              <p className="mt-1 text-sm text-neutral-500">
                 Cuncuna pedirá permiso solo cuando pulses activar.
               </p>
             </div>
-
             <div className="grid sm:grid-cols-2 gap-3">
               <button
                 onClick={activarPermiso}
                 disabled={permiso === 'granted' || permiso === 'no_soportado'}
-                className="bg-black text-[#FFD23F] border-[3px] border-black px-4 py-3 font-black uppercase text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ boxShadow: '5px 5px 0 #FF6B9D' }}
+                className="rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 Activar permiso
               </button>
               <button
                 onClick={probar}
-                className="bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm"
-                style={{ boxShadow: '5px 5px 0 #000' }}
+                className="rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
               >
                 Probar aviso
               </button>
             </div>
-
             {mensaje && (
-              <p
-                className="mt-4 bg-[#7FFF6B] border-[3px] border-black p-3 font-black text-black text-sm"
-                style={{ boxShadow: '4px 4px 0 #000' }}
-              >
+              <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
                 {mensaje}
               </p>
             )}
           </div>
 
-          <div
-            className="bg-white border-[4px] border-black p-5"
-            style={{ boxShadow: '8px 8px 0 #000' }}
-          >
+          {/* Horario */}
+          <div className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
             <div className="flex items-center gap-2 mb-4">
-              <Clock size={22} strokeWidth={3} className="text-black" />
-              <h2 className="font-black uppercase text-2xl text-black leading-none">
-                Horario
-              </h2>
+              <Clock size={18} className="text-neutral-500" />
+              <h3 className="font-bold tracking-tight">Horario</h3>
             </div>
 
             <label className="block mb-5">
-              <span className="block font-black uppercase text-xs tracking-[0.15em] text-black/60 mb-2">
-                Hora preferida
-              </span>
+              <span className="mb-2 block text-sm font-medium text-neutral-600">Hora preferida</span>
               <input
                 type="time"
                 value={config.hora}
-                onChange={(event) => actualizar({ hora: event.target.value })}
-                className="w-full bg-white border-[3px] border-black p-3 font-black text-black outline-none"
-                style={{ boxShadow: '4px 4px 0 #000' }}
+                onChange={(e) => actualizar({ hora: e.target.value })}
+                className="w-full rounded-xl border border-black/10 bg-white px-3 py-2.5 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-violet-300"
               />
             </label>
 
             <div className="mb-5">
               <div className="flex items-center gap-2 mb-3">
-                <CalendarDays size={20} strokeWidth={3} className="text-black" />
-                <p className="font-black uppercase text-black">Días activos</p>
+                <CalendarDays size={16} className="text-neutral-500" />
+                <p className="text-sm font-medium text-neutral-600">Días activos</p>
               </div>
               <div className="grid grid-cols-7 gap-2">
                 {dias.map((dia) => {
@@ -256,10 +185,11 @@ export default function PaginaRecordatorios() {
                     <button
                       key={dia.id}
                       onClick={() => alternarDia(dia.id)}
-                      className={`aspect-square border-[3px] border-black font-black text-sm ${
-                        activo ? 'bg-[#FFD23F] text-black' : 'bg-white text-black/50'
+                      className={`aspect-square rounded-xl border text-sm font-semibold transition-colors ${
+                        activo
+                          ? 'border-violet-600 bg-violet-600 text-white'
+                          : 'border-black/10 bg-white text-neutral-400 hover:bg-neutral-50'
                       }`}
-                      style={{ boxShadow: '3px 3px 0 #000' }}
                       aria-label={dia.nombre}
                     >
                       {dia.corto}
@@ -271,23 +201,20 @@ export default function PaginaRecordatorios() {
 
             <button
               onClick={() => actualizar({ activo: !config.activo })}
-              className={`w-full border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center justify-center gap-2 ${
-                config.activo ? 'bg-[#FF6B6B] text-black' : 'bg-[#7FFF6B] text-black'
+              className={`w-full rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors ${
+                config.activo
+                  ? 'border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100'
+                  : 'bg-violet-600 text-white hover:bg-violet-700'
               }`}
-              style={{ boxShadow: '5px 5px 0 #000' }}
             >
               {config.activo ? 'Pausar recordatorio' : 'Activar recordatorio'}
             </button>
           </div>
-        </section>
+        </div>
 
-        <section
-          className="bg-white border-[4px] border-black p-5 mt-6"
-          style={{ boxShadow: '8px 8px 0 #000' }}
-        >
-          <h2 className="font-black uppercase text-2xl text-black leading-none mb-4">
-            ¿Qué recordar?
-          </h2>
+        {/* Qué recordar */}
+        <section className="rounded-2xl border border-black/5 bg-white p-5 shadow-sm">
+          <h3 className="mb-4 font-bold tracking-tight">¿Qué recordar?</h3>
           <div className="grid md:grid-cols-3 gap-4">
             {tipos.map((tipo) => {
               const activo = config.tipo === tipo.id;
@@ -295,35 +222,32 @@ export default function PaginaRecordatorios() {
                 <button
                   key={tipo.id}
                   onClick={() => actualizar({ tipo: tipo.id })}
-                  className={`text-left border-[3px] border-black p-4 ${
-                    activo ? 'bg-[#4ECDC4]' : 'bg-white'
+                  className={`text-left rounded-2xl border p-4 transition-colors ${
+                    activo
+                      ? 'border-violet-400 ring-2 ring-violet-200 bg-violet-50'
+                      : 'border-black/5 bg-white hover:bg-neutral-50'
                   }`}
-                  style={{ boxShadow: activo ? '7px 7px 0 #000' : '5px 5px 0 #000' }}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h3 className="font-black uppercase text-black text-lg leading-tight">
-                        {tipo.titulo}
-                      </h3>
-                      <p className="font-bold text-black/70 text-sm mt-2">{tipo.texto}</p>
+                      <h4 className="font-semibold">{tipo.titulo}</h4>
+                      <p className="mt-1 text-sm text-neutral-500">{tipo.texto}</p>
                     </div>
-                    {activo && <Check size={22} strokeWidth={4} className="text-black shrink-0" />}
+                    {activo && <Check size={18} className="text-violet-600 shrink-0" />}
                   </div>
                 </button>
               );
             })}
           </div>
-
           <button
             onClick={restablecer}
-            className="mt-5 bg-white text-black border-[3px] border-black px-4 py-3 font-black uppercase text-sm flex items-center gap-2"
-            style={{ boxShadow: '5px 5px 0 #000' }}
+            className="mt-5 inline-flex items-center gap-2 rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-50 transition-colors"
           >
-            <RotateCcw size={18} strokeWidth={4} />
+            <RotateCcw size={16} />
             Restablecer
           </button>
         </section>
-      </main>
-    </div>
+      </div>
+    </AppShell>
   );
 }

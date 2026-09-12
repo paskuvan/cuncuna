@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 
 export default function FormularioListaEspera({
   origen = 'landing',
@@ -48,16 +48,16 @@ export default function FormularioListaEspera({
 
   if (estado === 'exito') {
     return (
-      <div
-        className="bg-black text-[#7FFF6B] border-[3px] border-black p-6 inline-block"
-        style={{ boxShadow: '6px 6px 0 #FF6B9D' }}
-      >
-        <p className="font-black uppercase text-base tracking-wider mb-1">
-          Listo
-        </p>
-        <p className="text-white font-bold text-sm">
-          Te avisaremos cuando Cuncuna esté lista.
-        </p>
+      <div className="inline-flex items-center gap-3 rounded-2xl bg-white/95 border border-black/5 px-5 py-4 text-left shadow-sm">
+        <span className="grid place-items-center w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 shrink-0">
+          <Check size={20} />
+        </span>
+        <div>
+          <p className="font-semibold text-neutral-900">¡Listo!</p>
+          <p className="text-sm text-neutral-500">
+            Te avisaremos cuando Cuncuna esté lista.
+          </p>
+        </div>
       </div>
     );
   }
@@ -75,31 +75,26 @@ export default function FormularioListaEspera({
           aria-label="Correo electrónico para la lista de espera"
           required
           disabled={estado === 'enviando'}
-          className="flex-1 bg-white border-[3px] border-black px-4 py-3 font-black text-black placeholder-black/40 focus:outline-none focus:translate-y-[-2px] transition-transform disabled:opacity-50"
-          style={{ boxShadow: '4px 4px 0 #000' }}
+          className="flex-1 rounded-xl border border-black/10 bg-white px-4 py-3 font-medium text-neutral-900 outline-none placeholder:text-neutral-400 focus-visible:ring-2 focus-visible:ring-violet-300 disabled:opacity-50"
         />
         <button
           type="submit"
           disabled={estado === 'enviando'}
-          className="bg-black text-[#FFD23F] border-[3px] border-black px-6 py-3 font-black uppercase tracking-wider hover:translate-y-[-2px] active:translate-y-0 transition-transform disabled:opacity-50 disabled:cursor-wait whitespace-nowrap inline-flex items-center justify-center gap-2"
-          style={{ boxShadow: '4px 4px 0 #FF6B9D' }}
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-neutral-900 px-6 py-3 font-semibold text-white hover:bg-neutral-800 transition-colors disabled:opacity-50 disabled:cursor-wait whitespace-nowrap"
         >
-          {estado === 'enviando' ? 'Enviando...' : 'Unirme'}
-          {estado !== 'enviando' && <ArrowRight size={18} strokeWidth={4} />}
+          {estado === 'enviando' ? 'Enviando…' : 'Unirme'}
+          {estado !== 'enviando' && <ArrowRight size={18} />}
         </button>
       </div>
 
       {estado === 'duplicado' && (
-        <p className="mt-4 font-black uppercase text-sm text-black/70">
-          Ya estás en la lista. Gracias.
-        </p>
+        <div className="mt-4 rounded-xl bg-white/95 border border-black/5 p-3 text-sm font-medium text-neutral-700">
+          Ya estás en la lista. ¡Gracias!
+        </div>
       )}
 
       {estado === 'error' && (
-        <div
-          className="mt-4 bg-[#FF6B6B] text-black border-[3px] border-black p-3 font-black uppercase text-sm"
-          style={{ boxShadow: '3px 3px 0 #000' }}
-        >
+        <div className="mt-4 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm font-medium text-rose-700">
           {mensajeError}
         </div>
       )}
