@@ -82,7 +82,7 @@ export default function VistaLeccion({
     <div className="min-h-screen bg-[#F6F1EC] text-neutral-900">
       {/* Barra superior */}
       <div className="sticky top-0 z-10 border-b border-black/5 bg-[#F6F1EC]/80 backdrop-blur p-4">
-        <div className="max-w-2xl mx-auto flex items-center gap-4">
+        <div className="max-w-3xl mx-auto flex items-center gap-4">
           <button
             onClick={onVolver}
             className="grid place-items-center w-10 h-10 rounded-xl border border-black/10 bg-white text-neutral-600 hover:bg-neutral-50 transition-colors shrink-0"
@@ -102,7 +102,7 @@ export default function VistaLeccion({
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto p-4 md:p-6">
+      <div className="max-w-3xl mx-auto p-4 md:p-6">
         <div className="rounded-2xl border border-black/5 bg-white p-6 md:p-8 shadow-sm">
           {/* VIDEO */}
           {ejercicio.tipo === 'video' && (
