@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { ArrowLeft, Mail, MessageCircle, ShieldCheck } from 'lucide-react';
 import { EMAIL_SOPORTE } from '../lib/contacto';
 
-export const metadata = { title: 'Soporte · Cuncuna' };
+export const metadata = { title: 'Soporte' };
 
 export default function SoportePage() {
   return (

@@ -1,7 +1,7 @@
 import PaginaLegal, { SeccionLegal } from '../../components/PaginaLegal';
 import { EMAIL_SOPORTE } from '../../lib/contacto';
 
-export const metadata = { title: 'Política de privacidad · Cuncuna' };
+export const metadata = { title: 'Política de privacidad' };
 
 export default function PrivacidadPage() {
   return (
