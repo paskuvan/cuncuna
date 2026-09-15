@@ -1,7 +1,15 @@
 import './globals.css';
+import { Inter } from 'next/font/google';
 import VolverArriba from './components/VolverArriba';
 import SelectorTema from './components/SelectorTema';
 import RegistrarSW from './components/RegistrarSW';
+
+// Tipografía moderna, auto-hospedada (sin request externo en runtime).
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
 
 // URL pública del sitio. Definir NEXT_PUBLIC_SITE_URL en producción
 // (ej: https://cuncuna.cl) para que las OG cards y el sitemap usen el
@@ -67,6 +75,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="es"
+      className={inter.variable}
       suppressHydrationWarning
     >
       <head>
