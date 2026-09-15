@@ -4,7 +4,7 @@
 // para que la app funcione offline una vez visitada.
 // ============================================================
 
-const CACHE_VERSION = 'cuncuna-v1';
+const CACHE_VERSION = 'cuncuna-v2';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 
