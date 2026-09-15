@@ -52,7 +52,7 @@ export default function VideoPlayer({ src, poster, titulo }) {
           src={src}
           poster={poster}
           title={titulo}
-          className="w-full aspect-video object-cover block bg-neutral-900"
+          className="w-full aspect-video object-contain block bg-neutral-900"
           onTimeUpdate={onTimeUpdate}
           onEnded={() => setReproduciendo(false)}
           onError={() => setError(true)}
