@@ -4,7 +4,7 @@ import Cuncuna from '../components/mascota/Cuncuna';
 import FormularioListaEspera from '../components/FormularioListaEspera';
 
 export const metadata = {
-  title: 'Lista de espera · Cuncuna',
+  title: 'Lista de espera',
   description: 'Únete a la lista de espera de Cuncuna para aprender LSCh.',
 };
 

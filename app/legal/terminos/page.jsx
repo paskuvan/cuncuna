@@ -1,7 +1,7 @@
 import PaginaLegal, { SeccionLegal } from '../../components/PaginaLegal';
 import { EMAIL_SOPORTE } from '../../lib/contacto';
 
-export const metadata = { title: 'Términos y condiciones · Cuncuna' };
+export const metadata = { title: 'Términos y condiciones' };
 
 export default function TerminosPage() {
   return (

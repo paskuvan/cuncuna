@@ -1,7 +1,7 @@
 import PaginaLegal, { SeccionLegal } from '../../components/PaginaLegal';
 import { EMAIL_SOPORTE } from '../../lib/contacto';
 
-export const metadata = { title: 'Cancelaciones y reembolsos · Cuncuna' };
+export const metadata = { title: 'Cancelaciones y reembolsos' };
 
 export default function ReembolsosPage() {
   return (
