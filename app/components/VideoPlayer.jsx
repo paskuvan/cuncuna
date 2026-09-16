@@ -66,6 +66,18 @@ export default function VideoPlayer({ src, poster, titulo }) {
         </div>
       )}
 
+      {/* Franja para difuminar subtítulos quemados en la parte baja del video.
+          El mask degrada el blur hacia arriba para que no tenga un borde duro. */}
+      {!error && (
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-32 backdrop-blur-lg"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to top, black 58%, transparent)',
+            maskImage: 'linear-gradient(to top, black 58%, transparent)',
+          }}
+        />
+      )}
+
       {/* Barra de progreso */}
       <div className="absolute bottom-[60px] left-0 right-0 h-1 bg-white/20">
         <div

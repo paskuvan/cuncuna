@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { createClient } from '../../lib/supabase-client';
 import VideoPlayer from '../../components/VideoPlayer';
+import GestionAdmins from './gestion-admins';
 
 const CAMPOS_CONTENIDO =
   'id,palabra,descripcion,nivel,region,credito,consentimiento,video_path,poster_path,estado,created_at';
@@ -401,6 +402,10 @@ export default function PanelContenido({ usuarioId }) {
               )}
             </div>
           </aside>
+        </div>
+
+        <div className="mt-6">
+          <GestionAdmins usuarioId={usuarioId} />
         </div>
       </main>
 
