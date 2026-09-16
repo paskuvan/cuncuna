@@ -66,28 +66,16 @@ export default function VideoPlayer({ src, poster, titulo }) {
         </div>
       )}
 
-      {/* Franja para difuminar subtítulos quemados en la parte baja del video.
-          El mask degrada el blur hacia arriba para que no tenga un borde duro. */}
-      {!error && (
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-32 backdrop-blur-lg"
-          style={{
-            WebkitMaskImage: 'linear-gradient(to top, black 58%, transparent)',
-            maskImage: 'linear-gradient(to top, black 58%, transparent)',
-          }}
-        />
-      )}
-
       {/* Barra de progreso */}
-      <div className="absolute bottom-[60px] left-0 right-0 h-1 bg-white/20">
+      <div className="absolute bottom-[52px] left-0 right-0 h-1 bg-white/20">
         <div
           className="h-full bg-violet-500 transition-all duration-100"
           style={{ width: `${progreso}%` }}
         />
       </div>
 
-      {/* Controles (blur fuerte para difuminar subtítulos quemados) */}
-      <div className="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-2xl px-3 py-3 flex items-center gap-2">
+      {/* Controles */}
+      <div className="absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur px-3 py-2.5 flex items-center gap-2">
         <button
           onClick={togglePlay}
           className="grid place-items-center w-9 h-9 rounded-lg bg-violet-600 text-white hover:bg-violet-700 transition-colors"
